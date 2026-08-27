@@ -1,0 +1,134 @@
+# Raidbots Legion
+
+Simulador de DPS local al estilo de [Raidbots](https://www.raidbots.com), pero
+para **World of Warcraft: Legion 7.3.5**. Todo corre en tu máquina: no hace
+falta cuenta, ni cola de espera, ni conexión a internet una vez instalado.
+
+Por debajo usa el motor oficial de **SimulationCraft** (rama `legion-dev`,
+versión `735-02`), que es el mismo que usaba Raidbots en su día para esa
+expansión: las rotaciones, talentos, artefactos, set bonuses y legendarias de
+Legion ya están implementados y validados ahí.
+
+## Qué incluye
+
+| Simulación | Qué hace |
+|---|---|
+| **Sim rápida** | DPS del personaje tal cual, desglose de daño por habilidad y pesos de estadística (Int/Crit/Celeridad/Maestría/Versatilidad). |
+| **Droptimizer** | Simula ítems sueltos, cada uno en los slots donde encaja, y los ordena por ganancia de DPS. Permite normalizar todos los candidatos a un ilvl. |
+| **Top Gear** | Combina el equipo puesto con el inventario y simula todas las configuraciones posibles, respetando el límite de legendarias. |
+| **Talentos** | Compara fila a fila (21 perfiles) o las 2187 combinaciones completas. |
+| **Consumibles** | Compara frascos, comida, pociones y runas de aumento de Legion. |
+
+Otras cosas que trae:
+
+- Importación con la cadena del **addon SimulationCraft** (`/simc` en el juego).
+- **Gestor de inventario propio**: el addon de Legion no exporta las bolsas de
+  forma fiable, así que las piezas para Top Gear se añaden desde un buscador
+  sobre la base de ítems, con ilvl ajustable (así se representa el titanforjado).
+- Progreso en vivo de la simulación e historial de resultados.
+- Filtrado de ítems por clase y tipo de armadura. **Esto importa**: si le pasas
+  a SimulationCraft una pieza que tu clase no puede llevar, aborta el lote
+  entero, así que la app lo bloquea antes de lanzar.
+
+## Instalación
+
+Necesitas **Node.js 20+** y un compilador de C++ (`build-essential` en
+Debian/Ubuntu, `xcode-select --install` en macOS).
+
+```bash
+npm install          # dependencias de la app
+npm run setup:simc   # clona y compila SimulationCraft 7.3.5 (10-20 min)
+npm run build:itemdb # genera la base de ítems desde la DBC de simc
+npm run check:simc   # comprueba que todo está en su sitio
+```
+
+`setup:simc` deja el binario en `vendor/simc/engine/simc`. Si ya tienes uno
+compilado, sáltate ese paso y apunta a él:
+
+```bash
+export SIMC_PATH=/ruta/a/tu/simc
+```
+
+> El código de SimulationCraft es de 2018 y no compila tal cual con GCC/Clang
+> modernos (faltan includes que entonces llegaban de forma transitiva). Los
+> parches necesarios están en `scripts/patches/` y el script los aplica solo.
+
+## Uso
+
+```bash
+npm run dev     # servidor + interfaz en modo desarrollo
+```
+
+- Interfaz: <http://localhost:5273>
+- API: <http://localhost:7331>
+
+Para usarlo como una app normal, compila la interfaz una vez y arranca solo el
+servidor, que ya sirve todo desde el mismo puerto:
+
+```bash
+npm run build
+npm start       # http://localhost:7331
+```
+
+### Importar un personaje
+
+1. Instala el addon SimulationCraft para Legion en tu cliente 7.3.5.
+2. En el juego, escribe `/simc`.
+3. Copia todo el texto y pégalo en la pantalla de Personajes.
+
+La app guarda el perfil `.simc` tal cual (saneado) y lo usa como base de todas
+las simulaciones, igual que hace Raidbots.
+
+## Cómo está montado
+
+```
+packages/
+  shared/   Tipos compartidos entre servidor e interfaz
+  server/   API Fastify, cola de simulación y envoltura de SimulationCraft
+  web/      Interfaz React + Vite
+scripts/
+  setup-simc.sh      Clona, parchea y compila SimulationCraft 7.3.5
+  build-item-db.mjs  Genera data/items.json y data/consumables.json
+  check-simc.mjs     Diagnóstico de la instalación
+data/       Base de ítems y consumibles (generados)
+.rbl/       Personajes, historial y resultados (estado local)
+```
+
+Detalles que merece la pena conocer:
+
+- **Los lotes usan `profileset`**, la función de SimulationCraft pensada
+  justamente para esto: una sola invocación del motor simula el perfil base y
+  todas las variantes, reutilizando la inicialización.
+- **La base de ítems se genera desde `sc_item_data.inc`**, la propia DBC de
+  simc. Así, cualquier ítem que aparezca en el buscador existe seguro en el
+  motor; no hay ids inventados ni desincronización de versiones.
+- **Las runas de aumento no salen de la DBC**: SimulationCraft 7.3.5 las
+  resuelve por nombre en `sc_consumable.cpp`, así que están fijadas en el
+  script de generación.
+- **Los perfiles pegados se sanean**: un `.simc` puede escribir ficheros o hacer
+  peticiones de red, y aquí se ejecuta un binario de verdad, así que esas
+  opciones se filtran al importar.
+
+## Limitaciones conocidas
+
+- **Reliquias del artefacto**: no se optimizan todavía. Se importan y se usan
+  tal cual vienen del addon, pero no hay comparador de reliquias ni de Crisol
+  de Luznether.
+- **Bonus IDs**: al sustituir una pieza se usa `ilevel=` para fijar su nivel,
+  que es lo que hace falta para el 99% de los casos, pero no se modelan
+  bonus IDs concretos (socket extra, terciarias) salvo que los indiques a mano.
+- **Encantamientos y gemas al cambiar de pieza**: se heredan del ítem que
+  ocupaba ese slot. Es la misma aproximación que usa Raidbots, pero conviene
+  saberlo al leer un Droptimizer.
+- **Límite de legendarias**: configurable (2 por defecto). Los servidores
+  privados lo cambian a menudo, así que ajústalo a lo que tenga el tuyo.
+- **Un solo personaje por simulación**: no hay sims de banda ni de varios
+  jugadores a la vez.
+
+## Servidores privados
+
+La app simula con los datos oficiales de 7.3.5. Si tu servidor tiene valores
+retocados (daño de hechizos, tasas de proc, ilvl de la loot), los resultados
+serán una aproximación: sirven perfectamente para comparar opciones entre sí
+—que es para lo que se usa un simulador— pero el DPS absoluto puede no cuadrar
+con el del servidor.

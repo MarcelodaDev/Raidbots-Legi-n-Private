@@ -1,0 +1,538 @@
+import {
+  PAIRED_SLOTS,
+  slotFamily,
+  type CandidateItem,
+  type Character,
+  type ConsumablesConfig,
+  type DroptimizerConfig,
+  type GearItem,
+  type GearSlot,
+  type SimRequest,
+  type TalentsConfig,
+  type TopGearConfig,
+} from '@rbl/shared';
+import {
+  buildCharacterProfile,
+  buildCliArgs,
+  buildSimOptions,
+  gearOverrideLine,
+  renderProfileset,
+  type ProfilesetSpec,
+} from '../simc/profile.js';
+import { gearItemToLine } from '../simc/import.js';
+import { canClassEquip, getItem, getItemQuality } from '../data/itemdb.js';
+import { config } from '../config.js';
+
+export interface BuiltSim {
+  profileText: string;
+  args: string[];
+  /** Metadatos por nombre de profileset, para reconstruir el resultado. */
+  meta: Record<string, Record<string, unknown>>;
+  profilesetCount: number;
+  warnings: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Droptimizer
+// ---------------------------------------------------------------------------
+
+function buildDroptimizer(
+  character: Character,
+  cfg: DroptimizerConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const specs: ProfilesetSpec[] = [];
+  const warnings: string[] = [];
+
+  for (const item of cfg.items) {
+    const slots = item.slots.length ? item.slots : [];
+    if (!slots.length) {
+      warnings.push(`El ítem "${item.name}" no tiene slot conocido; se omite.`);
+      continue;
+    }
+
+    for (const slot of slots) {
+      const equipped = character.gear[slot];
+      const ilevel = cfg.targetIlevel > 0 ? cfg.targetIlevel : item.ilevel;
+      const name = `${item.name} [${slot}] (${ilevel})`;
+      specs.push({
+        name,
+        options: [
+          gearOverrideLine(
+            slot,
+            { ...item, ilevel },
+            equipped,
+            cfg.keepEnchants,
+          ),
+        ],
+        meta: {
+          kind: 'item',
+          itemId: item.itemId,
+          itemName: item.name,
+          slot,
+          ilevel,
+          source: item.source,
+          replaces: equipped?.name ?? equipped?.itemId,
+        },
+      });
+    }
+  }
+
+  return { specs, warnings };
+}
+
+// ---------------------------------------------------------------------------
+// Top Gear
+// ---------------------------------------------------------------------------
+
+/**
+ * Una pieza candidata para un slot, junto con la forma de escribir su línea
+ * .simc en el slot que le toque.
+ */
+interface SlotOption {
+  itemId: number;
+  name: string;
+  ilevel: number;
+  quality: number;
+  /** true si el personaje ya la lleva puesta. */
+  equipped: boolean;
+  /** Slot donde está equipada ahora mismo (solo si `equipped`). */
+  originalSlot?: GearSlot;
+  /** Línea de equipo para el slot destino. */
+  lineFor: (slot: GearSlot) => string;
+}
+
+function candidateOption(
+  item: CandidateItem,
+  character: Character,
+  keepEnchants: boolean,
+): SlotOption {
+  return {
+    itemId: item.itemId,
+    name: item.name,
+    ilevel: item.ilevel,
+    quality: item.quality ?? getItemQuality(item.itemId) ?? 4,
+    equipped: false,
+    lineFor: (slot) =>
+      gearOverrideLine(slot, item, character.gear[slot], keepEnchants),
+  };
+}
+
+function equippedOption(slot: GearSlot, item: GearItem): SlotOption {
+  return {
+    itemId: item.itemId,
+    name: item.name ?? `Ítem ${item.itemId}`,
+    ilevel: item.ilevel ?? 0,
+    quality: getItemQuality(item.itemId) ?? 4,
+    equipped: true,
+    originalSlot: slot,
+    // Al reescribir un slot emparejado hay que volver a declarar también la
+    // pieza equipada, con su encantamiento, gemas y reliquias intactos.
+    lineFor: (target) => gearItemToLine(item, target),
+  };
+}
+
+/** Una pieza colocada en un slot concreto dentro de una combinación. */
+interface Placement {
+  option: SlotOption;
+  slot: GearSlot;
+  /** true si la pieza sigue exactamente donde ya estaba. */
+  unchanged: boolean;
+}
+
+function place(option: SlotOption, slot: GearSlot): Placement {
+  return { option, slot, unchanged: option.originalSlot === slot };
+}
+
+/**
+ * Combinaciones de dos ítems distintos para slots emparejados.
+ *
+ * Los dos huecos son intercambiables para simc, así que basta con parejas sin
+ * orden. Si ambas piezas siguen en su hueco original, la pareja no aporta
+ * ninguna línea: es el equipo base.
+ */
+function pairCombinations(options: SlotOption[], slots: GearSlot[]): Placement[][] {
+  const result: Placement[][] = [];
+  for (let i = 0; i < options.length; i++) {
+    for (let j = i + 1; j < options.length; j++) {
+      const a = options[i];
+      const b = options[j];
+      // No se pueden llevar dos copias del mismo ítem en anillos/abalorios.
+      if (a.itemId === b.itemId) continue;
+
+      // Los dos huecos son equivalentes para simc, así que colocamos cada
+      // pieza en el suyo cuando ya está equipada: así una sustitución se lee
+      // como "cambio un anillo", no como "muevo los dos".
+      const flip = a.originalSlot === slots[1] || b.originalSlot === slots[0];
+      const [first, second] = flip ? [b, a] : [a, b];
+
+      result.push([place(first, slots[0]), place(second, slots[1])]);
+    }
+  }
+  return result;
+}
+
+function buildTopGear(
+  character: Character,
+  cfg: TopGearConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+
+  // 1. Agrupamos candidatos por familia de slot.
+  const families = new Map<string, GearSlot[]>();
+  const wantedSlots = cfg.slots.length ? cfg.slots : undefined;
+  const candidatesByFamily = new Map<string, CandidateItem[]>();
+
+  for (const item of cfg.items) {
+    for (const slot of item.slots) {
+      if (wantedSlots && !wantedSlots.includes(slot)) continue;
+      const family = slotFamily(slot);
+      families.set(family, PAIRED_SLOTS[family] ?? [slot]);
+      const list = candidatesByFamily.get(family) ?? [];
+      if (!list.some((c) => c.itemId === item.itemId)) list.push(item);
+      candidatesByFamily.set(family, list);
+    }
+  }
+
+  // 2. Para cada familia, las configuraciones posibles de sus slots.
+  const axes: { family: string; choices: Placement[][] }[] = [];
+
+  for (const [family, slots] of families) {
+    const candidates = candidatesByFamily.get(family) ?? [];
+
+    if (slots.length === 2) {
+      const pool: SlotOption[] = [];
+      for (const slot of slots) {
+        const equipped = character.gear[slot];
+        if (equipped) pool.push(equippedOption(slot, equipped));
+      }
+      for (const candidate of candidates) {
+        pool.push(candidateOption(candidate, character, cfg.keepEnchants));
+      }
+      const combos = pairCombinations(dedupeById(pool), slots);
+      if (combos.length) axes.push({ family, choices: combos });
+    } else {
+      const slot = slots[0];
+      const equipped = character.gear[slot];
+      const choices: Placement[][] = [];
+      if (equipped) {
+        choices.push([place(equippedOption(slot, equipped), slot)]);
+      }
+      for (const candidate of candidates) {
+        choices.push([
+          place(candidateOption(candidate, character, cfg.keepEnchants), slot),
+        ]);
+      }
+      if (choices.length > 1) axes.push({ family, choices });
+    }
+  }
+
+  if (!axes.length) {
+    throw new Error(
+      'No hay ítems alternativos que combinar. Añade piezas al inventario del ' +
+        'personaje o selecciona más candidatos.',
+    );
+  }
+
+  // 3. Producto cartesiano con tope.
+  const total = axes.reduce((acc, axis) => acc * axis.choices.length, 1);
+  const limit = Math.min(cfg.maxCombinations, config.maxProfilesets);
+  if (total > limit) {
+    throw new Error(
+      `La combinación pedida genera ${total.toLocaleString('es-ES')} perfiles, por ` +
+        `encima del tope de ${limit.toLocaleString('es-ES')}. Reduce los slots o los ` +
+        'ítems candidatos.',
+    );
+  }
+
+  const specs: ProfilesetSpec[] = [];
+  const equippedLegendaries = countEquippedLegendaries(character, axes);
+  const seenCombos = new Set<string>();
+
+  const walk = (index: number, current: Placement[]) => {
+    if (index === axes.length) {
+      const legendaries =
+        equippedLegendaries.outside +
+        current.filter((placement) => placement.option.quality === 5).length;
+
+      if (cfg.maxLegendaries > 0 && legendaries > cfg.maxLegendaries) return;
+
+      const changed = current.filter((placement) => !placement.unchanged);
+      if (!changed.length) return; // es el perfil base
+
+      // Un slot emparejado se reescribe entero: si cambia una pieza hay que
+      // declarar también la otra para no perderla.
+      const touchedFamilies = new Set(changed.map((p) => slotFamily(p.slot)));
+      const options = current
+        .filter((placement) => touchedFamilies.has(slotFamily(placement.slot)))
+        .map((placement) => placement.option.lineFor(placement.slot))
+        .filter(Boolean);
+
+      if (!options.length) return;
+
+      // Dos recorridos distintos pueden dar el mismo equipo final.
+      const key = [...options].sort().join('|');
+      if (seenCombos.has(key)) return;
+      seenCombos.add(key);
+
+      specs.push({
+        name: changed
+          .map((placement) => `${placement.option.name} (${placement.slot})`)
+          .join(' + '),
+        options,
+        meta: {
+          kind: 'combination',
+          items: changed.map((placement) => ({
+            itemId: placement.option.itemId,
+            name: placement.option.name,
+            slot: placement.slot,
+            ilevel: placement.option.ilevel,
+          })),
+          legendaries,
+        },
+      });
+      return;
+    }
+
+    for (const choice of axes[index].choices) {
+      walk(index + 1, [...current, ...choice]);
+    }
+  };
+
+  walk(0, []);
+
+  if (!specs.length) {
+    warnings.push(
+      'Ninguna combinación cumple las restricciones (revisa el límite de legendarias).',
+    );
+  }
+
+  return { specs, warnings };
+}
+
+function dedupeById(options: SlotOption[]): SlotOption[] {
+  const seen = new Map<number, SlotOption>();
+  for (const option of options) {
+    const existing = seen.get(option.itemId);
+    // Preferimos la versión equipada: conserva encantamiento y gemas reales.
+    if (!existing || (option.equipped && !existing.equipped)) {
+      seen.set(option.itemId, option);
+    }
+  }
+  return [...seen.values()];
+}
+
+/** Legendarias equipadas en slots que NO estamos combinando. */
+function countEquippedLegendaries(
+  character: Character,
+  axes: { family: string; choices: Placement[][] }[],
+): { outside: number } {
+  const varying = new Set(axes.map((axis) => axis.family));
+  let outside = 0;
+  for (const item of Object.values(character.gear)) {
+    if (!item) continue;
+    if (varying.has(slotFamily(item.slot))) continue;
+    if (getItemQuality(item.itemId) === 5) outside++;
+  }
+  return { outside };
+}
+
+// ---------------------------------------------------------------------------
+// Talentos
+// ---------------------------------------------------------------------------
+
+function buildTalents(
+  character: Character,
+  cfg: TalentsConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+  const base = character.talents;
+
+  if (!/^[0-3]{7}$/.test(base)) {
+    throw new Error(
+      `La cadena de talentos "${base}" no es válida. Debe tener 7 dígitos (0-3).`,
+    );
+  }
+
+  const specs: ProfilesetSpec[] = [];
+  const seen = new Set<string>([base]);
+
+  const push = (talents: string, meta: Record<string, unknown>) => {
+    if (seen.has(talents)) return;
+    seen.add(talents);
+    specs.push({ name: `Talentos ${talents}`, options: [`talents=${talents}`], meta });
+  };
+
+  if (cfg.mode === 'custom') {
+    for (const talents of cfg.custom ?? []) {
+      if (!/^[0-3]{7}$/.test(talents)) {
+        warnings.push(`Se ignoró la cadena de talentos inválida "${talents}".`);
+        continue;
+      }
+      push(talents, { kind: 'talents', talents });
+    }
+  } else if (cfg.mode === 'rows') {
+    const rows = cfg.rows.length ? cfg.rows : [1, 2, 3, 4, 5, 6, 7];
+    for (const row of rows) {
+      if (row < 1 || row > 7) continue;
+      for (let choice = 1; choice <= 3; choice++) {
+        const chars = base.split('');
+        chars[row - 1] = String(choice);
+        push(chars.join(''), {
+          kind: 'talents',
+          talents: chars.join(''),
+          row,
+          choice,
+        });
+      }
+    }
+  } else {
+    // Todas las combinaciones: 3^7 = 2187 perfiles.
+    const total = 3 ** 7;
+    for (let index = 0; index < total; index++) {
+      let value = index;
+      const chars: string[] = [];
+      for (let row = 0; row < 7; row++) {
+        chars.push(String((value % 3) + 1));
+        value = Math.floor(value / 3);
+      }
+      const talents = chars.join('');
+      push(talents, { kind: 'talents', talents });
+    }
+  }
+
+  return { specs, warnings };
+}
+
+// ---------------------------------------------------------------------------
+// Consumibles
+// ---------------------------------------------------------------------------
+
+function buildConsumables(cfg: ConsumablesConfig): {
+  specs: ProfilesetSpec[];
+  warnings: string[];
+} {
+  const specs: ProfilesetSpec[] = [];
+  const axes: [string, string[], string][] = [
+    ['flask', cfg.flasks, 'Frasco'],
+    ['food', cfg.foods, 'Comida'],
+    ['potion', cfg.potions, 'Poción'],
+    ['augmentation', cfg.augmentations, 'Runa'],
+  ];
+
+  for (const [option, values, label] of axes) {
+    for (const value of values) {
+      if (!value) continue;
+      specs.push({
+        name: `${label}: ${value}`,
+        options: [`${option}=${value}`],
+        meta: { kind: 'consumable', category: option, value, label },
+      });
+    }
+  }
+
+  if (!specs.length) {
+    throw new Error('Selecciona al menos un consumible para comparar.');
+  }
+
+  return { specs, warnings: [] };
+}
+
+// ---------------------------------------------------------------------------
+// Entrada principal
+// ---------------------------------------------------------------------------
+
+/**
+ * SimulationCraft aborta el lote entero si un ítem no es equipable por la
+ * clase, así que lo comprobamos antes de generar nada.
+ */
+function assertEquippable(character: Character, items: CandidateItem[]): void {
+  for (const candidate of items) {
+    const record = getItem(candidate.itemId);
+    if (!record) continue; // no está en la base: que decida simc
+    if (!canClassEquip(record, character.class)) {
+      throw new Error(
+        `"${record.name}" (id ${record.id}) no lo puede equipar un ${character.class.replace(/_/g, ' ')}. ` +
+          'Quítalo de la selección: SimulationCraft cancelaría toda la simulación.',
+      );
+    }
+  }
+}
+
+export function buildSim(character: Character, request: SimRequest): BuiltSim {
+  const { options, config: cfg } = request;
+  const warnings: string[] = [];
+  let specs: ProfilesetSpec[] = [];
+  let scaleFactors = false;
+  let scaleStats: string[] | undefined;
+
+  switch (cfg.type) {
+    case 'quick':
+      scaleFactors = cfg.statWeights;
+      scaleStats = cfg.scaleStats;
+      break;
+    case 'droptimizer': {
+      assertEquippable(character, cfg.items);
+      const built = buildDroptimizer(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'topgear': {
+      assertEquippable(character, cfg.items);
+      const built = buildTopGear(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'talents': {
+      const built = buildTalents(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'consumables': {
+      const built = buildConsumables(cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+  }
+
+  if (specs.length > config.maxProfilesets) {
+    throw new Error(
+      `La simulación generaría ${specs.length} perfiles, por encima del tope de ` +
+        `${config.maxProfilesets}. Reduce la selección.`,
+    );
+  }
+
+  const meta: Record<string, Record<string, unknown>> = {};
+  const lines: string[] = [
+    buildCharacterProfile(character, options),
+    ...buildSimOptions(options),
+  ];
+
+  const usedNames = new Set<string>();
+  for (const spec of specs) {
+    // Los nombres de profileset deben ser únicos: simc los usa como clave.
+    let name = spec.name;
+    let suffix = 2;
+    while (usedNames.has(name)) name = `${spec.name} (${suffix++})`;
+    usedNames.add(name);
+
+    const finalSpec = { ...spec, name };
+    lines.push(...renderProfileset(finalSpec));
+    if (spec.meta) meta[name] = spec.meta;
+  }
+
+  return {
+    profileText: `${lines.join('\n')}\n`,
+    args: buildCliArgs(options, {
+      profilesets: specs.length > 0,
+      scaleFactors,
+      scaleStats,
+    }),
+    meta,
+    profilesetCount: specs.length,
+    warnings,
+  };
+}

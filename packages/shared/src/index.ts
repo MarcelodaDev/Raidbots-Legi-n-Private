@@ -1,0 +1,503 @@
+/**
+ * Tipos compartidos entre el servidor y la interfaz web.
+ *
+ * Todo lo que viaja por la API vive aquí para que el front y el back no se
+ * desincronicen. Los nombres de slots, stats y opciones siguen la nomenclatura
+ * de SimulationCraft 7.3.5 (rama legion-dev).
+ */
+
+// ---------------------------------------------------------------------------
+// Equipo y personaje
+// ---------------------------------------------------------------------------
+
+/** Slots de equipo tal y como los nombra SimulationCraft. */
+export const GEAR_SLOTS = [
+  'head',
+  'neck',
+  'shoulder',
+  'back',
+  'chest',
+  'shirt',
+  'tabard',
+  'wrist',
+  'hands',
+  'waist',
+  'legs',
+  'feet',
+  'finger1',
+  'finger2',
+  'trinket1',
+  'trinket2',
+  'main_hand',
+  'off_hand',
+] as const;
+
+export type GearSlot = (typeof GEAR_SLOTS)[number];
+
+/** Slots que en la práctica se simulan (sin camisa ni tabardo). */
+export const SIMMED_SLOTS: GearSlot[] = GEAR_SLOTS.filter(
+  (s) => s !== 'shirt' && s !== 'tabard',
+) as GearSlot[];
+
+/** Slots que comparten pool de ítems: un anillo puede ir en finger1 o finger2. */
+export const PAIRED_SLOTS: Record<string, GearSlot[]> = {
+  finger: ['finger1', 'finger2'],
+  trinket: ['trinket1', 'trinket2'],
+};
+
+export interface GearItem {
+  slot: GearSlot;
+  itemId: number;
+  /** Nombre legible. Puede venir del addon o de la base de datos de ítems. */
+  name?: string;
+  bonusIds: number[];
+  enchantId?: number;
+  /** Algunos perfiles usan el nombre del encantamiento en vez del id. */
+  enchantName?: string;
+  gemIds: number[];
+  /**
+   * Reliquias del arma artefacto (solo main_hand). Se guardan como texto
+   * porque simc admite `id:bonus_id` en cada reliquia.
+   */
+  relicIds: string[];
+  /** ilvl efectivo. Si está presente se fuerza con `ilevel=` en el perfil. */
+  ilevel?: number;
+  /** Línea original del perfil .simc, por si hay opciones que no parseamos. */
+  raw?: string;
+}
+
+export interface Character {
+  id: string;
+  name: string;
+  /** Clase en formato simc: `death_knight`, `demon_hunter`, ... */
+  class: string;
+  spec: string;
+  race: string;
+  level: number;
+  role?: string;
+  region?: string;
+  server?: string;
+  professions?: string;
+  /** Cadena de 7 dígitos con los talentos. */
+  talents: string;
+  /** Cadena `artifact=` del addon (rasgos del artefacto). */
+  artifact?: string;
+  /** Cadena `crucible=` del Crisol de Luznether (7.3+). */
+  crucible?: string;
+  gear: Partial<Record<GearSlot, GearItem>>;
+  /**
+   * Inventario adicional (bolsas y banco). El addon de Legion no siempre lo
+   * exporta, así que se puede gestionar a mano desde la app.
+   */
+  bag: GearItem[];
+  /** Perfil .simc original, saneado. Es la base de todas las simulaciones. */
+  profile: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ---------------------------------------------------------------------------
+// Opciones de simulación
+// ---------------------------------------------------------------------------
+
+export const FIGHT_STYLES = [
+  'Patchwerk',
+  'CastingPatchwerk',
+  'LightMovement',
+  'HeavyMovement',
+  'HelterSkelter',
+  'Ultraxion',
+  'CleaveAdd',
+  'HecticAddCleave',
+  'Beastlord',
+] as const;
+
+export type FightStyle = (typeof FIGHT_STYLES)[number];
+
+export interface SimOptions {
+  fightStyle: FightStyle;
+  /** Duración media del combate en segundos. */
+  fightLength: number;
+  /** Variación de la duración (0.2 = ±20%). */
+  varyCombatLength: number;
+  targets: number;
+  /** Error objetivo en %. Si es > 0 manda sobre `iterations`. */
+  targetError: number;
+  iterations: number;
+  threads: number;
+  /** Consumibles: `default` deja que simc elija, `disabled` los desactiva. */
+  flask?: string;
+  food?: string;
+  potion?: string;
+  augmentation?: string;
+  /** Opciones extra en formato simc, una por línea. Uso avanzado. */
+  extraOptions?: string;
+}
+
+export const DEFAULT_SIM_OPTIONS: SimOptions = {
+  fightStyle: 'Patchwerk',
+  fightLength: 300,
+  varyCombatLength: 0.2,
+  targets: 1,
+  targetError: 0.2,
+  iterations: 10000,
+  threads: 0, // 0 = usar todos los núcleos disponibles
+  flask: 'default',
+  food: 'default',
+  potion: 'default',
+  augmentation: 'default',
+};
+
+// ---------------------------------------------------------------------------
+// Tipos de simulación
+// ---------------------------------------------------------------------------
+
+export type SimType =
+  | 'quick'
+  | 'droptimizer'
+  | 'topgear'
+  | 'talents'
+  | 'consumables';
+
+export interface QuickSimConfig {
+  type: 'quick';
+  /** Calcula pesos de estadística (`calculate_scale_factors=1`). */
+  statWeights: boolean;
+  /** Stats a escalar. Vacío = las que simc elija para la spec. */
+  scaleStats?: string[];
+}
+
+/** Un ítem candidato para Droptimizer / Top Gear. */
+export interface CandidateItem {
+  itemId: number;
+  name: string;
+  /** Slots donde puede ir (uno o dos en anillos y abalorios). */
+  slots: GearSlot[];
+  ilevel: number;
+  bonusIds?: number[];
+  gemIds?: number[];
+  /** Calidad del ítem (5 = legendaria). Se usa para el límite de legendarias. */
+  quality?: number;
+  /** Etiqueta de origen: jefe, mazmorra, "bolsa"... solo informativa. */
+  source?: string;
+}
+
+export interface DroptimizerConfig {
+  type: 'droptimizer';
+  items: CandidateItem[];
+  /** ilvl al que se normalizan todos los candidatos. 0 = usar el suyo. */
+  targetIlevel: number;
+  /** Mantener encantamiento y gemas del ítem equipado en ese slot. */
+  keepEnchants: boolean;
+}
+
+export interface TopGearConfig {
+  type: 'topgear';
+  /** Ítems candidatos además de lo equipado (bolsa incluida). */
+  items: CandidateItem[];
+  /** Slots que se dejan libres para combinar. */
+  slots: GearSlot[];
+  maxLegendaries: number;
+  /** Tope de combinaciones a simular. */
+  maxCombinations: number;
+  keepEnchants: boolean;
+}
+
+export type TalentMode = 'rows' | 'full' | 'custom';
+
+export interface TalentsConfig {
+  type: 'talents';
+  /** `rows`: una fila cada vez. `full`: todas las combinaciones. */
+  mode: TalentMode;
+  /** Filas (1-7) a variar en modo `rows`. */
+  rows: number[];
+  /** Cadenas de talentos concretas en modo `custom`. */
+  custom?: string[];
+}
+
+export interface ConsumablesConfig {
+  type: 'consumables';
+  flasks: string[];
+  foods: string[];
+  potions: string[];
+  augmentations: string[];
+}
+
+export type SimConfig =
+  | QuickSimConfig
+  | DroptimizerConfig
+  | TopGearConfig
+  | TalentsConfig
+  | ConsumablesConfig;
+
+export interface SimRequest {
+  characterId: string;
+  /** Nombre libre para identificar la simulación en el historial. */
+  label?: string;
+  options: SimOptions;
+  config: SimConfig;
+}
+
+// ---------------------------------------------------------------------------
+// Resultados
+// ---------------------------------------------------------------------------
+
+export interface DpsValue {
+  mean: number;
+  /** Error estándar de la media (lo que simc llama `mean_std_dev`). */
+  error: number;
+  min?: number;
+  max?: number;
+}
+
+export interface AbilityBreakdown {
+  name: string;
+  /** Daño total medio de la habilidad. */
+  amount: number;
+  /** Porcentaje sobre el daño total del jugador. */
+  pct: number;
+  dps: number;
+  executes: number;
+  crit: number;
+  uptime?: number;
+}
+
+export interface ScaleFactor {
+  stat: string;
+  value: number;
+  error: number;
+  /** Valor normalizado respecto al stat principal. */
+  normalized: number;
+}
+
+export interface ProfilesetResult {
+  name: string;
+  mean: number;
+  stddev: number;
+  /** Diferencia absoluta contra el perfil base. */
+  delta: number;
+  /** Diferencia porcentual contra el perfil base. */
+  deltaPct: number;
+  /** Datos estructurados para pintar la fila (ítem, talentos, etc.). */
+  meta?: Record<string, unknown>;
+}
+
+export interface SimResult {
+  jobId: string;
+  type: SimType;
+  label: string;
+  characterId: string;
+  characterName: string;
+  spec: string;
+  class: string;
+  simcVersion: string;
+  wowVersion: string;
+  options: SimOptions;
+  baseline: DpsValue;
+  breakdown: AbilityBreakdown[];
+  scaleFactors?: ScaleFactor[];
+  profilesets?: ProfilesetResult[];
+  /** Avisos de simc (perfiles con errores, opciones desconocidas...). */
+  warnings: string[];
+  iterations: number;
+  elapsedMs: number;
+  finishedAt: string;
+}
+
+// ---------------------------------------------------------------------------
+// Trabajos (cola de simulación)
+// ---------------------------------------------------------------------------
+
+export type JobStatus = 'queued' | 'running' | 'done' | 'error' | 'cancelled';
+
+export interface Job {
+  id: string;
+  status: JobStatus;
+  type: SimType;
+  label: string;
+  characterId: string;
+  characterName: string;
+  /** 0-100. */
+  progress: number;
+  /** Texto de estado ("simulando perfil 12/240"). */
+  phase: string;
+  createdAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  error?: string;
+  /** Número de perfilesets planificados, para mostrar el coste antes de lanzar. */
+  profilesetCount?: number;
+}
+
+export interface JobEvent {
+  job: Job;
+  /** Últimas líneas de la salida de simc. */
+  log?: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Base de datos de ítems
+// ---------------------------------------------------------------------------
+
+export interface ItemRecord {
+  id: number;
+  name: string;
+  ilevel: number;
+  /** Calidad: 0 pobre ... 5 legendaria, 6 artefacto. */
+  quality: number;
+  /** INVTYPE de la DBC. */
+  inventoryType: number;
+  itemClass: number;
+  itemSubclass: number;
+  classMask: number;
+  /** Slots de simc derivados del INVTYPE. */
+  slots: GearSlot[];
+}
+
+export interface ConsumableRecord {
+  id: number;
+  name: string;
+  /** Nombre tokenizado que espera simc (`flask_of_the_whispered_pact`). */
+  token: string;
+  ilevel: number;
+  reqLevel: number;
+}
+
+export interface ConsumableDb {
+  flasks: ConsumableRecord[];
+  foods: ConsumableRecord[];
+  potions: ConsumableRecord[];
+  augmentations: ConsumableRecord[];
+}
+
+export interface ItemSearchQuery {
+  q?: string;
+  slot?: GearSlot;
+  minIlevel?: number;
+  maxIlevel?: number;
+  quality?: number;
+  limit?: number;
+  /** Clase en formato simc: filtra lo que ese personaje puede equipar. */
+  class?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Restricciones de equipo por clase
+// ---------------------------------------------------------------------------
+
+/** Bit de cada clase dentro de `classMask` (orden de la DBC). */
+export const CLASS_BITS: Record<string, number> = {
+  warrior: 1 << 0,
+  paladin: 1 << 1,
+  hunter: 1 << 2,
+  rogue: 1 << 3,
+  priest: 1 << 4,
+  death_knight: 1 << 5,
+  shaman: 1 << 6,
+  mage: 1 << 7,
+  warlock: 1 << 8,
+  monk: 1 << 9,
+  druid: 1 << 10,
+  demon_hunter: 1 << 11,
+};
+
+/** Subclase de armadura que usa cada clase: 1 tela, 2 cuero, 3 malla, 4 placas. */
+export const CLASS_ARMOR_TYPE: Record<string, number> = {
+  mage: 1,
+  priest: 1,
+  warlock: 1,
+  druid: 2,
+  rogue: 2,
+  monk: 2,
+  demon_hunter: 2,
+  hunter: 3,
+  shaman: 3,
+  warrior: 4,
+  paladin: 4,
+  death_knight: 4,
+};
+
+/**
+ * INVTYPE de las piezas cuya subclase determina el tipo de armadura.
+ * Capas, cuellos, anillos y abalorios los puede llevar cualquiera aunque en la
+ * DBC figuren como "tela" o "misceláneo".
+ */
+export const ARMOR_TYPED_INVTYPES = new Set([1, 3, 5, 6, 7, 8, 9, 10, 20]);
+
+// ---------------------------------------------------------------------------
+// Metadatos y estado del servidor
+// ---------------------------------------------------------------------------
+
+export interface SimcStatus {
+  available: boolean;
+  path?: string;
+  version?: string;
+  wowVersion?: string;
+  error?: string;
+}
+
+export interface ServerMeta {
+  simc: SimcStatus;
+  itemDb: { available: boolean; items: number; consumables: number };
+  fightStyles: readonly string[];
+  defaults: SimOptions;
+  cpuCount: number;
+}
+
+// ---------------------------------------------------------------------------
+// Utilidades compartidas
+// ---------------------------------------------------------------------------
+
+export const CLASS_LIST = [
+  'death_knight',
+  'demon_hunter',
+  'druid',
+  'hunter',
+  'mage',
+  'monk',
+  'paladin',
+  'priest',
+  'rogue',
+  'shaman',
+  'warlock',
+  'warrior',
+] as const;
+
+/** Etiqueta legible para un slot. */
+export const SLOT_LABELS: Record<GearSlot, string> = {
+  head: 'Cabeza',
+  neck: 'Cuello',
+  shoulder: 'Hombros',
+  back: 'Espalda',
+  chest: 'Pecho',
+  shirt: 'Camisa',
+  tabard: 'Tabardo',
+  wrist: 'Muñecas',
+  hands: 'Manos',
+  waist: 'Cintura',
+  legs: 'Piernas',
+  feet: 'Pies',
+  finger1: 'Anillo 1',
+  finger2: 'Anillo 2',
+  trinket1: 'Abalorio 1',
+  trinket2: 'Abalorio 2',
+  main_hand: 'Mano principal',
+  off_hand: 'Mano secundaria',
+};
+
+/** Convierte un nombre de ítem al token que espera simc. */
+export function tokenize(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+/** Slot "base" de un slot emparejado: finger2 -> finger. */
+export function slotFamily(slot: GearSlot): string {
+  if (slot === 'finger1' || slot === 'finger2') return 'finger';
+  if (slot === 'trinket1' || slot === 'trinket2') return 'trinket';
+  return slot;
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.rbl/
+vendor/
+data/items.json
+*.log
+.DS_Store
+
+# Datos generados desde la DBC de simc (npm run build:itemdb)
+data/consumables.json

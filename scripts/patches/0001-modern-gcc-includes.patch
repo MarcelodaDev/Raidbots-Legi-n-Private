@@ -1,0 +1,12 @@
+diff --git a/engine/util/stopwatch.cpp b/engine/util/stopwatch.cpp
+index 4dcfb15..a2ede10 100644
+--- a/engine/util/stopwatch.cpp
++++ b/engine/util/stopwatch.cpp
+@@ -7,6 +7,7 @@
+ 
+ #include <cassert>
+ #include <cmath>
++#include <ctime>
+ #include <stdexcept>
+ #include <system_error>
+ #include <limits>
