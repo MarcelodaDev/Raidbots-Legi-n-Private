@@ -4,6 +4,7 @@ import type {
   PatchPhase,
   PatchSpecGear,
   ConsumableDb,
+  EnhancementDb,
   GearItem,
   ItemRecord,
   Job,
@@ -36,6 +37,7 @@ export const api = {
   meta: () => request<ServerMeta>('/api/meta'),
   refreshMeta: () => request<unknown>('/api/meta/refresh', { method: 'POST' }),
   consumables: () => request<ConsumableDb>('/api/consumables'),
+  enhancements: () => request<EnhancementDb>('/api/enhancements'),
 
   patches: () => request<PatchPhase[]>('/api/patches'),
   patchGear: (patchId: string, className: string, spec: string) =>

@@ -19,6 +19,8 @@ Legion ya están implementados y validados ahí.
 | **Talentos** | Compara fila a fila (21 perfiles) o las 2187 combinaciones completas. |
 | **Consumibles** | Compara frascos, comida, pociones y runas de aumento de Legion. |
 | **Reliquias** | Qué rasgo del artefacto conviene subir (cada reliquia da +1 rango) y cuánto vale subir el ilvl de cada una de las tres reliquias. |
+| **Encantamientos** | Compara los encantamientos de un hueco, incluido el perfil sin encantar. |
+| **Gemas** | Compara las gemas de un hueco, incluido el perfil sin gema. |
 
 Otras cosas que trae:
 
@@ -48,6 +50,7 @@ npm install          # dependencias de la app
 npm run setup:simc   # clona y compila SimulationCraft 7.3.5 (10-20 min)
 npm run build:itemdb # genera la base de ítems desde la DBC de simc
 npm run build:patchdb # genera las fases de contenido desde los perfiles de simc
+npm run build:enhancements # genera el catálogo de gemas y encantamientos
 npm run check:simc   # comprueba que todo está en su sitio
 ```
 
@@ -106,6 +109,7 @@ scripts/
   setup-simc.sh      Clona, parchea y compila SimulationCraft 7.3.5
   build-item-db.mjs  Genera data/items.json y data/consumables.json
   build-patch-db.mjs Genera data/patches.json (fases y equipo de referencia)
+  build-enhancements-db.mjs  Genera data/enhancements.json (gemas y encantamientos)
   check-simc.mjs     Diagnóstico de la instalación
 data/       Base de ítems y consumibles (generados)
 .rbl/       Personajes, historial y resultados (estado local)
@@ -136,6 +140,14 @@ Detalles que merece la pena conocer:
   tier de banda. Cada perfil se carga en el motor para que sea él quien resuelva
   el ilvl efectivo de cada pieza, y de ahí se deducen el tope de ilvl de la fase
   y cuántas legendarias equipa.
+- **Gemas y encantamientos se validan antes de simular.** SimulationCraft
+  ignora en silencio un `enchant_id` que no conoce y devuelve el DPS sin
+  encantar, que parece un resultado bueno. Las listas por hueco salen de los
+  perfiles por tier (qué se pone de verdad en un anillo), y el catálogo completo
+  queda detrás de un interruptor.
+- **Las gemas solo cuentan si la pieza tiene engarce.** Comprobado: si no lo
+  tiene, el motor las ignora, así que heredarlas al cambiar de ítem no inventa
+  estadísticas. La app avisa cuando el hueco no parece tener engarce.
 - **Los perfiles pegados se sanean**: un `.simc` puede escribir ficheros o hacer
   peticiones de red, y aquí se ejecuta un binario de verdad, así que esas
   opciones se filtran al importar.
@@ -185,8 +197,8 @@ nada más.
   que es lo que hace falta para el 99% de los casos, pero no se modelan
   bonus IDs concretos (socket extra, terciarias) salvo que los indiques a mano.
 - **Encantamientos y gemas al cambiar de pieza**: se heredan del ítem que
-  ocupaba ese slot. Es la misma aproximación que usa Raidbots, pero conviene
-  saberlo al leer un Droptimizer.
+  ocupaba ese slot. Es la misma aproximación que usa Raidbots. No se modela que
+  la pieza nueva tenga engarce y la vieja no: para eso está la pestaña de Gemas.
 - **Límite de legendarias**: configurable (2 por defecto). Los servidores
   privados lo cambian a menudo, así que ajústalo a lo que tenga el tuyo.
 - **Un solo personaje por simulación**: no hay sims de banda ni de varios

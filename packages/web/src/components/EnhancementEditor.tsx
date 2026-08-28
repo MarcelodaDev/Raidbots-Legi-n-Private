@@ -120,14 +120,6 @@ export function EnhancementEditor({
         </label>
       </div>
 
-      {kind === 'gems' && equipped && !equipped.gemIds.length && (
-        <div className="notice">
-          Esa pieza no lleva ninguna gema ahora mismo. Si no tiene engarce,
-          SimulationCraft ignorará las gemas y todos los perfiles saldrán con el
-          mismo DPS.
-        </div>
-      )}
-
       <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
         Las diferencias entre {kind === 'enchants' ? 'encantamientos' : 'gemas'} son
         pequeñas (del orden de 0,1-0,5%). Baja el error objetivo a 0,05% o menos

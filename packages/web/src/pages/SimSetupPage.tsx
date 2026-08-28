@@ -7,6 +7,8 @@ import {
   type CandidateItem,
   type Character,
   type ConsumableDb,
+  type EnhancementDb,
+  type GearSlot,
   type FightStyle,
   type ServerMeta,
   type SimConfig,
@@ -15,6 +17,7 @@ import {
 } from '@rbl/shared';
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
+import { EnhancementEditor } from '../components/EnhancementEditor.js';
 
 const TABS: { type: SimType; label: string; hint: string }[] = [
   {
@@ -47,6 +50,16 @@ const TABS: { type: SimType; label: string; hint: string }[] = [
     label: 'Reliquias',
     hint: 'Qué rasgo del artefacto conviene subir y cuánto vale subir el ilvl de cada reliquia.',
   },
+  {
+    type: 'enchants',
+    label: 'Encantamientos',
+    hint: 'Compara los encantamientos de un hueco, incluido no llevar ninguno.',
+  },
+  {
+    type: 'gems',
+    label: 'Gemas',
+    hint: 'Compara las gemas de un hueco. Ojo: si la pieza no tiene engarce, el motor las ignora.',
+  },
 ];
 
 /** ¿La pestaña está todavía sin rellenar? */
@@ -64,6 +77,10 @@ function isEmptySelection(tab: SimType, config: SimConfig): boolean {
       );
     case 'relics':
       return config.traits.length === 0 && config.relicIlevels.length === 0;
+    case 'enchants':
+      return config.enchantIds.length === 0 && !config.includeNone;
+    case 'gems':
+      return config.gemIds.length === 0 && !config.includeNone;
     default:
       return false;
   }
@@ -102,11 +119,17 @@ export function SimSetupPage() {
   const [extraRanks, setExtraRanks] = useState(1);
   const [relicIlevelInput, setRelicIlevelInput] = useState('');
   const [currentRelicIlevel, setCurrentRelicIlevel] = useState(0);
+  const [enhancementDb, setEnhancementDb] = useState<EnhancementDb | null>(null);
+  const [enhanceSlot, setEnhanceSlot] = useState<GearSlot>('finger1');
+  const [enchantIds, setEnchantIds] = useState<number[]>([]);
+  const [gemIds, setGemIds] = useState<number[]>([]);
+  const [includeNone, setIncludeNone] = useState(true);
 
   useEffect(() => {
     if (!id) return;
     api.character(id).then(setCharacter).catch((err: Error) => setError(err.message));
     api.consumables().then(setConsumableDb).catch(() => setConsumableDb(null));
+    api.enhancements().then(setEnhancementDb).catch(() => setEnhancementDb(null));
   }, [id]);
 
   useEffect(() => {
@@ -145,6 +168,26 @@ export function SimSetupPage() {
     setCurrentRelicIlevel((prev) => prev || character.estimatedRelicIlevel || 0);
   }, [tab, character]);
 
+  // Al abrir Encantamientos o Gemas colocamos el cursor en un hueco que tenga
+  // pieza y marcamos lo que se suele usar ahí.
+  useEffect(() => {
+    if ((tab !== 'enchants' && tab !== 'gems') || !character || !enhancementDb) return;
+
+    const candidates: GearSlot[] = ['finger1', 'finger2', 'neck', 'back'];
+    const slot =
+      candidates.find((option) => character.gear[option]) ?? enhanceSlot;
+    setEnhanceSlot(slot);
+
+    const suggestions = enhancementDb.bySlot[slot];
+    if (tab === 'enchants') {
+      setEnchantIds((prev) => (prev.length ? prev : suggestions?.enchants ?? []));
+    } else {
+      setGemIds((prev) => (prev.length ? prev : suggestions?.gems ?? []));
+    }
+    // `enhanceSlot` se omite a propósito: solo queremos el valor inicial.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, character, enhancementDb]);
+
   const relicIlevels = useMemo(
     () =>
       relicIlevelInput
@@ -173,6 +216,10 @@ export function SimSetupPage() {
         return { type: 'talents', mode: talentMode, rows: [1, 2, 3, 4, 5, 6, 7] };
       case 'consumables':
         return { type: 'consumables', ...selectedConsumables };
+      case 'enchants':
+        return { type: 'enchants', slot: enhanceSlot, enchantIds, includeNone };
+      case 'gems':
+        return { type: 'gems', slot: enhanceSlot, gemIds, includeNone };
       case 'relics':
         return {
           type: 'relics',
@@ -200,6 +247,10 @@ export function SimSetupPage() {
     extraRanks,
     currentRelicIlevel,
     relicIlevels,
+    enhanceSlot,
+    enchantIds,
+    gemIds,
+    includeNone,
   ]);
 
   // Vista previa del coste: cuántos perfiles va a simular.
@@ -339,6 +390,26 @@ export function SimSetupPage() {
             relicIlevelInput={relicIlevelInput}
             setRelicIlevelInput={setRelicIlevelInput}
             onCharacterUpdate={setCharacter}
+          />
+        )}
+
+        {(tab === 'enchants' || tab === 'gems') && enhancementDb && (
+          <EnhancementEditor
+            kind={tab}
+            character={character}
+            db={enhancementDb}
+            slot={enhanceSlot}
+            setSlot={(slot) => {
+              setEnhanceSlot(slot);
+              // Cada hueco tiene sus propias opciones habituales.
+              const suggestions = enhancementDb.bySlot[slot];
+              if (tab === 'enchants') setEnchantIds(suggestions?.enchants ?? []);
+              else setGemIds(suggestions?.gems ?? []);
+            }}
+            selected={tab === 'enchants' ? enchantIds : gemIds}
+            setSelected={tab === 'enchants' ? setEnchantIds : setGemIds}
+            includeNone={includeNone}
+            setIncludeNone={setIncludeNone}
           />
         )}
 

@@ -11,3 +11,6 @@ data/consumables.json
 
 # Fases generadas desde los perfiles de simc (npm run build:patchdb)
 data/patches.json
+
+# Catálogo generado (npm run build:enhancements)
+data/enhancements.json
