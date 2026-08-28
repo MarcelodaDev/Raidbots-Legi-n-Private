@@ -185,6 +185,7 @@ export const DEFAULT_SIM_OPTIONS: SimOptions = {
 export type SimType =
   | 'quick'
   | 'droptimizer'
+  | 'upgrades'
   | 'topgear'
   | 'talents'
   | 'consumables'
@@ -233,6 +234,21 @@ export interface TopGearConfig {
   maxLegendaries: number;
   /** Tope de combinaciones a simular. */
   maxCombinations: number;
+  keepEnchants: boolean;
+}
+
+/**
+ * Buscador de mejoras: recorre la base de ítems de tu fase y te dice qué te
+ * sube el DPS, hueco por hueco.
+ */
+export interface UpgradesConfig {
+  type: 'upgrades';
+  /** Cuántos candidatos por hueco se simulan, tras ordenarlos por tus pesos. */
+  perSlot: number;
+  /** Huecos a mirar. Vacío = todos menos abalorios. */
+  slots: GearSlot[];
+  /** ilvls a los que se prueba cada candidato, para saber desde cuál mejora. */
+  ilevels: number[];
   keepEnchants: boolean;
 }
 
@@ -316,6 +332,7 @@ export interface GemsConfig {
 export type SimConfig =
   | QuickSimConfig
   | DroptimizerConfig
+  | UpgradesConfig
   | TopGearConfig
   | TalentsConfig
   | ConsumablesConfig
@@ -445,6 +462,11 @@ export interface ItemRecord {
   classMask: number;
   /** Slots de simc derivados del INVTYPE. */
   slots: GearSlot[];
+  /**
+   * Tipos de estadística (ITEM_MOD_* de la DBC). Solo los tipos, no los
+   * importes: sirven para ordenar candidatos sin simularlos.
+   */
+  stats?: number[];
 }
 
 export interface ConsumableRecord {
@@ -730,6 +752,13 @@ export function slotFamily(slot: GearSlot): string {
 }
 
 export { buildPawnScale, type PawnScale } from './pawn.js';
+export {
+  ITEM_MOD_STATS,
+  pickSlotCandidates,
+  statScore,
+  weightsByStat,
+  type ScoredItem,
+} from './upgrades.js';
 
 /** Una familia de slots y cuántas configuraciones admite. */
 export interface TopGearAxisInfo {

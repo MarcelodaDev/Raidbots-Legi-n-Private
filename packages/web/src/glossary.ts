@@ -148,6 +148,26 @@ export const GLOSSARY = {
     text: 'Cuánto DPS ganas o pierdes con ese cambio, comparado con tu personaje ahora mismo. En verde y con ▲ si mejora, en rojo y con ▼ si empeora.',
   },
 
+  upgrades: {
+    title: 'Qué me mejora',
+    text: 'Repasa todas las piezas de tu fase que tu clase puede llevar, se queda con las más prometedoras de cada hueco y las simula de verdad. Te dice cuáles te suben el DPS y desde qué nivel de objeto empiezan a merecer la pena.',
+  },
+
+  perSlot: {
+    title: 'Candidatos por hueco',
+    text: 'Cuántas piezas se pelean en cada hueco. Se eligen antes sin simular: la mitad por llevar las estadísticas que a ti te rentan y la mitad por tener más ilvl, para no perder ninguna de las dos formas de ser mejor. Más candidatos afinan más, pero tardan más.',
+  },
+
+  upgradeIlevels: {
+    title: 'Niveles a probar',
+    text: 'Cada pieza se simula a estos niveles de objeto. Sirve para saber desde cuál te compensa: una pieza puede no mejorarte a 940 y sí a 970. Cuantos más niveles, más tarda.',
+  },
+
+  trinkets: {
+    title: 'Abalorios',
+    text: 'Los abalorios se prueban por parejas, porque lo que decide es la combinación: dos que por separado son buenos pueden solaparse. Van aparte del buscador de mejoras porque casi todo su valor está en el efecto que disparan, no en sus estadísticas, así que ordenarlos sin simularlos no funcionaría.',
+  },
+
   topgearSpace: {
     title: 'Por qué crece tan rápido',
     text: 'Se prueban todas las mezclas posibles, así que las opciones de cada hueco se multiplican entre sí, no se suman. Con 2 piezas de repuesto en cada hueco ya salen millones de combinaciones. Por eso funciona bien con los 3 o 4 huecos que dudas, y no con el equipo entero.',

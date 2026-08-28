@@ -1,6 +1,9 @@
 import {
   PAIRED_SLOTS,
+  SIMMED_SLOTS,
+  pickSlotCandidates,
   slotFamily,
+  weightsByStat,
   type CandidateItem,
   type Character,
   type ConsumablesConfig,
@@ -11,9 +14,12 @@ import {
   type GemsConfig,
   type RelicsConfig,
   type SimRequest,
+  type ScaleFactor,
+  type ScoredItem,
   type TalentsConfig,
   type TopGearConfig,
   type TopGearSpace,
+  type UpgradesConfig,
 } from '@rbl/shared';
 import {
   buildCharacterProfile,
@@ -24,7 +30,14 @@ import {
   type ProfilesetSpec,
 } from '../simc/profile.js';
 import { gearItemToLine } from '../simc/import.js';
-import { canClassEquip, getItem, getItemQuality } from '../data/itemdb.js';
+import {
+  canClassEquip,
+  getItem,
+  getItemQuality,
+  slotCandidates,
+} from '../data/itemdb.js';
+import { ilevelCapOf } from '../data/patches.js';
+import { latestScaleFactors } from '../store.js';
 import { getEnchant, getGem } from '../data/enhancements.js';
 import { config } from '../config.js';
 
@@ -79,6 +92,143 @@ function buildDroptimizer(
           replaces: equipped?.name ?? equipped?.itemId,
         },
       });
+    }
+  }
+
+  return { specs, warnings };
+}
+
+// ---------------------------------------------------------------------------
+// Buscador de mejoras
+// ---------------------------------------------------------------------------
+
+/**
+ * Los abalorios se quedan fuera a propósito.
+ *
+ * Casi todo su valor está en un proc, no en las estadísticas, así que ordenarlos
+ * por estadísticas daría una lista sin sentido justo donde más importa. Para
+ * ellos está el apartado de Abalorios, que los pelea por parejas de verdad.
+ */
+const UPGRADE_SLOTS: GearSlot[] = SIMMED_SLOTS.filter(
+  (slot) => slotFamily(slot) !== 'trinket' && slot !== 'main_hand' && slot !== 'off_hand',
+);
+
+export interface UpgradePlan {
+  /** Candidatos elegidos por hueco, ya ordenados. */
+  bySlot: { slot: GearSlot; candidates: ScoredItem[] }[];
+  ilevels: number[];
+  /** Cuántos perfiles saldrían. */
+  total: number;
+  /** Si no hay pesos guardados no se puede ordenar nada. */
+  missingWeights: boolean;
+}
+
+/** Los ilvls a probar, saneados: ordenados, sin repetidos y dentro de la fase. */
+function upgradeIlevels(cfg: UpgradesConfig, cap: number | undefined): number[] {
+  const clean = [...new Set(cfg.ilevels.filter((value) => value > 0))]
+    .filter((value) => !cap || value <= cap)
+    .sort((a, b) => a - b);
+  return clean.length ? clean : [];
+}
+
+/**
+ * Qué se va a probar, sin construir los perfiles.
+ *
+ * Se separa para poder enseñar el coste antes de lanzar, igual que en «Mejor
+ * combinación»: aquí también el número sale de multiplicar huecos por
+ * candidatos por ilvls, y conviene verlo antes de esperar diez minutos.
+ */
+export function describeUpgrades(
+  character: Character,
+  cfg: UpgradesConfig,
+  factors: ScaleFactor[] | undefined,
+): UpgradePlan {
+  const ilevels = upgradeIlevels(cfg, ilevelCapOf(character.patchId ?? ''));
+  if (!factors?.length) {
+    return { bySlot: [], ilevels, total: 0, missingWeights: true };
+  }
+
+  const weights = weightsByStat(factors);
+  const slots = cfg.slots.length
+    ? cfg.slots.filter((slot) => UPGRADE_SLOTS.includes(slot))
+    : UPGRADE_SLOTS;
+
+  const bySlot: UpgradePlan['bySlot'] = [];
+  for (const slot of slots) {
+    const pool = slotCandidates(slot, character.class, character.patchId);
+    // Lo que ya llevas puesto no se prueba contra sí mismo.
+    const equipped = character.gear[slot]?.itemId;
+    const candidates = pickSlotCandidates(
+      pool.filter((item) => item.id !== equipped),
+      weights,
+      cfg.perSlot,
+    );
+    if (candidates.length) bySlot.push({ slot, candidates });
+  }
+
+  const perCandidate = ilevels.length || 1;
+  const total = bySlot.reduce((acc, entry) => acc + entry.candidates.length * perCandidate, 0);
+  return { bySlot, ilevels, total, missingWeights: false };
+}
+
+function buildUpgrades(
+  character: Character,
+  cfg: UpgradesConfig,
+  factors: ScaleFactor[] | undefined,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const plan = describeUpgrades(character, cfg, factors);
+  const warnings: string[] = [];
+
+  if (plan.missingWeights) {
+    throw new Error(
+      'Para buscar mejoras hacen falta tus pesos de estadística, y este ' +
+        'personaje todavía no los tiene. Lanza antes «Cuánto pego» con la ' +
+        'casilla «Calcular también cuánto vale cada estadística» marcada.',
+    );
+  }
+
+  if (!plan.bySlot.length) {
+    throw new Error(
+      'No se han encontrado piezas que probar. Revisa la fase del personaje: ' +
+        'si el tope de ilvl es muy bajo puede que no haya candidatos.',
+    );
+  }
+
+  const specs: ProfilesetSpec[] = [];
+
+  for (const { slot, candidates } of plan.bySlot) {
+    const equipped = character.gear[slot];
+
+    for (const { item, reason } of candidates) {
+      // Sin escalera de ilvls se prueba la pieza tal y como es.
+      const levels = plan.ilevels.length ? plan.ilevels : [item.ilevel];
+
+      for (const ilevel of levels) {
+        const candidate: CandidateItem = {
+          itemId: item.id,
+          name: item.name,
+          slots: item.slots,
+          ilevel,
+          quality: item.quality,
+        };
+
+        specs.push({
+          name: `${item.name} [${slot}] (${ilevel})`,
+          options: [gearOverrideLine(slot, candidate, equipped, cfg.keepEnchants)],
+          meta: {
+            kind: 'upgrade',
+            itemId: item.id,
+            itemName: item.name,
+            slot,
+            ilevel,
+            quality: item.quality,
+            reason,
+            replaces: equipped?.name ?? equipped?.itemId,
+            replacesId: equipped?.itemId,
+            replacesIlevel: equipped?.ilevel,
+          },
+        });
+      }
     }
   }
 
@@ -779,6 +929,12 @@ export function buildSim(character: Character, request: SimRequest): BuiltSim {
     case 'droptimizer': {
       assertEquippable(character, cfg.items);
       const built = buildDroptimizer(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'upgrades': {
+      const built = buildUpgrades(character, cfg, latestScaleFactors(character.id));
       specs = built.specs;
       warnings.push(...built.warnings);
       break;

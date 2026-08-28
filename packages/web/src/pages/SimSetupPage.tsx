@@ -25,13 +25,26 @@ import { TopGearBudget } from '../components/TopGearBudget.js';
 import type { GlossaryKey } from '../glossary.js';
 
 /**
+ * Las pestañas de la pantalla.
+ *
+ * Casi todas son un tipo de simulación del servidor, pero «Abalorios» no: por
+ * dentro es «Mejor combinación» acotada a los dos huecos de abalorio. Se
+ * presenta aparte porque la pregunta del jugador es distinta —qué pareja llevar—
+ * y porque los abalorios son el único hueco donde el buscador de mejoras no
+ * puede ayudar: su valor está en el proc, no en las estadísticas.
+ */
+type TabId = SimType | 'trinkets';
+
+const TRINKET_SLOTS: GearSlot[] = ['trinket1', 'trinket2'];
+
+/**
  * Los tipos de simulación, presentados por la pregunta que responde cada uno.
  *
  * El nombre técnico («Droptimizer») se mantiene como etiqueta pequeña porque es
  * el que se usa fuera de la app, pero lo que se lee primero es para qué sirve.
  */
 const SIM_TYPES: {
-  type: SimType;
+  type: TabId;
   label: string;
   /** Nombre por el que se conoce fuera, si es distinto. */
   alias?: string;
@@ -53,11 +66,23 @@ const SIM_TYPES: {
     term: 'droptimizer',
   },
   {
+    type: 'upgrades',
+    label: 'Qué me mejora',
+    question: '¿Qué piezas de mi fase me subirían el DPS y desde qué ilvl?',
+    term: 'upgrades',
+  },
+  {
     type: 'topgear',
     label: 'Mejor combinación',
     alias: 'Top Gear',
     question: '¿Cuál es el mejor conjunto con todo lo que tengo?',
     term: 'topgear',
+  },
+  {
+    type: 'trinkets',
+    label: 'Abalorios',
+    question: '¿Qué pareja de abalorios me renta más?',
+    term: 'trinkets',
   },
   {
     type: 'talents',
@@ -113,7 +138,7 @@ function fightStyleLabel(style: string): string {
 }
 
 /** ¿La pestaña está todavía sin rellenar? */
-function isEmptySelection(tab: SimType, config: SimConfig): boolean {
+function isEmptySelection(tab: TabId, config: SimConfig): boolean {
   switch (config.type) {
     case 'droptimizer':
     case 'topgear':
@@ -142,7 +167,7 @@ export function SimSetupPage() {
   const navigate = useNavigate();
 
   const [character, setCharacter] = useState<Character | null>(null);
-  const [tab, setTab] = useState<SimType>('quick');
+  const [tab, setTab] = useState<TabId>('quick');
   const [options, setOptions] = useState<SimOptions>(DEFAULT_SIM_OPTIONS);
   const [consumableDb, setConsumableDb] = useState<ConsumableDb | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -156,6 +181,8 @@ export function SimSetupPage() {
   const [keepEnchants, setKeepEnchants] = useState(true);
   const [maxLegendaries, setMaxLegendaries] = useState(2);
   const [maxCombinations, setMaxCombinations] = useState(2000);
+  const [perSlot, setPerSlot] = useState(4);
+  const [upgradeIlevels, setUpgradeIlevels] = useState<number[]>([]);
   const [talentMode, setTalentMode] = useState<'rows' | 'full'>('rows');
   const [selectedConsumables, setSelectedConsumables] = useState<{
     flasks: string[];
@@ -184,12 +211,28 @@ export function SimSetupPage() {
     if (meta) setOptions((prev) => ({ ...prev, threads: meta.defaults.threads }));
   }, [meta]);
 
+  // La escalera de ilvls sale de la fase: no tiene sentido probar niveles que
+  // en tu servidor todavía no existen.
+  useEffect(() => {
+    if (!character || !meta) return;
+    const phase = meta.patches.find((entry) => entry.id === character.patchId);
+    const cap = phase?.ilevelCap ?? 970;
+    setUpgradeIlevels([cap - 30, cap - 15, cap].filter((value) => value > 0));
+  }, [character, meta]);
+
   // El límite de legendarias depende de la fase del servidor.
   useEffect(() => {
     if (!character || !meta) return;
     const phase = meta.patches.find((entry) => entry.id === character.patchId);
     if (phase?.maxLegendaries) setMaxLegendaries(phase.maxLegendaries);
   }, [character, meta]);
+
+  // Al abrir Abalorios se empieza en blanco: los candidatos se buscan a mano,
+  // porque lo que se compara son parejas concretas.
+  useEffect(() => {
+    if (tab !== 'trinkets') return;
+    setCandidates([]);
+  }, [tab]);
 
   // Al abrir Top Gear precargamos el inventario del personaje como candidatos.
   useEffect(() => {
@@ -251,11 +294,24 @@ export function SimSetupPage() {
         return { type: 'quick', statWeights };
       case 'droptimizer':
         return { type: 'droptimizer', items: candidates, targetIlevel, keepEnchants };
+      case 'upgrades':
+        return { type: 'upgrades', perSlot, slots: [], ilevels: upgradeIlevels, keepEnchants };
       case 'topgear':
         return {
           type: 'topgear',
           items: candidates,
           slots: [],
+          maxLegendaries,
+          maxCombinations,
+          keepEnchants,
+        };
+      case 'trinkets':
+        // Por dentro es Top Gear, pero solo con los dos huecos de abalorio: así
+        // se prueban las parejas de verdad, que es lo que decide.
+        return {
+          type: 'topgear',
+          items: candidates,
+          slots: TRINKET_SLOTS,
           maxLegendaries,
           maxCombinations,
           keepEnchants,
@@ -289,6 +345,8 @@ export function SimSetupPage() {
     keepEnchants,
     maxLegendaries,
     maxCombinations,
+    perSlot,
+    upgradeIlevels,
     talentMode,
     selectedConsumables,
     selectedTraits,
@@ -420,6 +478,32 @@ export function SimSetupPage() {
           </label>
         )}
 
+        {tab === 'upgrades' && (
+          <UpgradesEditor
+            character={character}
+            phaseCap={
+              meta?.patches.find((entry) => entry.id === character.patchId)?.ilevelCap
+            }
+            perSlot={perSlot}
+            setPerSlot={setPerSlot}
+            ilevels={upgradeIlevels}
+            setIlevels={setUpgradeIlevels}
+            keepEnchants={keepEnchants}
+            setKeepEnchants={setKeepEnchants}
+            profilesetCount={plan?.profilesetCount ?? 0}
+            secondsPerProfile={meta?.secondsPerProfile}
+          />
+        )}
+
+        {tab === 'trinkets' && (
+          <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
+            <strong>Se prueban por parejas.</strong> Busca abajo los abalorios que
+            quieras comparar y se pelearán todas las combinaciones con los dos que
+            ya llevas puestos. Lo que decide es la pareja: dos abalorios buenos
+            por separado pueden solaparse y rendir menos juntos.
+          </div>
+        )}
+
         {tab === 'topgear' && (
           <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
             <strong>Cómo sacarle partido.</strong> Esto prueba todas las mezclas
@@ -444,8 +528,9 @@ export function SimSetupPage() {
           </div>
         )}
 
-        {(tab === 'droptimizer' || tab === 'topgear') && (
+        {(tab === 'droptimizer' || tab === 'topgear' || tab === 'trinkets') && (
           <CandidatesEditor
+            pickerSlot={tab === 'trinkets' ? 'trinket1' : undefined}
             characterClass={character.class}
             patchId={character.patchId}
             candidates={candidates}
@@ -703,6 +788,7 @@ function OptionsCard({
 }
 
 function CandidatesEditor({
+  pickerSlot,
   characterClass,
   patchId,
   candidates,
@@ -718,6 +804,8 @@ function CandidatesEditor({
   maxCombinations,
   setMaxCombinations,
 }: {
+  /** Hueco al que se acota el buscador. Sin esto busca en todos. */
+  pickerSlot?: GearSlot;
   characterClass: string;
   patchId?: string;
   candidates: CandidateItem[];
@@ -846,6 +934,7 @@ function CandidatesEditor({
       )}
 
       <ItemPicker
+        slot={pickerSlot}
         characterClass={characterClass}
         patchId={patchId}
         onPick={(item, ilevel) => {
@@ -1101,4 +1190,125 @@ function RelicsEditor({
       </div>
     </>
   );
+}
+
+/**
+ * Configuración del buscador de mejoras.
+ *
+ * Solo tiene dos mandos, y los dos multiplican el tiempo: cuántas piezas se
+ * prueban en cada hueco y a cuántos niveles. Por eso el coste se enseña aquí
+ * mismo, antes de lanzar.
+ */
+function UpgradesEditor({
+  character,
+  phaseCap,
+  perSlot,
+  setPerSlot,
+  ilevels,
+  setIlevels,
+  keepEnchants,
+  setKeepEnchants,
+  profilesetCount,
+  secondsPerProfile,
+}: {
+  character: Character;
+  phaseCap?: number;
+  perSlot: number;
+  setPerSlot: (value: number) => void;
+  ilevels: number[];
+  setIlevels: (value: number[]) => void;
+  keepEnchants: boolean;
+  setKeepEnchants: (value: boolean) => void;
+  profilesetCount: number;
+  secondsPerProfile?: number;
+}) {
+  const time = secondsPerProfile
+    ? formatSeconds(profilesetCount * secondsPerProfile)
+    : null;
+
+  return (
+    <>
+      <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
+        <strong>Cómo funciona.</strong> Repasa todas las piezas de tu fase que
+        puedes llevar, se queda con las más prometedoras de cada hueco y esas sí
+        las pelea de verdad. Necesita saber cuánto vale para ti cada estadística,
+        así que hace falta haber lanzado antes <strong>Cuánto pego</strong> con la
+        casilla de estadísticas marcada.
+        <div style={{ marginTop: 6 }}>
+          Los abalorios van aparte, en su propia pestaña: su valor está en el
+          efecto que disparan, no en sus estadísticas, así que aquí no se pueden
+          ordenar bien.
+        </div>
+      </div>
+
+      <div className="grid-3" style={{ marginBottom: 16 }}>
+        <label className="field">
+          <FieldLabel term="perSlot">Candidatos por hueco</FieldLabel>
+          <input
+            type="number"
+            min={1}
+            max={20}
+            value={perSlot}
+            onChange={(event) => setPerSlot(Number(event.target.value) || 1)}
+          />
+        </label>
+
+        <label className="field">
+          <FieldLabel term="upgradeIlevels">Niveles a probar</FieldLabel>
+          <input
+            value={ilevels.join(', ')}
+            placeholder="940, 955, 970"
+            onChange={(event) =>
+              setIlevels(
+                event.target.value
+                  .split(/[\s,]+/)
+                  .map((value) => Number.parseInt(value, 10))
+                  .filter((value) => Number.isFinite(value) && value > 0),
+              )
+            }
+          />
+          <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
+            {phaseCap
+              ? `Tu fase llega a ${phaseCap}; por encima no se prueba.`
+              : 'Sin fase elegida no hay tope.'}
+          </span>
+        </label>
+
+        <label className="field" style={{ justifyContent: 'flex-end' }}>
+          <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              type="checkbox"
+              style={{ width: 'auto' }}
+              checked={keepEnchants}
+              onChange={(event) => setKeepEnchants(event.target.checked)}
+            />
+            <span className="field-label">
+              Heredar encantamiento y gemas
+              <Help term="keepEnchants" />
+            </span>
+          </span>
+        </label>
+      </div>
+
+      {profilesetCount > 0 && (
+        <p className="hint" style={{ margin: 0 }}>
+          Se van a pelear <strong>{profilesetCount.toLocaleString('es-ES')}</strong>{' '}
+          piezas en total ({perSlot} por hueco ×{' '}
+          {ilevels.length || 1} {ilevels.length === 1 ? 'nivel' : 'niveles'})
+          {time ? `, unos ${time} en este ordenador` : ''}.
+          {character.patchId
+            ? ''
+            : ' Sin fase elegida se busca en todo 7.3.5: elige una en la ficha para acotarlo.'}
+        </p>
+      )}
+    </>
+  );
+}
+
+/** «25 min», «4,4 h». */
+function formatSeconds(total: number): string {
+  if (total < 90) return `${Math.round(total)} s`;
+  if (total < 5400) return `${Math.round(total / 60)} min`;
+  if (total < 172800) return `${(total / 3600).toFixed(1)} h`;
+  return `${Math.round(total / 86400)} días`;
 }

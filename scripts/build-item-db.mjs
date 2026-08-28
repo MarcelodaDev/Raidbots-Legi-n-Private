@@ -117,9 +117,13 @@ function findItemDataFile(explicit) {
  *   {  152163, "Nombre", 0x..., 0x..., 0x00, 940, 110, 0, 0, 4, 1, 4, 3, 1, 0,
  *      0.000000, 0.000000, 0xffff..., 0x0000ffff, { ... }, ... },
  *
- * Solo necesitamos los escalares que van antes del primer grupo `{`.
+ * Del primer grupo entre llaves salen los tipos de estadística (ITEM_MOD_*),
+ * que es lo que permite ordenar candidatos sin simularlos. Los importes exactos
+ * no se leen a propósito: dependen del presupuesto por ilvl y calcularlos aquí
+ * sería reimplementar a simc, con el riesgo de que salgan números creíbles y
+ * equivocados. Para ordenar basta con saber qué estadísticas lleva.
  */
-const ROW_RE = /^\s*\{\s*(\d+),\s*"((?:[^"\\]|\\.)*)"\s*,([^{]*)\{/;
+const ROW_RE = /^\s*\{\s*(\d+),\s*"((?:[^"\\]|\\.)*)"\s*,([^{]*)\{([^}]*)\}/;
 
 function parseItems(text, opts) {
   const items = [];
@@ -137,6 +141,17 @@ function parseItems(text, opts) {
       .split(',')
       .map((f) => f.trim())
       .filter(Boolean);
+
+    // Tipos de estadística. -1 marca hueco vacío; se repiten a veces, así que
+    // se deduplican conservando el orden (el primero es la principal).
+    const stats = [
+      ...new Set(
+        match[4]
+          .split(',')
+          .map((value) => Number(value.trim()))
+          .filter((value) => Number.isFinite(value) && value >= 0),
+      ),
+    ];
 
     // fields: flags1, flags2, type, level, reqLevel, reqSkill, reqSkillRank,
     //         quality, inventoryType, itemClass, itemSubclass, bindType,
@@ -182,6 +197,7 @@ function parseItems(text, opts) {
       itemSubclass,
       classMask,
       slots,
+      stats,
     });
   }
 

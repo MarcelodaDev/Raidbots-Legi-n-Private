@@ -8,6 +8,7 @@ import {
 } from '@rbl/shared';
 import { ItemLabel } from './ItemIcon.js';
 import { Help } from './Help.js';
+import { UpgradesView } from './UpgradesView.js';
 
 const nf = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
 const nf2 = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
@@ -83,7 +84,11 @@ export function ResultsView({ result }: { result: SimResult }) {
 
       {result.warnings.length > 0 && <WarningsCard warnings={result.warnings} />}
 
-      {result.profilesets && result.profilesets.length > 0 && (
+      {result.type === 'upgrades' && result.profilesets?.length ? (
+        <UpgradesView profilesets={result.profilesets} />
+      ) : null}
+
+      {result.type !== 'upgrades' && result.profilesets && result.profilesets.length > 0 && (
         <ProfilesetTable
           profilesets={result.profilesets}
           baseline={result.baseline.mean}

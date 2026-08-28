@@ -20,8 +20,9 @@ interface QueueEntry {
 }
 
 const SIM_LABELS: Record<string, string> = {
-  quick: 'Sim rápida',
-  droptimizer: 'Droptimizer',
+  quick: 'Cuánto pego',
+  droptimizer: 'Probar piezas',
+  upgrades: 'Qué me mejora',
   topgear: 'Top Gear',
   talents: 'Talentos',
   consumables: 'Consumibles',

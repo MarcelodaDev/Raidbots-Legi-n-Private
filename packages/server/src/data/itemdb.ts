@@ -127,3 +127,33 @@ export function searchItems(query: ItemSearchQuery): ItemRecord[] {
 export function slotsForItem(id: number): GearSlot[] {
   return byId.get(id)?.slots ?? [];
 }
+
+/**
+ * Todas las piezas de un hueco que esta clase puede llevar en esta fase.
+ *
+ * A diferencia de `searchItems`, no recorta ni ordena: quien llama necesita la
+ * lista entera para puntuarla con los pesos del personaje. Para un mago con
+ * tope 970 son unos cientos por hueco, así que recorrerla sale gratis frente a
+ * lo que cuesta simular una sola de ellas.
+ */
+export function slotCandidates(
+  slot: GearSlot,
+  className: string,
+  phaseId: string | undefined,
+  minQuality = 3,
+): ItemRecord[] {
+  const phase = phaseId ? getPhase(phaseId) : undefined;
+  const maxIlevel = phase?.ilevelCap ?? Number.POSITIVE_INFINITY;
+  const maxItemId = phase?.maxItemId ?? Number.POSITIVE_INFINITY;
+
+  const results: ItemRecord[] = [];
+  for (const item of items) {
+    if (!item.slots.includes(slot)) continue;
+    if (item.quality < minQuality) continue;
+    if (item.ilevel > maxIlevel) continue;
+    if (item.id > maxItemId) continue;
+    if (!canClassEquip(item, className)) continue;
+    results.push(item);
+  }
+  return results;
+}

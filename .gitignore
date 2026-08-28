@@ -17,3 +17,6 @@ data/enhancements.json
 
 # Caché de nombres e iconos descargados. Se rellena sola al usar la app.
 data/item-media.json
+
+# Enlace local al binario de simc para pruebas.
+bin/

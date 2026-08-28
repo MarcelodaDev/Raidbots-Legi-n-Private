@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import type { Character, Job, SimResult } from '@rbl/shared';
+import type { Character, Job, ScaleFactor, SimResult } from '@rbl/shared';
 import { config, paths } from './config.js';
 
 function readJson<T>(file: string, fallback: T): T {
@@ -138,4 +138,20 @@ export function secondsPerProfile(): number | undefined {
 
   if (profiles < 10) return undefined;
   return seconds / profiles;
+}
+
+/**
+ * Los pesos de estadística más recientes de un personaje.
+ *
+ * El buscador de mejoras los necesita para ordenar candidatos. Salen de la
+ * última simulación que los calculó, no de una tabla genérica por spec: los
+ * pesos dependen del equipo que llevas puesto y cambian según te equipas.
+ */
+export function latestScaleFactors(characterId: string): ScaleFactor[] | undefined {
+  for (const job of listJobs()) {
+    if (job.characterId !== characterId || job.status !== 'done') continue;
+    const result = getResult(job.id);
+    if (result?.scaleFactors?.length) return result.scaleFactors;
+  }
+  return undefined;
 }

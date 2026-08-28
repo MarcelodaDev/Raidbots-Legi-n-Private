@@ -285,6 +285,49 @@ Hay dos matices que conviene tener claros:
 Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
 nada más.
 
+## Qué me mejora
+
+Recorre las piezas de tu fase que tu clase puede llevar y te dice cuáles te
+suben el DPS, con las **3 mejores por hueco** y **desde qué ilvl** compensan.
+
+Para un mago con tope 970 hay unas 2.700 candidatas: simularlas todas serían
+horas. Así que se ordenan antes sin simular, usando los tipos de estadística que
+trae la DBC y los pesos que calculó tu propia simulación (por eso hace falta
+haber lanzado antes «Cuánto pego» con la casilla de estadísticas marcada).
+
+Dos decisiones que conviene conocer:
+
+- **Se leen los tipos de estadística, no los importes.** Calcular los importes
+  exigiría reimplementar el presupuesto por ilvl de SimulationCraft, con el
+  riesgo de sacar números creíbles y equivocados. Para ordenar basta con saber
+  qué estadísticas lleva la pieza; quien decide de verdad es la simulación.
+- **Mitad por estadísticas, mitad por ilvl.** Una pieza puede ser mejor por
+  llevar lo que te renta o por tener más presupuesto bruto. Ordenar solo por un
+  criterio pierde el otro, así que se cogen las mejores de cada lista.
+
+`npm run test:upgrades` cubre el ordenador de candidatos. Existe porque si se
+equivoca no hay error: la pieza buena simplemente nunca se simula y nadie se
+entera.
+
+### Abalorios, aparte
+
+Los abalorios no entran en el buscador de mejoras: casi todo su valor está en el
+efecto que disparan, no en sus estadísticas, así que ordenarlos sin simularlos
+daría una lista sin sentido. De los 8.202 ítems de la base solo 11 no declaran
+estadísticas, y 7 son abalorios.
+
+Tienen su propia pestaña, que los prueba **por parejas** — que es lo que decide,
+porque dos buenos por separado pueden solaparse. Por dentro es «Mejor
+combinación» acotada a los dos huecos de abalorio: misma lógica ya probada, sin
+código nuevo.
+
+### De dónde cae cada pieza
+
+Esto **no** lo sabe la app. La DBC que genera SimulationCraft no incluye la tabla
+de botín: `engine/dbc/generated/` solo trae ítems, hechizos, talentos y
+escalados. Cada fila lleva un enlace a la ficha del ítem, donde sí está el jefe
+que lo suelta.
+
 ## El límite de «Mejor combinación» (Top Gear)
 
 Top Gear prueba **todas** las mezclas de las piezas que le des, así que el número
