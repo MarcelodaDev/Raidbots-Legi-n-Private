@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import type { ProfilesetResult, SimResult } from '@rbl/shared';
+import {
+  SLOT_LABELS,
+  type GearSlot,
+  type ProfilesetResult,
+  type SimResult,
+} from '@rbl/shared';
+import { ItemLabel } from './ItemIcon.js';
 
 const nf = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
 const nf2 = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
@@ -131,7 +137,25 @@ function ProfilesetTable({
               <tr key={row.name}>
                 <td style={{ color: 'var(--ink-muted)' }}>{index + 1}</td>
                 <td>
-                  {row.label}
+                  {row.items ? (
+                    // Una combinación de Top Gear: cada pieza con su icono y
+                    // el slot al que va, que es lo que hay que ir a buscar.
+                    <div style={{ display: 'grid', gap: 4 }}>
+                      {row.items.map((item) => (
+                        <span key={`${item.itemId}-${item.slot}`}>
+                          <ItemLabel id={item.itemId} name={item.name} size="sm" />
+                          <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
+                            {' '}
+                            · {SLOT_LABELS[item.slot as GearSlot] ?? item.slot}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  ) : row.itemId ? (
+                    <ItemLabel id={row.itemId} name={row.label} size="sm" />
+                  ) : (
+                    row.label
+                  )}
                   {row.slotNote && (
                     <div style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
                       {row.slotNote}
@@ -206,10 +230,42 @@ function RelicReferenceNote({ profilesets }: { profilesets: ProfilesetResult[] }
 interface CollapsedRow {
   name: string;
   label: string;
+  /** Si la fila es una pieza concreta, para poder enseñar su icono. */
+  itemId?: number;
+  /** Si la fila es una combinación de Top Gear, las piezas que cambia. */
+  items?: { itemId: number; name: string; slot: string }[];
   slotNote?: string;
   mean: number;
   delta: number;
   deltaPct: number;
+}
+
+/** `wrist` → `Muñecas`. Si el slot no se reconoce se deja tal cual. */
+function slotNote(slot: string | undefined): string | undefined {
+  if (!slot) return undefined;
+  return `mejor en ${SLOT_LABELS[slot as GearSlot] ?? slot}`;
+}
+
+/**
+ * El id del ítem de un perfil, si es que el perfil es una pieza.
+ *
+ * Las gemas también son ítems y tienen su icono; los encantamientos son
+ * hechizos, así que ahí no hay nada que pedir.
+ */
+function rowItemId(entry: ProfilesetResult): number | undefined {
+  const id = entry.meta?.kind === 'gem' ? entry.meta?.gemId : entry.meta?.itemId;
+  return typeof id === 'number' && id > 0 ? id : undefined;
+}
+
+/** Las piezas que cambia una combinación de Top Gear. */
+function rowItems(
+  entry: ProfilesetResult,
+): { itemId: number; name: string; slot: string }[] | undefined {
+  if (entry.meta?.kind !== 'combination') return undefined;
+  const items = entry.meta?.items;
+  return Array.isArray(items) && items.length
+    ? (items as { itemId: number; name: string; slot: string }[])
+    : undefined;
 }
 
 function collapseByItem(
@@ -220,6 +276,8 @@ function collapseByItem(
     return profilesets.map((entry) => ({
       name: entry.name,
       label: String(entry.meta?.itemName ?? entry.name),
+      itemId: rowItemId(entry),
+      items: rowItems(entry),
       mean: entry.mean,
       delta: entry.delta,
       deltaPct: entry.deltaPct,
@@ -228,14 +286,14 @@ function collapseByItem(
 
   const best = new Map<string, CollapsedRow>();
   for (const entry of profilesets) {
-    const itemId = entry.meta?.itemId;
+    const itemId = rowItemId(entry);
     const key = itemId ? `item-${itemId}` : entry.name;
     const label = String(entry.meta?.itemName ?? entry.name);
-    const slot = entry.meta?.slot ? `mejor en ${entry.meta.slot}` : undefined;
     const candidate: CollapsedRow = {
       name: entry.name,
       label,
-      slotNote: slot,
+      itemId,
+      slotNote: slotNote(entry.meta?.slot as string | undefined),
       mean: entry.mean,
       delta: entry.delta,
       deltaPct: entry.deltaPct,
