@@ -11,6 +11,7 @@ import {
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
 import { PhaseGearCard } from '../components/PhaseGearCard.js';
+import { ItemIcon, ItemLabel, useItemName } from '../components/ItemIcon.js';
 
 export function CharacterPage() {
   const { id } = useParams<{ id: string }>();
@@ -150,11 +151,7 @@ export function CharacterPage() {
               {character.bag.map((item, index) => (
                 <tr key={`${item.itemId}-${index}`}>
                   <td>
-                    {item.name ?? `Ítem ${item.itemId}`}
-                    <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
-                      {' '}
-                      (id {item.itemId})
-                    </span>
+                    <ItemLabel id={item.itemId} name={item.name} size="sm" />
                   </td>
                   <td style={{ color: 'var(--ink-2)' }}>{SLOT_LABELS[item.slot]}</td>
                   <td className="num">{item.ilevel ?? '—'}</td>
@@ -305,18 +302,25 @@ function ArtifactCard({
 }
 
 function GearSlotCard({ slot, item }: { slot: GearSlot; item?: GearItem }) {
+  // Con el slot vacío no hay ítem que resolver; el 0 no se pide.
+  const name = useItemName(item?.itemId ?? 0, item?.name);
+
   return (
     <div className="gear-slot">
-      <div>
-        <div className="slot-name">{SLOT_LABELS[slot]}</div>
-        <div className="item-name">
-          {item ? item.name ?? `Ítem ${item.itemId}` : <span style={{ color: 'var(--ink-muted)' }}>vacío</span>}
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', minWidth: 0 }}>
+        {item && <ItemIcon id={item.itemId} name={name} size="md" />}
+        <div style={{ minWidth: 0 }}>
+          <div className="slot-name">{SLOT_LABELS[slot]}</div>
+          <div className="item-name">
+            {item ? name : <span style={{ color: 'var(--ink-muted)' }}>vacío</span>}
+          </div>
         </div>
       </div>
       {item && (
         <div style={{ color: 'var(--ink-muted)', fontSize: 12, textAlign: 'right' }}>
-          id {item.itemId}
-          {item.enchantId ? <div>ench. {item.enchantId}</div> : null}
+          {item.ilevel ? <div>{item.ilevel}</div> : null}
+          {item.enchantId ? <div>ench.</div> : null}
+          {item.gemIds.length ? <div>{item.gemIds.length} gema</div> : null}
         </div>
       )}
     </div>

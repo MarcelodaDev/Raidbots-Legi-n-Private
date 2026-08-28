@@ -18,6 +18,7 @@ import {
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
 import { EnhancementEditor } from '../components/EnhancementEditor.js';
+import { ItemLabel } from '../components/ItemIcon.js';
 
 const TABS: { type: SimType; label: string; hint: string }[] = [
   {
@@ -655,7 +656,14 @@ function CandidatesEditor({
           <tbody>
             {candidates.map((item, index) => (
               <tr key={`${item.itemId}-${index}`}>
-                <td>{item.name}</td>
+                <td>
+                  <ItemLabel
+                    id={item.itemId}
+                    name={item.name}
+                    quality={item.quality}
+                    size="sm"
+                  />
+                </td>
                 <td style={{ color: 'var(--ink-2)' }}>
                   {item.slots.map((slot) => SLOT_LABELS[slot]).join(' / ')}
                 </td>

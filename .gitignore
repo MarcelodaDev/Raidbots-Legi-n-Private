@@ -14,3 +14,6 @@ data/patches.json
 
 # Catálogo generado (npm run build:enhancements)
 data/enhancements.json
+
+# Caché de nombres e iconos descargados. Se rellena sola al usar la app.
+data/item-media.json

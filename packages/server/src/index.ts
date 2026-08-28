@@ -8,6 +8,7 @@ import { registerRoutes } from './routes.js';
 import { loadItemDb, itemDbStatus } from './data/itemdb.js';
 import { loadPatches, patchDbStatus } from './data/patches.js';
 import { enhancementsStatus, loadEnhancements } from './data/enhancements.js';
+import { loadMedia, mediaStatus } from './data/media.js';
 import { getSimcStatus } from './simc/binary.js';
 
 async function main(): Promise<void> {
@@ -15,6 +16,7 @@ async function main(): Promise<void> {
   loadItemDb();
   loadPatches();
   loadEnhancements();
+  loadMedia();
 
   const app = Fastify({
     logger: { level: process.env.LOG_LEVEL ?? 'info' },
@@ -59,6 +61,11 @@ async function main(): Promise<void> {
     enhancements.available
       ? `Mejoras: ${enhancements.gems} gemas, ${enhancements.enchants} encantamientos`
       : 'Gemas y encantamientos no generados. Ejecuta `npm run build:enhancements`.',
+  );
+
+  const media = mediaStatus();
+  app.log.info(
+    `Iconos: ${media.withIcon} en caché de ${media.cached} ítems consultados`,
   );
 
   const patches = patchDbStatus();

@@ -492,6 +492,32 @@ export interface EnhancementDb {
   bySlot: Partial<Record<GearSlot, SlotEnhancements>>;
 }
 
+/**
+ * Nombre e icono de un ítem para pintarlo en la interfaz.
+ *
+ * El nombre sale de la DBC de SimulationCraft; el icono hay que pedirlo fuera,
+ * porque la DBC no lo trae. `source` dice de dónde salió cada cosa, y `icon`
+ * puede faltar perfectamente: la interfaz tiene que saber pintarlo sin él.
+ */
+export interface ItemMedia {
+  id: number;
+  name?: string;
+  /** Nombre del fichero del icono, sin extensión (`inv_helmet_164`). */
+  icon?: string;
+  quality?: number;
+  source: 'dbc' | 'remote';
+  fetchedAt?: string;
+}
+
+/** Plantilla de URL del icono. `{icon}` es el nombre del fichero. */
+export const ICON_URL_TEMPLATE =
+  'https://wow.zamimg.com/images/wow/icons/medium/{icon}.jpg';
+
+export function iconUrl(icon: string | undefined): string | undefined {
+  if (!icon) return undefined;
+  return ICON_URL_TEMPLATE.replace('{icon}', icon.toLowerCase());
+}
+
 export interface ItemSearchQuery {
   q?: string;
   slot?: GearSlot;

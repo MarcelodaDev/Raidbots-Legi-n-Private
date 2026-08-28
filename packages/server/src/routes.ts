@@ -27,6 +27,7 @@ import {
   patchDbStatus,
 } from './data/patches.js';
 import { getEnhancements, loadEnhancements } from './data/enhancements.js';
+import { clearMedia, getItemMedia, loadMedia, mediaStatus } from './data/media.js';
 import { planSim, queue } from './queue.js';
 import {
   deleteCharacter,
@@ -61,6 +62,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     loadItemDb();
     loadPatches();
     loadEnhancements();
+    loadMedia();
     return {
       simc: await getSimcStatus(true),
       itemDb: itemDbStatus(),
@@ -237,6 +239,26 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
   app.get<{ Params: { id: string } }>('/api/items/:id/slots', async (req) => ({
     slots: slotsForItem(Number(req.params.id)),
   }));
+
+  /**
+   * Nombre e icono de varios ítems a la vez. La interfaz pide de golpe los que
+   * tiene en pantalla en vez de uno por uno.
+   */
+  app.get<{ Querystring: { ids?: string } }>('/api/items/media', async (req) => {
+    const ids = (req.query.ids ?? '')
+      .split(',')
+      .map((value) => Number.parseInt(value, 10))
+      .filter((value) => Number.isFinite(value) && value > 0)
+      .slice(0, 200);
+    return getItemMedia(ids);
+  });
+
+  app.get('/api/items/media/status', async () => mediaStatus());
+
+  app.post('/api/items/media/clear', async () => {
+    clearMedia();
+    return { ok: true };
+  });
 
   // -------------------------------------------------------------------------
   // Simulaciones

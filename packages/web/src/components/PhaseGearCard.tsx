@@ -7,6 +7,7 @@ import {
   type PatchSpecGear,
 } from '@rbl/shared';
 import { api } from '../api.js';
+import { ItemLabel } from './ItemIcon.js';
 
 /** Estado de un slot al comparar tu equipo con el de referencia de la fase. */
 type SlotStatus = 'igual' | 'distinto' | 'vacío';
@@ -156,15 +157,18 @@ export function PhaseGearCard({
                   </td>
                   <td>
                     {row.mine ? (
-                      row.mine.name ?? `Ítem ${row.mine.itemId}`
+                      <ItemLabel id={row.mine.itemId} name={row.mine.name} size="sm" />
                     ) : (
                       <span style={{ color: 'var(--ink-muted)' }}>vacío</span>
                     )}
                   </td>
                   <td>
-                    <span className={`quality-${row.recommended.quality}`}>
-                      {row.recommended.name}
-                    </span>
+                    <ItemLabel
+                      id={row.recommended.itemId}
+                      name={row.recommended.name}
+                      quality={row.recommended.quality}
+                      size="sm"
+                    />
                   </td>
                   <td className="num">{row.recommended.ilevel}</td>
                   <td>

@@ -285,6 +285,39 @@ Hay dos matices que conviene tener claros:
 Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
 nada más.
 
+## Nombres e iconos de los ítems
+
+La app parte de los ids que ya tiene en su base de datos y les pone cara: pide
+el nombre y el icono de cada ítem, los cachea en `data/item-media.json` y los
+pinta con el color de calidad del juego.
+
+```
+npm run check:icons              # comprueba que la fuente responde
+npm run check:icons -- 152138    # o un ítem concreto
+```
+
+Detalles que conviene saber:
+
+- **Se pide en tandas.** Los ids que hay en pantalla van en una sola petición,
+  no uno por uno, y lo que se descarga se guarda en disco: la segunda vez que
+  abres la misma pantalla no hay red de por medio.
+- **El nombre bueno gana.** El que trae el addon es el del perfil `.simc`, en
+  minúsculas (`runebound collar`); el que se resuelve viene con sus mayúsculas
+  (`Runebound Collar`) y es el que se enseña.
+- **Sin internet la app funciona igual.** Si no hay icono se pinta un recuadro
+  con las iniciales y el nombre que ya estaba en la base de datos. Los fallos se
+  recuerdan seis horas para no reintentar en bucle.
+- **Se puede apagar o cambiar de fuente:**
+
+  | Variable | Para qué |
+  |---|---|
+  | `RBL_ICONS=off` | No sale nada a internet; solo nombres de la base local. |
+  | `RBL_ICON_SOURCE="https://…/{id}"` | Otra fuente. Se lee `icon`/`iconName` y `name`/`name_enus`. |
+
+Si `npm run check:icons` dice que la respuesta llega pero no encuentra el icono,
+imprime las claves que sí trae: con eso se añade el nombre que use esa fuente en
+`packages/server/src/data/media.ts`.
+
 ## Limitaciones conocidas
 
 - **Reliquias**: se comparan por rasgo (`artifact_override`) y por ilvl

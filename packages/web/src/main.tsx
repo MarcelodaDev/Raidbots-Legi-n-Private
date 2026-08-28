@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { App } from './App.js';
+import { ItemMediaProvider } from './components/ItemIcon.js';
 import { CharactersPage } from './pages/CharactersPage.js';
 import { CharacterPage } from './pages/CharacterPage.js';
 import { SimSetupPage } from './pages/SimSetupPage.js';
@@ -25,6 +26,8 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ItemMediaProvider>
+      <RouterProvider router={router} />
+    </ItemMediaProvider>
   </React.StrictMode>,
 );

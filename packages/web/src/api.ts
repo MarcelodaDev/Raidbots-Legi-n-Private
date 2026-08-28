@@ -6,6 +6,7 @@ import type {
   ConsumableDb,
   EnhancementDb,
   GearItem,
+  ItemMedia,
   ItemRecord,
   Job,
   ServerMeta,
@@ -72,6 +73,9 @@ export const api = {
     }),
   deleteCharacter: (id: string) =>
     request<{ ok: true }>(`/api/characters/${id}`, { method: 'DELETE' }),
+
+  itemMedia: (ids: number[]) =>
+    request<Record<number, ItemMedia>>(`/api/items/media?ids=${ids.join(',')}`),
 
   items: (params: Record<string, string | number | undefined>) => {
     const search = new URLSearchParams();

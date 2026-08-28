@@ -21,6 +21,7 @@
     "build:enhancements": "node scripts/build-enhancements-db.mjs",
     "typecheck": "tsc --noEmit -p packages/server && tsc --noEmit -p packages/web",
     "check:simc": "node scripts/check-simc.mjs",
+    "check:icons": "node scripts/check-icons.mjs",
     "test:addon": "lua5.4 addon/test/run.lua --check"
   },
   "devDependencies": {

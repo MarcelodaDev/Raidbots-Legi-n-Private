@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { GEAR_SLOTS, SLOT_LABELS, type GearSlot, type ItemRecord } from '@rbl/shared';
 import { api } from '../api.js';
+import { ItemLabel } from './ItemIcon.js';
 
 interface Props {
   /** Se llama al elegir un ítem. `ilevel` puede venir sobrescrito por el usuario. */
@@ -171,10 +172,12 @@ export function ItemPicker({
               {results.map((item) => (
                 <tr key={item.id}>
                   <td>
-                    <span className={`quality-${item.quality}`}>{item.name}</span>
-                    <div style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
-                      id {item.id}
-                    </div>
+                    <ItemLabel
+                      id={item.id}
+                      name={item.name}
+                      quality={item.quality}
+                      size="sm"
+                    />
                   </td>
                   <td style={{ color: 'var(--ink-2)' }}>
                     {item.slots.map((s) => SLOT_LABELS[s]).join(' / ')}
