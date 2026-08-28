@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { GEAR_SLOTS, SLOT_LABELS, type GearSlot, type ItemRecord } from '@rbl/shared';
 import { api } from '../api.js';
 import { ItemLabel } from './ItemIcon.js';
+import { FieldLabel } from './Help.js';
 
 interface Props {
   /** Se llama al elegir un ítem. `ilevel` puede venir sobrescrito por el usuario. */
@@ -113,7 +114,7 @@ export function ItemPicker({
           </select>
         </label>
         <label className="field">
-          ilvl mínimo
+          <FieldLabel term="ilevel">ilvl mínimo</FieldLabel>
           <input
             type="number"
             value={minIlevel}
@@ -134,7 +135,7 @@ export function ItemPicker({
               checked={patchOnly}
               onChange={(event) => setPatchOnly(event.target.checked)}
             />
-            Solo piezas que aparecen en los perfiles de referencia de mi fase
+            Enseñar solo el equipo bueno de mi fase
           </label>
           <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <input
@@ -143,9 +144,9 @@ export function ItemPicker({
               checked={includeLaterTiers}
               onChange={(event) => setIncludeLaterTiers(event.target.checked)}
             />
-            Incluir equipo que parece de un tier posterior
+            Enseñar también equipo de fases que aún no han salido
             <span style={{ color: 'var(--ink-muted)' }}>
-              (se descarta por rango de id de ítem, que es una aproximación)
+              (por si tu servidor va por otro lado)
             </span>
           </label>
         </div>
@@ -161,10 +162,10 @@ export function ItemPicker({
           <table>
             <thead>
               <tr>
-                <th>Ítem</th>
-                <th>Slot</th>
-                <th className="num">ilvl base</th>
-                <th className="num">ilvl a usar</th>
+                <th>Pieza</th>
+                <th>Dónde va</th>
+                <th className="num">ilvl que tiene</th>
+                <th className="num">ilvl a probar</th>
                 <th />
               </tr>
             </thead>

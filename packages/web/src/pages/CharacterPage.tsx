@@ -12,6 +12,7 @@ import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
 import { PhaseGearCard } from '../components/PhaseGearCard.js';
 import { ItemIcon, ItemLabel, useItemName } from '../components/ItemIcon.js';
+import { FieldLabel, Help } from '../components/Help.js';
 
 export function CharacterPage() {
   const { id } = useParams<{ id: string }>();
@@ -84,7 +85,7 @@ export function CharacterPage() {
 
         {phases.length > 0 && (
           <label className="field" style={{ minWidth: 320 }}>
-            Fase del servidor
+            <FieldLabel term="phase">Fase del servidor</FieldLabel>
             <select
               value={character.patchId ?? ''}
               onChange={(event) => void setPhase(event.target.value)}
@@ -102,9 +103,10 @@ export function CharacterPage() {
 
       {phase && (
         <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
-          Fase <strong>{phase.label}</strong>: {phase.description} El buscador de
-          ítems se limita a ilvl {phase.ilevelCap} y Top Gear usa{' '}
-          {phase.maxLegendaries} legendarias por defecto.
+          Fase <strong>{phase.label}</strong>: {phase.description} Mientras estés
+          en ella, el buscador solo te enseña equipo de hasta ilvl{' '}
+          {phase.ilevelCap} y se dan por buenas {phase.maxLegendaries}{' '}
+          legendarias a la vez.
         </div>
       )}
 
@@ -115,10 +117,13 @@ export function CharacterPage() {
       />
 
       <div className="card">
-        <h2>Equipo</h2>
+        <h2>Lo que llevas puesto</h2>
         <p className="hint">
-          Importado del addon. Talentos: <strong>{character.talents || '—'}</strong>
-          {character.artifact ? ' · artefacto importado' : ' · sin datos de artefacto'}
+          Tal y como lo trajo el addon. Talentos:{' '}
+          <strong>{character.talents || '—'}</strong>
+          {character.artifact
+            ? ' · el artefacto también se importó'
+            : ' · no llegaron datos del artefacto'}
         </p>
 
         <div className="gear-grid">
@@ -131,19 +136,28 @@ export function CharacterPage() {
       <ArtifactCard character={character} onUpdate={setCharacter} />
 
       <div className="card">
-        <h2>Inventario para Top Gear</h2>
+        <h2>
+          Piezas guardadas para comparar
+          <Help term="bag" />
+        </h2>
         <p className="hint">
-          El addon de Legion no exporta las bolsas de forma fiable, así que aquí
-          añades a mano las piezas que quieras comparar. Se guardan con el personaje.
+          Aquí vas metiendo las piezas que te interesa probar. Luego, al simular,
+          las tienes todas a mano para ver cuál te conviene. Se guardan con el
+          personaje, así que siguen aquí la próxima vez.
         </p>
 
         {character.bag.length > 0 && (
           <table style={{ marginBottom: 16 }}>
             <thead>
               <tr>
-                <th>Ítem</th>
-                <th>Slot</th>
-                <th className="num">ilvl</th>
+                <th>Pieza</th>
+                <th>Dónde va</th>
+                <th className="num">
+                  <span className="field-label" style={{ justifyContent: 'flex-end' }}>
+                    ilvl
+                    <Help term="ilevel" />
+                  </span>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -187,15 +201,17 @@ export function CharacterPage() {
           </>
         ) : (
           <button className="secondary" onClick={() => setShowPicker(true)}>
-            Añadir ítem al inventario
+            Buscar una pieza y guardarla
           </button>
         )}
       </div>
 
       <div className="card">
-        <h2>Perfil .simc</h2>
+        <h2>Ficha técnica</h2>
         <p className="hint">
-          Esto es exactamente lo que recibe SimulationCraft como perfil base.
+          Esto es lo que se le pasa tal cual al simulador. No hace falta tocarlo
+          ni entenderlo para usar la app: está aquí por si algo sale raro y hay
+          que mirar de dónde viene.
         </p>
         <div className="log">{character.profile}</div>
       </div>
@@ -235,10 +251,14 @@ function ArtifactCard({
 
   return (
     <div className="card">
-      <h2>Artefacto</h2>
+      <h2>
+        Tu arma artefacto
+        <Help term="artifactTraits" />
+      </h2>
       <p className="hint">
-        Necesario para comparar reliquias. Se leen del propio SimulationCraft,
-        que es quien resuelve los rangos del Crisol y de las reliquias.
+        Hace falta leerla una vez antes de poder comparar reliquias. Los rangos
+        los calcula el propio simulador, porque es quien sabe cuáles te da el
+        Crisol y cuáles tus reliquias.
       </p>
 
       {error && <div className="notice error">{error}</div>}

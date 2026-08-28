@@ -49,7 +49,11 @@ export function JobPage() {
       <h1 className="page-title">{job.label}</h1>
       <p className="page-subtitle">
         <Link to={`/personajes/${job.characterId}`}>{job.characterName}</Link>
-        {job.profilesetCount ? ` · ${job.profilesetCount} perfiles` : ''}
+        {job.profilesetCount
+          ? ` · ${job.profilesetCount.toLocaleString('es-ES')} ${
+              job.profilesetCount === 1 ? 'opción comparada' : 'opciones comparadas'
+            }`
+          : ''}
       </p>
 
       {running && (

@@ -54,7 +54,15 @@ export function CharactersPage() {
     <>
       <h1 className="page-title">Personajes</h1>
       <p className="page-subtitle">
-        Importa tu personaje con el addon SimulationCraft y simúlalo en local.
+        Copia tu personaje desde el juego y prueba aquí qué equipo, talentos o
+        consumibles te hacen pegar más.
+      </p>
+
+      <p className="lead">
+        Funciona así: dentro del WoW, el addon te da un texto con todo lo que
+        llevas. Lo pegas aquí y la app recrea a tu personaje. A partir de ahí
+        puedes probar cambios —una pieza nueva, otro talento, otra gema— y ver
+        cuánto DPS ganarías con cada uno, sin tener que probarlo en el juego.
       </p>
 
       {meta && !meta.simc.available && (
@@ -76,9 +84,11 @@ export function CharactersPage() {
       )}
 
       <div className="card">
-        <h2>Importar personaje</h2>
+        <h2>Traer un personaje del juego</h2>
         <p className="hint">
-          En el juego: <code>/simc</code> → copia todo el texto → pégalo aquí.
+          Dentro del WoW escribe <code>/rbl</code> (o <code>/simc</code> si usas
+          el addon oficial), copia todo el texto que sale con Ctrl+C y pégalo
+          aquí abajo con Ctrl+V.
         </p>
 
         <textarea
@@ -122,7 +132,7 @@ export function CharactersPage() {
                 <th>Nombre</th>
                 <th>Clase / spec</th>
                 <th>Talentos</th>
-                <th className="num">Bolsa</th>
+                <th className="num">Piezas guardadas</th>
                 <th />
               </tr>
             </thead>

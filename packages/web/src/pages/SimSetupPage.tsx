@@ -19,49 +19,96 @@ import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
 import { EnhancementEditor } from '../components/EnhancementEditor.js';
 import { ItemLabel } from '../components/ItemIcon.js';
+import { FieldLabel, Help } from '../components/Help.js';
+import type { GlossaryKey } from '../glossary.js';
 
-const TABS: { type: SimType; label: string; hint: string }[] = [
+/**
+ * Los tipos de simulación, presentados por la pregunta que responde cada uno.
+ *
+ * El nombre técnico («Droptimizer») se mantiene como etiqueta pequeña porque es
+ * el que se usa fuera de la app, pero lo que se lee primero es para qué sirve.
+ */
+const SIM_TYPES: {
+  type: SimType;
+  label: string;
+  /** Nombre por el que se conoce fuera, si es distinto. */
+  alias?: string;
+  /** La pregunta que responde, en el idioma del jugador. */
+  question: string;
+  /** Explicación larga, si la hay. */
+  term?: GlossaryKey;
+}[] = [
   {
     type: 'quick',
-    label: 'Sim rápida',
-    hint: 'DPS del personaje tal y como está, con desglose por habilidad y pesos de estadística.',
+    label: 'Cuánto pego',
+    question: '¿Cuánto DPS hago ahora mismo y de dónde sale mi daño?',
   },
   {
     type: 'droptimizer',
-    label: 'Droptimizer',
-    hint: 'Simula ítems sueltos uno a uno y los ordena por ganancia de DPS.',
+    label: 'Probar piezas',
+    alias: 'Droptimizer',
+    question: '¿Me pongo esta pieza que me ha caído?',
+    term: 'droptimizer',
   },
   {
     type: 'topgear',
-    label: 'Top Gear',
-    hint: 'Combina el equipo actual con el inventario y busca la mejor configuración.',
+    label: 'Mejor combinación',
+    alias: 'Top Gear',
+    question: '¿Cuál es el mejor conjunto con todo lo que tengo?',
+    term: 'topgear',
   },
   {
     type: 'talents',
     label: 'Talentos',
-    hint: 'Compara filas de talentos o todas las combinaciones.',
+    question: '¿Qué talentos me convienen?',
+    term: 'talents',
   },
   {
     type: 'consumables',
     label: 'Consumibles',
-    hint: 'Compara frascos, comida, pociones y runas.',
+    question: '¿Qué frasco, comida y poción me renta llevar?',
   },
   {
     type: 'relics',
     label: 'Reliquias',
-    hint: 'Qué rasgo del artefacto conviene subir y cuánto vale subir el ilvl de cada reliquia.',
+    question: '¿Qué reliquia del artefacto me interesa más?',
+    term: 'artifactTraits',
   },
   {
     type: 'enchants',
     label: 'Encantamientos',
-    hint: 'Compara los encantamientos de un hueco, incluido no llevar ninguno.',
+    question: '¿Con qué encanto esta pieza?',
+    term: 'enchants',
   },
   {
     type: 'gems',
     label: 'Gemas',
-    hint: 'Compara las gemas de un hueco. Ojo: si la pieza no tiene engarce, el motor las ignora.',
+    question: '¿Qué gema pongo en este hueco?',
+    term: 'gems',
   },
 ];
+
+/**
+ * Qué significa cada estilo de combate, que si no son nombres sueltos en
+ * inglés. Los que no estén se enseñan tal cual llegan del motor.
+ */
+const FIGHT_STYLES: Record<string, string> = {
+  Patchwerk: 'un muñeco quieto, sin moverte',
+  LightMovement: 'con algo de movimiento',
+  HeavyMovement: 'moviéndote mucho',
+  HelterSkelter: 'movimiento, aturdimientos y enemigos que aparecen',
+  Ultraxion: 'sin movimiento, con fases de daño fuerte',
+  CleaveAdd: 'un jefe y un añadido que aparece de vez en cuando',
+  HecticAddCleave: 'un jefe con oleadas constantes de añadidos',
+  Beastlord: 'muchos enemigos entrando y saliendo',
+  DungeonSlice: 'como una mazmorra: grupos pequeños seguidos',
+  DungeonRoute: 'una ruta de mazmorra completa',
+};
+
+function fightStyleLabel(style: string): string {
+  const plain = FIGHT_STYLES[style];
+  return plain ? `${style} — ${plain}` : style;
+}
 
 /** ¿La pestaña está todavía sin rellenar? */
 function isEmptySelection(tab: SimType, config: SimConfig): boolean {
@@ -304,7 +351,7 @@ export function SimSetupPage() {
     return error ? <div className="notice error">{error}</div> : <div className="empty">Cargando…</div>;
   }
 
-  const activeTab = TABS.find((entry) => entry.type === tab)!;
+  const activeTab = SIM_TYPES.find((entry) => entry.type === tab)!;
 
   return (
     <>
@@ -313,21 +360,47 @@ export function SimSetupPage() {
         {character.class.replace(/_/g, ' ')} · {character.spec}
       </p>
 
-      <div className="tabs">
-        {TABS.map((entry) => (
+      <p className="lead">
+        Elige qué quieres averiguar. La app monta con tu personaje todas las
+        versiones que haya que comparar, las pelea muchas veces cada una y te
+        dice cuánto daño hace cada opción.
+      </p>
+
+      <div className="sim-picker">
+        {SIM_TYPES.map((entry) => (
           <button
             key={entry.type}
-            className={entry.type === tab ? 'active' : ''}
+            type="button"
+            className={`sim-card${entry.type === tab ? ' active' : ''}`}
+            aria-pressed={entry.type === tab}
             onClick={() => setTab(entry.type)}
           >
-            {entry.label}
+            <div className="sim-card-title">
+              {entry.label}
+              {entry.alias && (
+                <span
+                  style={{
+                    color: 'var(--ink-muted)',
+                    fontWeight: 500,
+                    fontSize: 12,
+                    marginLeft: 6,
+                  }}
+                >
+                  {entry.alias}
+                </span>
+              )}
+            </div>
+            <div className="sim-card-question">{entry.question}</div>
           </button>
         ))}
       </div>
 
       <div className="card">
-        <h2>{activeTab.label}</h2>
-        <p className="hint">{activeTab.hint}</p>
+        <h2>
+          {activeTab.label}
+          {activeTab.term && <Help term={activeTab.term} />}
+        </h2>
+        <p className="hint">{activeTab.question}</p>
 
         {tab === 'quick' && (
           <label className="row" style={{ gap: 8, alignItems: 'center' }}>
@@ -337,7 +410,10 @@ export function SimSetupPage() {
               checked={statWeights}
               onChange={(event) => setStatWeights(event.target.checked)}
             />
-            Calcular pesos de estadística (multiplica el tiempo de simulación)
+            <span className="field-label">
+              Calcular también cuánto vale cada estadística
+              <Help term="statWeights" />
+            </span>
           </label>
         )}
 
@@ -363,17 +439,21 @@ export function SimSetupPage() {
         {tab === 'talents' && (
           <div className="grid-2">
             <label className="field">
-              Modo
+              <FieldLabel term="talents">Cómo compararlos</FieldLabel>
               <select
                 value={talentMode}
                 onChange={(event) => setTalentMode(event.target.value as 'rows' | 'full')}
               >
-                <option value="rows">Fila a fila (21 perfiles)</option>
-                <option value="full">Todas las combinaciones (2187 perfiles)</option>
+                <option value="rows">
+                  El mejor de cada fila — rápido (21 pruebas)
+                </option>
+                <option value="full">
+                  Todas las combinaciones — muy lento (2.187 pruebas)
+                </option>
               </select>
             </label>
             <div className="stat-tile">
-              <div className="label">Talentos actuales</div>
+              <div className="label">Los que llevas ahora</div>
               <div className="value">{character.talents || '—'}</div>
             </div>
           </div>
@@ -440,24 +520,40 @@ export function SimSetupPage() {
       <div className="card">
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <div>
-            <div style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
-              {tab === 'quick'
-                ? 'Un solo perfil'
-                : `${(plan?.profilesetCount ?? 0).toLocaleString('es-ES')} perfiles a simular`}
+            <div className="field-label" style={{ fontSize: 14 }}>
+              {tab === 'quick' ? (
+                'Se va a probar tu personaje tal y como está.'
+              ) : (
+                <>
+                  Se van a probar{' '}
+                  <strong>
+                    {(plan?.profilesetCount ?? 0).toLocaleString('es-ES')} variantes
+                  </strong>{' '}
+                  de tu personaje.
+                  <Help term="profiles" />
+                </>
+              )}
             </div>
-            <div style={{ fontSize: 13, marginTop: 4 }}>
+            <div style={{ color: 'var(--ink-muted)', fontSize: 13, marginTop: 4 }}>
               {options.targetError > 0
-                ? `Hasta ${options.targetError}% de error, máx. ${options.iterations.toLocaleString('es-ES')} iteraciones`
-                : `${options.iterations.toLocaleString('es-ES')} iteraciones fijas`}
+                ? `Cada una se pelea hasta afinar al ${options.targetError}%, como mucho ${options.iterations.toLocaleString('es-ES')} veces.`
+                : `Cada una se pelea ${options.iterations.toLocaleString('es-ES')} veces.`}
             </div>
           </div>
           <button
             onClick={launch}
             disabled={busy || (tab !== 'quick' && !plan?.profilesetCount)}
           >
-            {busy ? 'Lanzando…' : 'Lanzar simulación'}
+            {busy ? 'Lanzando…' : 'Calcular'}
           </button>
         </div>
+
+        {tab !== 'quick' && !plan?.profilesetCount && (
+          <p className="hint" style={{ margin: '12px 0 0' }}>
+            Todavía no has elegido nada que comparar, así que no hay nada que
+            calcular.
+          </p>
+        )}
       </div>
     </>
   );
@@ -479,26 +575,29 @@ function OptionsCard({
 
   return (
     <div className="card">
-      <h2>Opciones de combate</h2>
-      <p className="hint">Se aplican a todos los perfiles de esta simulación.</p>
+      <h2>Cómo es la pelea</h2>
+      <p className="hint">
+        Con qué condiciones se simula. Los valores de fábrica sirven para
+        comparar equipo de raid: si no sabes qué tocar, no toques nada.
+      </p>
 
       <div className="grid-3">
         <label className="field">
-          Estilo de combate
+          <FieldLabel term="fightStyle">Tipo de pelea</FieldLabel>
           <select
             value={options.fightStyle}
             onChange={(event) => set('fightStyle', event.target.value as FightStyle)}
           >
             {(meta?.fightStyles ?? ['Patchwerk']).map((style) => (
               <option key={style} value={style}>
-                {style}
+                {fightStyleLabel(style)}
               </option>
             ))}
           </select>
         </label>
 
         <label className="field">
-          Duración (s)
+          <FieldLabel>Cuánto dura (segundos)</FieldLabel>
           <input
             type="number"
             value={options.fightLength}
@@ -509,7 +608,7 @@ function OptionsCard({
         </label>
 
         <label className="field">
-          Objetivos
+          <FieldLabel term="targets">Cuántos enemigos</FieldLabel>
           <input
             type="number"
             value={options.targets}
@@ -520,7 +619,7 @@ function OptionsCard({
         </label>
 
         <label className="field">
-          Error objetivo (%)
+          <FieldLabel term="targetError">Precisión (%)</FieldLabel>
           <input
             type="number"
             step={0.05}
@@ -531,7 +630,7 @@ function OptionsCard({
         </label>
 
         <label className="field">
-          Iteraciones
+          <FieldLabel term="iterations">Tope de repeticiones</FieldLabel>
           <input
             type="number"
             step={1000}
@@ -542,7 +641,9 @@ function OptionsCard({
         </label>
 
         <label className="field">
-          Hilos ({meta?.cpuCount ?? '?'} núcleos)
+          <FieldLabel term="threads">
+            Núcleos a usar (tienes {meta?.cpuCount ?? '?'})
+          </FieldLabel>
           <input
             type="number"
             min={0}
@@ -592,7 +693,7 @@ function CandidatesEditor({
       <div className="grid-3" style={{ marginBottom: 16 }}>
         {showIlevelTarget && (
           <label className="field">
-            Normalizar ilvl a
+            <FieldLabel term="targetIlevel">Igualar todo a este ilvl</FieldLabel>
             <input
               type="number"
               value={targetIlevel}
@@ -601,13 +702,18 @@ function CandidatesEditor({
               step={5}
               onChange={(event) => setTargetIlevel(Number(event.target.value) || 0)}
             />
+            <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
+              {targetIlevel > 0
+                ? `Todas se compararán como si fueran ilvl ${targetIlevel}.`
+                : 'Con 0 se comparan tal y como son.'}
+            </span>
           </label>
         )}
 
         {topGear && (
           <>
             <label className="field">
-              Máx. legendarias
+              <FieldLabel term="maxLegendaries">Legendarias a la vez</FieldLabel>
               <input
                 type="number"
                 value={maxLegendaries}
@@ -617,7 +723,9 @@ function CandidatesEditor({
               />
             </label>
             <label className="field">
-              Tope de combinaciones
+              <FieldLabel term="maxCombinations">
+                Tope de combinaciones
+              </FieldLabel>
               <input
                 type="number"
                 value={maxCombinations}
@@ -638,7 +746,10 @@ function CandidatesEditor({
               checked={keepEnchants}
               onChange={(event) => setKeepEnchants(event.target.checked)}
             />
-            Mantener encantamientos y gemas del slot
+            <span className="field-label">
+              Heredar encantamiento y gemas
+              <Help term="keepEnchants" />
+            </span>
           </span>
         </label>
       </div>
@@ -647,9 +758,14 @@ function CandidatesEditor({
         <table style={{ marginBottom: 16 }}>
           <thead>
             <tr>
-              <th>Ítem candidato</th>
-              <th>Slots</th>
-              <th className="num">ilvl</th>
+              <th>Pieza a probar</th>
+              <th>Dónde va</th>
+              <th className="num">
+                <span className="field-label" style={{ justifyContent: 'flex-end' }}>
+                  ilvl
+                  <Help term="ilevel" />
+                </span>
+              </th>
               <th />
             </tr>
           </thead>
@@ -848,7 +964,7 @@ function RelicsEditor({
 
       <div className="grid-3" style={{ marginBottom: 16 }}>
         <label className="field">
-          Rangos que añade la reliquia
+          <FieldLabel term="extraRanks">Rangos que sumaría</FieldLabel>
           <input
             type="number"
             min={1}
@@ -858,7 +974,7 @@ function RelicsEditor({
           />
         </label>
         <label className="field">
-          ilvl actual de tus reliquias
+          <FieldLabel term="relicIlevel">ilvl de las que llevas</FieldLabel>
           <input
             type="number"
             min={0}
@@ -868,7 +984,7 @@ function RelicsEditor({
           />
         </label>
         <label className="field">
-          ilvl de reliquia a probar
+          <FieldLabel>ilvl que quieres probar</FieldLabel>
           <input
             value={relicIlevelInput}
             placeholder="980, 995"
@@ -878,14 +994,14 @@ function RelicsEditor({
       </div>
 
       <p className="hint">
-        El ilvl actual lo despeja la app a partir del ilvl que el motor calcula
-        para tu arma ({character.weaponIlevel ?? '?'}). Si lo cambias a un valor
-        que no es el tuyo, la fila «Reliquias actuales» se separará del perfil
-        base y lo verás en la tabla de resultados.
+        El ilvl que llevas lo ha despejado la app sola, a partir del nivel que el
+        simulador calcula para tu arma ({character.weaponIlevel ?? '?'}). Si lo
+        cambias por uno que no es el tuyo, la fila «Reliquias actuales» dejará de
+        coincidir con tu personaje y lo verás raro en los resultados.
       </p>
 
       <div className="slot-name" style={{ margin: '16px 0 8px' }}>
-        Rasgos a comparar ({selectedTraits.length} de {withRank.length})
+        Qué rasgos comparar ({selectedTraits.length} de {withRank.length})
       </div>
       <div className="row" style={{ marginBottom: 10 }}>
         <button

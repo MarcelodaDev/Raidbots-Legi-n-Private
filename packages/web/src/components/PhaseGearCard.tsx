@@ -92,11 +92,11 @@ export function PhaseGearCard({
 
   return (
     <div className="card">
-      <h2>Equipo de referencia · {phase.label}</h2>
+      <h2>A qué equipo apuntar en {phase.label}</h2>
       <p className="hint">
-        Lo que lleva un {character.class.replace(/_/g, ' ')} {character.spec} en los
-        perfiles de esa fase. Es equipo BiS del tier, no lo que te vaya a tocar:
-        sirve para saber a dónde apuntar y qué merece la pena simular.
+        El equipo ideal de un {character.class.replace(/_/g, ' ')} {character.spec}{' '}
+        en esta fase, comparado con lo que llevas puesto. No es lo que te vaya a
+        tocar: es la referencia para saber qué merece la pena buscar.
       </p>
 
       {loading && <div className="empty">Cargando…</div>}
@@ -188,10 +188,10 @@ export function PhaseGearCard({
           {missing.length > 0 && (
             <div className="row" style={{ marginTop: 16, alignItems: 'center' }}>
               <button className="secondary" onClick={addMissing}>
-                Añadir las {missing.length} piezas distintas al inventario
+                Guardar las {missing.length} piezas que te faltan
               </button>
               <span style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
-                Así puedes compararlas con Droptimizer o Top Gear.
+                Se quedan guardadas para que puedas simularlas.
               </span>
             </div>
           )}

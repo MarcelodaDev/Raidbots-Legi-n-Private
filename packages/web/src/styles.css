@@ -110,16 +110,30 @@ a:hover {
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  margin: 0 0 4px;
-  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
 }
 
 .page-subtitle {
   color: var(--ink-muted);
   margin: 0 0 24px;
-  font-size: 14px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/*
+ * El párrafo que explica en cristiano de qué va la pantalla. Va antes de
+ * cualquier control: primero se entiende, luego se toca.
+ */
+.lead {
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  max-width: 68ch;
 }
 
 /* --- Piezas -------------------------------------------------------------- */
@@ -133,15 +147,21 @@ a:hover {
 }
 
 .card h2 {
-  margin: 0 0 4px;
-  font-size: 16px;
+  margin: 0 0 6px;
+  font-size: 18px;
   font-weight: 650;
+  letter-spacing: -0.015em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card .hint {
   color: var(--ink-muted);
-  font-size: 13px;
+  font-size: 13.5px;
+  line-height: 1.55;
   margin: 0 0 16px;
+  max-width: 72ch;
 }
 
 .row {
@@ -235,6 +255,118 @@ button.danger {
 button.small {
   padding: 5px 10px;
   font-size: 13px;
+}
+
+/* --- Ayudas (el `?` que se abre al pasar el ratón) ----------------------- */
+
+.help-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  vertical-align: middle;
+  transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.help-dot:hover:not(:disabled),
+.help-dot.open,
+.help-dot:focus-visible {
+  color: var(--ink);
+  border-color: var(--series-1);
+  background: var(--series-1);
+  filter: none;
+}
+
+.help-bubble {
+  position: fixed;
+  z-index: 100;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.help-bubble .help-title {
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--series-1);
+  margin-bottom: 5px;
+}
+
+.help-bubble p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.field-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- Elegir qué simular (rejilla de tarjetas) ---------------------------- */
+
+.sim-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.sim-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease, transform 0.14s ease;
+}
+
+.sim-card:hover:not(.active) {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+  filter: none;
+}
+
+.sim-card.active {
+  border-color: var(--series-1);
+  background: var(--surface-2);
+  box-shadow: inset 3px 0 0 var(--series-1);
+}
+
+.sim-card .sim-card-title {
+  font-size: 15px;
+  font-weight: 650;
+  margin-bottom: 4px;
+}
+
+/* La pregunta que responde esa simulación, que es lo que de verdad orienta. */
+.sim-card .sim-card-question {
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .tabs {
@@ -403,6 +535,18 @@ tbody tr:hover {
   color: var(--critical);
 }
 
+/* El número grande de los resultados, con una etiqueta que diga qué es. */
+.hero-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
 .hero {
   display: flex;
   align-items: baseline;
@@ -543,11 +687,53 @@ tbody tr:hover {
 .quality-5 { color: #ff8000; }
 .quality-6 { color: #e6cc80; }
 
+/*
+ * El titular en cristiano de una pantalla de resultados: «lo mejor que has
+ * probado te sube X». Es lo que la mayoría viene a leer, así que va primero y
+ * en grande, antes que la tabla.
+ */
+.verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--series-1);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.verdict.good {
+  border-left-color: var(--good);
+}
+
+.verdict.flat {
+  border-left-color: var(--border-strong);
+}
+
+.verdict strong {
+  font-weight: 650;
+}
+
 .empty {
   color: var(--ink-muted);
   font-size: 14px;
   padding: 24px 0;
   text-align: center;
+}
+
+/* Un aro de foco visible en todo lo que se pueda enfocar con el tabulador. */
+:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline-offset: 1px;
 }
 
 .spinner {
