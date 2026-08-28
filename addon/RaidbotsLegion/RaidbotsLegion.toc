@@ -1,0 +1,10 @@
+## Interface: 70300
+## Title: Raidbots Legion Export
+## Notes: Exporta el personaje en formato SimulationCraft, con bolsas y banco incluidos
+## Version: 1.0.0
+## SavedVariablesPerCharacter: RaidbotsLegionDB
+
+Data.lua
+Items.lua
+Core.lua
+UI.lua

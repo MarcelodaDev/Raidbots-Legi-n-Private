@@ -81,9 +81,15 @@ npm start       # http://localhost:7331
 
 ### Importar un personaje
 
-1. Instala el addon SimulationCraft para Legion en tu cliente 7.3.5.
-2. En el juego, escribe `/simc`.
-3. Copia todo el texto y pégalo en la pantalla de Personajes.
+Con el addon que viene en `addon/` (recomendado, porque exporta también bolsas
+y banco):
+
+1. Copia `addon/RaidbotsLegion` a `Interface/AddOns/` de tu cliente.
+2. Abre el banco si quieres incluir lo que guardas ahí, y escribe `/rbl`.
+3. Copia el texto y pégalo en la pantalla de Personajes.
+
+También vale la cadena del addon oficial de SimulationCraft (`/simc`); lo único
+que cambia es que el inventario puede venir incompleto.
 
 La app guarda el perfil `.simc` tal cual (saneado) y lo usa como base de todas
 las simulaciones, igual que hace Raidbots.
@@ -95,6 +101,7 @@ packages/
   shared/   Tipos compartidos entre servidor e interfaz
   server/   API Fastify, cola de simulación y envoltura de SimulationCraft
   web/      Interfaz React + Vite
+addon/      Addon de WoW 7.3.5 que exporta el personaje con bolsas y banco
 scripts/
   setup-simc.sh      Clona, parchea y compila SimulationCraft 7.3.5
   build-item-db.mjs  Genera data/items.json y data/consumables.json

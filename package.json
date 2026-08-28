@@ -18,7 +18,8 @@
     "build:itemdb": "node scripts/build-item-db.mjs",
     "build:patchdb": "node scripts/build-patch-db.mjs",
     "typecheck": "tsc --noEmit -p packages/server && tsc --noEmit -p packages/web",
-    "check:simc": "node scripts/check-simc.mjs"
+    "check:simc": "node scripts/check-simc.mjs",
+    "test:addon": "lua5.4 addon/test/run.lua --check"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
