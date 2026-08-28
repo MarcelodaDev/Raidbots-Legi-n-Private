@@ -99,6 +99,8 @@ function ProfilesetTable({
         de mejor a peor.
       </p>
 
+      {type === 'relics' && <RelicReferenceNote profilesets={profilesets} />}
+
       <div className="row" style={{ marginBottom: 12, alignItems: 'center' }}>
         <button
           className={onlyGains ? '' : 'secondary'}
@@ -163,6 +165,40 @@ function ProfilesetTable({
           })}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+/**
+ * Los perfiles de ilvl de reliquia declaran los tres huecos de forma explícita,
+ * incluido uno de referencia con el ilvl actual. Si esa referencia se separa del
+ * perfil base es que el ilvl declarado no es el real, y entonces las subidas de
+ * ilvl hay que leerlas contra la referencia, no contra el base.
+ */
+function RelicReferenceNote({ profilesets }: { profilesets: ProfilesetResult[] }) {
+  const reference = profilesets.find(
+    (entry) => entry.meta?.kind === 'relic_ilevel_reference',
+  );
+  if (!reference) return null;
+
+  const drift = Math.abs(reference.deltaPct);
+  if (drift < 0.5) {
+    return (
+      <div className="notice" style={{ borderLeftColor: 'var(--good)' }}>
+        La fila «{reference.name}» sale a {nf2.format(reference.deltaPct)}% del perfil
+        base, así que el ilvl de reliquia declarado es el correcto y las subidas
+        de ilvl se pueden leer directamente.
+      </div>
+    );
+  }
+
+  return (
+    <div className="notice">
+      La fila «{reference.name}» se desvía {nf2.format(drift)}% del perfil base: el
+      ilvl de reliquia que declaraste no coincide con el real. Las filas de ilvl
+      siguen siendo comparables <strong>entre ellas y con esa referencia</strong>,
+      pero no contra el perfil base. Vuelve a leer el artefacto en la ficha del
+      personaje para que la app lo despeje sola.
     </div>
   );
 }

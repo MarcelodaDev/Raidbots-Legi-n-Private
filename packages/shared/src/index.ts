@@ -66,6 +66,26 @@ export interface GearItem {
   raw?: string;
 }
 
+/**
+ * Un rasgo del arma artefacto, leído del propio motor.
+ *
+ * SimulationCraft acepta `artifact_override=<rasgo>:<rango>` para forzar el
+ * rango de un rasgo, que es justo lo que hace una reliquia. Pero si el nombre
+ * no existe se limita a avisar por consola y sigue con el rango original: el
+ * perfil devuelve el DPS base disfrazado de resultado válido. Por eso hay que
+ * partir siempre de la lista real de rasgos del personaje.
+ */
+export interface ArtifactTrait {
+  id: number;
+  name: string;
+  /** Nombre tokenizado, que es lo que espera `artifact_override`. */
+  token: string;
+  totalRank: number;
+  purchasedRank: number;
+  crucibleRank: number;
+  relicRank: number;
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -84,6 +104,14 @@ export interface Character {
   artifact?: string;
   /** Cadena `crucible=` del Crisol de Luznether (7.3+). */
   crucible?: string;
+  /** Rasgos del artefacto leídos del motor. Los rellena la sonda de artefacto. */
+  artifactTraits?: ArtifactTrait[];
+  /** Cuándo se leyeron esos rasgos. */
+  artifactReadAt?: string;
+  /** ilvl efectivo del arma artefacto, según el motor. */
+  weaponIlevel?: number;
+  /** ilvl de reliquia equivalente, despejado a partir del ilvl del arma. */
+  estimatedRelicIlevel?: number;
   gear: Partial<Record<GearSlot, GearItem>>;
   /**
    * Inventario adicional (bolsas y banco). El addon de Legion no siempre lo
@@ -157,7 +185,8 @@ export type SimType =
   | 'droptimizer'
   | 'topgear'
   | 'talents'
-  | 'consumables';
+  | 'consumables'
+  | 'relics';
 
 export interface QuickSimConfig {
   type: 'quick';
@@ -223,12 +252,41 @@ export interface ConsumablesConfig {
   augmentations: string[];
 }
 
+/**
+ * Comparador de reliquias y del Crisol de Luznether.
+ *
+ * Una reliquia hace dos cosas: sube un rango de un rasgo concreto y sube el
+ * ilvl del arma. Se comparan por separado porque son decisiones distintas:
+ * "qué rasgo me conviene" y "cuánto vale subir el arma".
+ */
+export interface RelicsConfig {
+  type: 'relics';
+  /** Rasgos a comparar, en formato tokenizado. */
+  traits: string[];
+  /** Rangos que añade la reliquia. Normalmente 1. */
+  extraRanks: number;
+  /**
+   * ilvl actual de las tres reliquias del arma.
+   *
+   * Hace falta porque el addon no lo exporta: el ilvl va codificado en los
+   * bonus_id de cada reliquia. Todos los perfiles del eje de ilvl declaran los
+   * tres slots de forma explícita, incluido uno de referencia con estos
+   * valores, así que las diferencias entre ellos son correctas aunque el
+   * usuario se equivoque; si se equivoca, la referencia se desvía del perfil
+   * base y se ve a simple vista.
+   */
+  currentRelicIlevels: number[];
+  /** ilvls a probar en cada slot de reliquia. Vacío = no comparar ilvl. */
+  relicIlevels: number[];
+}
+
 export type SimConfig =
   | QuickSimConfig
   | DroptimizerConfig
   | TopGearConfig
   | TalentsConfig
-  | ConsumablesConfig;
+  | ConsumablesConfig
+  | RelicsConfig;
 
 export interface SimRequest {
   characterId: string;

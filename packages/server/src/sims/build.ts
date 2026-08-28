@@ -7,6 +7,7 @@ import {
   type DroptimizerConfig,
   type GearItem,
   type GearSlot,
+  type RelicsConfig,
   type SimRequest,
   type TalentsConfig,
   type TopGearConfig,
@@ -438,6 +439,138 @@ function buildConsumables(cfg: ConsumablesConfig): {
 }
 
 // ---------------------------------------------------------------------------
+// Reliquias y Crisol de Luznether
+// ---------------------------------------------------------------------------
+
+/**
+ * Una reliquia sube un rango de un rasgo del artefacto y, de paso, el ilvl del
+ * arma. Aquí se comparan las dos cosas por separado:
+ *
+ *  - Cada rasgo con `artifact_override=<rasgo>:<rango actual + N>`.
+ *  - Cada ilvl de arma reescribiendo la línea de `main_hand`.
+ *
+ * Ojo con la validación: si el nombre del rasgo no existe, SimulationCraft
+ * avisa por consola pero simula igual con el rango original, así que el perfil
+ * saldría con el DPS base y parecería un resultado legítimo. Por eso se exige
+ * que cada rasgo esté en la lista que leyó la sonda del artefacto.
+ */
+/** Un arma artefacto de Legion tiene tres huecos de reliquia. */
+const RELIC_SLOTS = 3;
+
+/** Normaliza los tres ilvl de reliquia; devuelve null si no son utilizables. */
+function normalizeRelicIlevels(values: number[] | undefined): number[] | null {
+  if (!Array.isArray(values)) return null;
+  const usable = values
+    .map((value) => Math.round(Number(value)))
+    .filter((value) => Number.isFinite(value) && value > 0);
+  if (usable.length < RELIC_SLOTS) return null;
+  return usable.slice(0, RELIC_SLOTS);
+}
+
+function buildRelics(
+  character: Character,
+  cfg: RelicsConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+  const specs: ProfilesetSpec[] = [];
+
+  const known = character.artifactTraits ?? [];
+  if (!known.length && cfg.traits.length) {
+    throw new Error(
+      'Todavía no se han leído los rasgos del artefacto de este personaje. ' +
+        'Pulsa "Leer rasgos del artefacto" en la ficha antes de comparar reliquias.',
+    );
+  }
+
+  const byToken = new Map(known.map((trait) => [trait.token, trait]));
+  const extraRanks = Math.max(1, Math.round(cfg.extraRanks || 1));
+
+  for (const token of cfg.traits) {
+    const trait = byToken.get(token);
+    if (!trait) {
+      throw new Error(
+        `El rasgo "${token}" no existe en el artefacto de este personaje. ` +
+          'SimulationCraft lo ignoraría en silencio y el resultado saldría igual ' +
+          'que el perfil base.',
+      );
+    }
+
+    const target = trait.totalRank + extraRanks;
+    specs.push({
+      name: `${trait.name} ${trait.totalRank} → ${target}`,
+      options: [`artifact_override=${trait.token}:${target}`],
+      meta: {
+        kind: 'relic',
+        trait: trait.name,
+        token: trait.token,
+        fromRank: trait.totalRank,
+        toRank: target,
+      },
+    });
+  }
+
+  // Segundo eje: cuánto vale subir el ilvl de cada reliquia.
+  //
+  // No vale con forzar `ilevel=` en el arma: en un artefacto el ilvl sale de
+  // las reliquias, y fijarlo a mano lo baja de golpe (999 -> lo que pongas) y
+  // da diferencias absurdas. La opción correcta es `relic_ilevel=`, que toma un
+  // ilvl por cada uno de los tres slots.
+  const weapon = character.gear.main_hand;
+  if (cfg.relicIlevels.length) {
+    if (!weapon) {
+      warnings.push(
+        'El personaje no tiene arma principal en el perfil: se omite la ' +
+          'comparación de ilvl de reliquias.',
+      );
+    } else {
+      const current = normalizeRelicIlevels(cfg.currentRelicIlevels);
+      if (!current) {
+        throw new Error(
+          'Indica el ilvl actual de tus tres reliquias para poder comparar ' +
+            'subidas de ilvl.',
+        );
+      }
+
+      const line = (ilevels: number[]) =>
+        `${gearItemToLine(weapon, 'main_hand')},relic_ilevel=${ilevels.join('/')}`;
+
+      // Referencia con los valores actuales: si se aleja del perfil base es que
+      // los ilvl declarados no son los reales.
+      specs.push({
+        name: `Reliquias actuales (${current.join('/')})`,
+        options: [line(current)],
+        meta: { kind: 'relic_ilevel_reference', ilevels: current },
+      });
+
+      for (let slot = 0; slot < RELIC_SLOTS; slot++) {
+        for (const ilevel of cfg.relicIlevels) {
+          if (!Number.isFinite(ilevel) || ilevel <= 0) continue;
+          if (ilevel === current[slot]) continue;
+          const next = [...current];
+          next[slot] = Math.round(ilevel);
+          specs.push({
+            name: `Reliquia ${slot + 1} a ilvl ${next[slot]}`,
+            options: [line(next)],
+            meta: {
+              kind: 'relic_ilevel',
+              slot: slot + 1,
+              ilevel: next[slot],
+              from: current[slot],
+            },
+          });
+        }
+      }
+    }
+  }
+
+  if (!specs.length) {
+    throw new Error('Selecciona al menos un rasgo o un ilvl de reliquia que comparar.');
+  }
+
+  return { specs, warnings };
+}
+
+// ---------------------------------------------------------------------------
 // Entrada principal
 // ---------------------------------------------------------------------------
 
@@ -492,6 +625,12 @@ export function buildSim(character: Character, request: SimRequest): BuiltSim {
     }
     case 'consumables': {
       const built = buildConsumables(cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'relics': {
+      const built = buildRelics(character, cfg);
       specs = built.specs;
       warnings.push(...built.warnings);
       break;

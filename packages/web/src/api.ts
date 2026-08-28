@@ -1,4 +1,5 @@
 import type {
+  ArtifactTrait,
   Character,
   ConsumableDb,
   GearItem,
@@ -46,6 +47,14 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(patch),
     }),
+  readArtifact: (id: string) =>
+    request<{
+      character: Character;
+      traits: ArtifactTrait[];
+      weaponIlevel?: number;
+      estimatedRelicIlevel?: number;
+      relicIlevelExact?: boolean;
+    }>(`/api/characters/${id}/artifact`, { method: 'POST' }),
   updateBag: (id: string, bag: GearItem[]) =>
     request<Character>(`/api/characters/${id}/bag`, {
       method: 'PUT',

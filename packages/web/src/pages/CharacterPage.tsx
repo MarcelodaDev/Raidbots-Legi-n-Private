@@ -79,6 +79,8 @@ export function CharacterPage() {
         </div>
       </div>
 
+      <ArtifactCard character={character} onUpdate={setCharacter} />
+
       <div className="card">
         <h2>Inventario para Top Gear</h2>
         <p className="hint">
@@ -152,6 +154,104 @@ export function CharacterPage() {
         <div className="log">{character.profile}</div>
       </div>
     </>
+  );
+}
+
+/**
+ * Rasgos del artefacto. Los lee el motor con una simulación de una iteración,
+ * porque la cadena `artifact=` del addon no trae ni nombres ni los rangos que
+ * aportan el Crisol y las reliquias.
+ */
+function ArtifactCard({
+  character,
+  onUpdate,
+}: {
+  character: Character;
+  onUpdate: (character: Character) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const traits = character.artifactTraits ?? [];
+
+  const read = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const result = await api.readArtifact(character.id);
+      onUpdate(result.character);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="card">
+      <h2>Artefacto</h2>
+      <p className="hint">
+        Necesario para comparar reliquias. Se leen del propio SimulationCraft,
+        que es quien resuelve los rangos del Crisol y de las reliquias.
+      </p>
+
+      {error && <div className="notice error">{error}</div>}
+
+      {traits.length > 0 && (
+        <>
+          <div className="grid-3" style={{ marginBottom: 16 }}>
+            <div className="stat-tile">
+              <div className="label">Rasgos</div>
+              <div className="value">{traits.length}</div>
+            </div>
+            <div className="stat-tile">
+              <div className="label">ilvl del arma</div>
+              <div className="value">{character.weaponIlevel ?? '—'}</div>
+            </div>
+            <div className="stat-tile">
+              <div className="label">ilvl de reliquia</div>
+              <div className="value">{character.estimatedRelicIlevel ?? '—'}</div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Rasgo</th>
+                <th className="num">Total</th>
+                <th className="num">Comprado</th>
+                <th className="num">Crisol</th>
+                <th className="num">Reliquia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {traits
+                .filter((trait) => trait.totalRank > 0)
+                .map((trait) => (
+                  <tr key={trait.id}>
+                    <td>{trait.name}</td>
+                    <td className="num">{trait.totalRank}</td>
+                    <td className="num">{trait.purchasedRank}</td>
+                    <td className="num">{trait.crucibleRank || '—'}</td>
+                    <td className="num">{trait.relicRank || '—'}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
+      <div className="row" style={{ marginTop: traits.length ? 16 : 0 }}>
+        <button className="secondary" onClick={read} disabled={busy}>
+          {busy ? 'Leyendo…' : traits.length ? 'Volver a leer' : 'Leer rasgos del artefacto'}
+        </button>
+        {character.artifactReadAt && (
+          <span style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
+            Leído el {new Date(character.artifactReadAt).toLocaleString('es-ES')}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 

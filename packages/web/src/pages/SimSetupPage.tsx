@@ -3,6 +3,7 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import {
   DEFAULT_SIM_OPTIONS,
   SLOT_LABELS,
+  type ArtifactTrait,
   type CandidateItem,
   type Character,
   type ConsumableDb,
@@ -41,7 +42,32 @@ const TABS: { type: SimType; label: string; hint: string }[] = [
     label: 'Consumibles',
     hint: 'Compara frascos, comida, pociones y runas.',
   },
+  {
+    type: 'relics',
+    label: 'Reliquias',
+    hint: 'Qué rasgo del artefacto conviene subir y cuánto vale subir el ilvl de cada reliquia.',
+  },
 ];
+
+/** ¿La pestaña está todavía sin rellenar? */
+function isEmptySelection(tab: SimType, config: SimConfig): boolean {
+  switch (config.type) {
+    case 'droptimizer':
+    case 'topgear':
+      return config.items.length === 0;
+    case 'consumables':
+      return (
+        config.flasks.length === 0 &&
+        config.foods.length === 0 &&
+        config.potions.length === 0 &&
+        config.augmentations.length === 0
+      );
+    case 'relics':
+      return config.traits.length === 0 && config.relicIlevels.length === 0;
+    default:
+      return false;
+  }
+}
 
 export function SimSetupPage() {
   const { id } = useParams<{ id: string }>();
@@ -72,6 +98,10 @@ export function SimSetupPage() {
     potions: string[];
     augmentations: string[];
   }>({ flasks: [], foods: [], potions: [], augmentations: [] });
+  const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
+  const [extraRanks, setExtraRanks] = useState(1);
+  const [relicIlevelInput, setRelicIlevelInput] = useState('');
+  const [currentRelicIlevel, setCurrentRelicIlevel] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -97,6 +127,26 @@ export function SimSetupPage() {
     );
   }, [tab, character]);
 
+  // Al abrir Reliquias precargamos los rasgos que ya tienen rango y el ilvl de
+  // reliquia que despejó la sonda del artefacto.
+  useEffect(() => {
+    if (tab !== 'relics' || !character) return;
+    const traits = character.artifactTraits ?? [];
+    setSelectedTraits((prev) =>
+      prev.length ? prev : traits.filter((t) => t.totalRank > 0).map((t) => t.token),
+    );
+    setCurrentRelicIlevel((prev) => prev || character.estimatedRelicIlevel || 0);
+  }, [tab, character]);
+
+  const relicIlevels = useMemo(
+    () =>
+      relicIlevelInput
+        .split(/[\s,]+/)
+        .map((value) => Number.parseInt(value, 10))
+        .filter((value) => Number.isFinite(value) && value > 0),
+    [relicIlevelInput],
+  );
+
   const config: SimConfig | null = useMemo(() => {
     switch (tab) {
       case 'quick':
@@ -116,6 +166,16 @@ export function SimSetupPage() {
         return { type: 'talents', mode: talentMode, rows: [1, 2, 3, 4, 5, 6, 7] };
       case 'consumables':
         return { type: 'consumables', ...selectedConsumables };
+      case 'relics':
+        return {
+          type: 'relics',
+          traits: selectedTraits,
+          extraRanks,
+          currentRelicIlevels: currentRelicIlevel
+            ? [currentRelicIlevel, currentRelicIlevel, currentRelicIlevel]
+            : [],
+          relicIlevels,
+        };
       default:
         return null;
     }
@@ -129,12 +189,23 @@ export function SimSetupPage() {
     maxCombinations,
     talentMode,
     selectedConsumables,
+    selectedTraits,
+    extraRanks,
+    currentRelicIlevel,
+    relicIlevels,
   ]);
 
   // Vista previa del coste: cuántos perfiles va a simular.
   useEffect(() => {
     if (!character || !config) return;
     if (tab === 'quick') {
+      setPlan({ profilesetCount: 0, warnings: [] });
+      setError(null);
+      return;
+    }
+    // Sin nada seleccionado el servidor respondería con un error de validación
+    // que no aporta: todavía no ha elegido nada, no es que se haya equivocado.
+    if (isEmptySelection(tab, config)) {
       setPlan({ profilesetCount: 0, warnings: [] });
       setError(null);
       return;
@@ -246,6 +317,21 @@ export function SimSetupPage() {
               <div className="value">{character.talents || '—'}</div>
             </div>
           </div>
+        )}
+
+        {tab === 'relics' && (
+          <RelicsEditor
+            character={character}
+            selectedTraits={selectedTraits}
+            setSelectedTraits={setSelectedTraits}
+            extraRanks={extraRanks}
+            setExtraRanks={setExtraRanks}
+            currentRelicIlevel={currentRelicIlevel}
+            setCurrentRelicIlevel={setCurrentRelicIlevel}
+            relicIlevelInput={relicIlevelInput}
+            setRelicIlevelInput={setRelicIlevelInput}
+            onCharacterUpdate={setCharacter}
+          />
         )}
 
         {tab === 'consumables' && consumableDb && (
@@ -584,5 +670,175 @@ function ConsumablesEditor({
         </div>
       ))}
     </div>
+  );
+}
+
+/**
+ * Configuración del comparador de reliquias.
+ *
+ * Los rasgos salen de la sonda del artefacto: son los que el motor reconoce.
+ * No dejamos escribir nombres a mano a propósito, porque SimulationCraft ignora
+ * en silencio un rasgo que no existe y devolvería el DPS base como si fuera un
+ * resultado bueno.
+ */
+function RelicsEditor({
+  character,
+  selectedTraits,
+  setSelectedTraits,
+  extraRanks,
+  setExtraRanks,
+  currentRelicIlevel,
+  setCurrentRelicIlevel,
+  relicIlevelInput,
+  setRelicIlevelInput,
+  onCharacterUpdate,
+}: {
+  character: Character;
+  selectedTraits: string[];
+  setSelectedTraits: (traits: string[]) => void;
+  extraRanks: number;
+  setExtraRanks: (value: number) => void;
+  currentRelicIlevel: number;
+  setCurrentRelicIlevel: (value: number) => void;
+  relicIlevelInput: string;
+  setRelicIlevelInput: (value: string) => void;
+  onCharacterUpdate: (character: Character) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const traits = character.artifactTraits ?? [];
+
+  const readArtifact = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const result = await api.readArtifact(character.id);
+      onCharacterUpdate(result.character);
+      setSelectedTraits(
+        result.traits.filter((t) => t.totalRank > 0).map((t) => t.token),
+      );
+      if (result.estimatedRelicIlevel) {
+        setCurrentRelicIlevel(result.estimatedRelicIlevel);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!traits.length) {
+    return (
+      <>
+        {error && <div className="notice error">{error}</div>}
+        <p className="hint">
+          Primero hay que leer los rasgos del artefacto de este personaje. Es una
+          simulación de una iteración: tarda menos de un segundo.
+        </p>
+        <button onClick={readArtifact} disabled={busy}>
+          {busy ? 'Leyendo…' : 'Leer rasgos del artefacto'}
+        </button>
+      </>
+    );
+  }
+
+  const toggle = (token: string) => {
+    setSelectedTraits(
+      selectedTraits.includes(token)
+        ? selectedTraits.filter((value) => value !== token)
+        : [...selectedTraits, token],
+    );
+  };
+
+  const withRank = traits.filter((trait) => trait.totalRank > 0);
+
+  return (
+    <>
+      {error && <div className="notice error">{error}</div>}
+
+      <div className="grid-3" style={{ marginBottom: 16 }}>
+        <label className="field">
+          Rangos que añade la reliquia
+          <input
+            type="number"
+            min={1}
+            max={4}
+            value={extraRanks}
+            onChange={(event) => setExtraRanks(Number(event.target.value) || 1)}
+          />
+        </label>
+        <label className="field">
+          ilvl actual de tus reliquias
+          <input
+            type="number"
+            min={0}
+            max={1100}
+            value={currentRelicIlevel}
+            onChange={(event) => setCurrentRelicIlevel(Number(event.target.value) || 0)}
+          />
+        </label>
+        <label className="field">
+          ilvl de reliquia a probar
+          <input
+            value={relicIlevelInput}
+            placeholder="980, 995"
+            onChange={(event) => setRelicIlevelInput(event.target.value)}
+          />
+        </label>
+      </div>
+
+      <p className="hint">
+        El ilvl actual lo despeja la app a partir del ilvl que el motor calcula
+        para tu arma ({character.weaponIlevel ?? '?'}). Si lo cambias a un valor
+        que no es el tuyo, la fila «Reliquias actuales» se separará del perfil
+        base y lo verás en la tabla de resultados.
+      </p>
+
+      <div className="slot-name" style={{ margin: '16px 0 8px' }}>
+        Rasgos a comparar ({selectedTraits.length} de {withRank.length})
+      </div>
+      <div className="row" style={{ marginBottom: 10 }}>
+        <button
+          className="secondary small"
+          onClick={() => setSelectedTraits(withRank.map((trait) => trait.token))}
+        >
+          Todos
+        </button>
+        <button className="secondary small" onClick={() => setSelectedTraits([])}>
+          Ninguno
+        </button>
+        <button className="secondary small" onClick={readArtifact} disabled={busy}>
+          {busy ? 'Leyendo…' : 'Releer artefacto'}
+        </button>
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+          gap: 4,
+          maxHeight: 280,
+          overflow: 'auto',
+        }}
+      >
+        {withRank.map((trait: ArtifactTrait) => (
+          <label
+            key={trait.id}
+            style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13 }}
+          >
+            <input
+              type="checkbox"
+              style={{ width: 'auto' }}
+              checked={selectedTraits.includes(trait.token)}
+              onChange={() => toggle(trait.token)}
+            />
+            {trait.name}
+            <span style={{ color: 'var(--ink-muted)' }}>
+              {trait.totalRank} → {trait.totalRank + extraRanks}
+            </span>
+          </label>
+        ))}
+      </div>
+    </>
   );
 }

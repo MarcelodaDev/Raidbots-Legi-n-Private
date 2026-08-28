@@ -18,6 +18,7 @@ Legion ya están implementados y validados ahí.
 | **Top Gear** | Combina el equipo puesto con el inventario y simula todas las configuraciones posibles, respetando el límite de legendarias. |
 | **Talentos** | Compara fila a fila (21 perfiles) o las 2187 combinaciones completas. |
 | **Consumibles** | Compara frascos, comida, pociones y runas de aumento de Legion. |
+| **Reliquias** | Qué rasgo del artefacto conviene subir (cada reliquia da +1 rango) y cuánto vale subir el ilvl de cada una de las tres reliquias. |
 
 Otras cosas que trae:
 
@@ -25,6 +26,9 @@ Otras cosas que trae:
 - **Gestor de inventario propio**: el addon de Legion no exporta las bolsas de
   forma fiable, así que las piezas para Top Gear se añaden desde un buscador
   sobre la base de ítems, con ilvl ajustable (así se representa el titanforjado).
+- **Lectura del artefacto**: la app le pregunta al motor los rasgos del arma,
+  con sus rangos comprados, del Crisol y de reliquias, y además despeja el ilvl
+  real de tus reliquias. Tarda menos de un segundo.
 - Progreso en vivo de la simulación e historial de resultados.
 - Filtrado de ítems por clase y tipo de armadura. **Esto importa**: si le pasas
   a SimulationCraft una pieza que tu clase no puede llevar, aborta el lote
@@ -105,15 +109,27 @@ Detalles que merece la pena conocer:
 - **Las runas de aumento no salen de la DBC**: SimulationCraft 7.3.5 las
   resuelve por nombre en `sc_consumable.cpp`, así que están fijadas en el
   script de generación.
+- **Los rasgos del artefacto se le preguntan al motor**, no se parsean de la
+  cadena `artifact=`: ahí solo vienen ids y rangos comprados, sin nombres y sin
+  los rangos que aportan el Crisol y las reliquias. El informe JSON de simc trae
+  la lista completa, así que basta una simulación de una iteración.
+- **El ilvl de las reliquias se despeja por bisección**: el addon no lo exporta
+  (va codificado en los bonus_id de cada reliquia), pero el motor sí publica el
+  ilvl resultante del arma y la relación es monótona, así que la app busca el
+  valor de `relic_ilevel` que lo reproduce. Con eso el comparador de ilvl no
+  depende de que el usuario adivine nada.
 - **Los perfiles pegados se sanean**: un `.simc` puede escribir ficheros o hacer
   peticiones de red, y aquí se ejecuta un binario de verdad, así que esas
   opciones se filtran al importar.
 
 ## Limitaciones conocidas
 
-- **Reliquias del artefacto**: no se optimizan todavía. Se importan y se usan
-  tal cual vienen del addon, pero no hay comparador de reliquias ni de Crisol
-  de Luznether.
+- **Reliquias**: se comparan por rasgo (`artifact_override`) y por ilvl
+  (`relic_ilevel`), que son las dos decisiones reales. Lo que no hay es un
+  catálogo de reliquias concretas por jefe: eliges el rasgo, no el ítem.
+- **Crisol de Luznether**: los rangos del Crisol se importan y cuentan en el
+  rango total de cada rasgo, así que el comparador ya los tiene en cuenta. No
+  hay, en cambio, un optimizador de qué camino del Crisol elegir.
 - **Bonus IDs**: al sustituir una pieza se usa `ilevel=` para fijar su nivel,
   que es lo que hace falta para el 99% de los casos, pero no se modelan
   bonus IDs concretos (socket extra, terciarias) salvo que los indiques a mano.

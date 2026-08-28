@@ -25,6 +25,7 @@ const SIM_LABELS: Record<string, string> = {
   topgear: 'Top Gear',
   talents: 'Talentos',
   consumables: 'Consumibles',
+  relics: 'Reliquias',
 };
 
 class SimQueue extends EventEmitter {

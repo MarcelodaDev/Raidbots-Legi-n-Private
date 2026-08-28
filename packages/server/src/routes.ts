@@ -11,6 +11,7 @@ import {
 import { config } from './config.js';
 import { getSimcStatus, invalidateSimcCache } from './simc/binary.js';
 import { parseSimcProfile, sanitizeProfile, toCharacter } from './simc/import.js';
+import { readArtifactTraits } from './simc/artifact.js';
 import {
   getConsumables,
   itemDbStatus,
@@ -120,6 +121,39 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       }));
 
       return saveCharacter({ ...existing, bag: normalized });
+    },
+  );
+
+  /**
+   * Lee los rasgos del artefacto preguntándoselos al motor y los cachea en el
+   * personaje. Es una simulación de una sola iteración: tarda menos de un
+   * segundo y evita que la app tenga que mantener su propia copia de la DBC de
+   * artefactos.
+   */
+  app.post<{ Params: { id: string } }>(
+    '/api/characters/:id/artifact',
+    async (req, reply) => {
+      const character = getCharacter(req.params.id);
+      if (!character) return reply.code(404).send({ error: 'Personaje no encontrado.' });
+
+      const simc = await getSimcStatus();
+      if (!simc.available) return reply.code(503).send({ error: simc.error });
+
+      try {
+        const probe = await readArtifactTraits(character);
+        const updated = saveCharacter({
+          ...character,
+          artifactTraits: probe.traits,
+          artifactReadAt: new Date().toISOString(),
+          weaponIlevel: probe.weaponIlevel,
+          estimatedRelicIlevel: probe.estimatedRelicIlevel,
+        });
+        return { character: updated, ...probe };
+      } catch (err) {
+        return reply
+          .code(400)
+          .send({ error: err instanceof Error ? err.message : String(err) });
+      }
     },
   );
 
