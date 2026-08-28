@@ -65,6 +65,81 @@ export SIMC_PATH=/ruta/a/tu/simc
 > modernos (faltan includes que entonces llegaban de forma transitiva). Los
 > parches necesarios están en `scripts/patches/` y el script los aplica solo.
 
+## Instalación en Windows
+
+En Windows lo único que no se resuelve con `npm` es SimulationCraft, porque hay
+que compilarlo. Hay tres caminos, de más fácil a más laborioso.
+
+### 1. Paquete ya preparado (recomendado)
+
+Trae `simc.exe` compilado y las bases de datos ya generadas, así que te saltas
+la compilación entera.
+
+1. Instala [Node.js 20+](https://nodejs.org).
+2. Descarga el proyecto y descomprímelo, por ejemplo en `C:\raidbots-legion`.
+3. Descomprime el paquete de Windows y copia sus carpetas `bin` y `data`
+   **dentro** de la carpeta del proyecto.
+4. Abre PowerShell ahí y ejecuta:
+
+   ```powershell
+   npm install
+   npm run build
+   npm start
+   ```
+
+5. Abre <http://localhost:7331>.
+
+Para comprobar que todo está en su sitio: `npm run check:simc`.
+
+> El `simc.exe` del paquete está compilado de forma estática (no necesita
+> Visual C++ ni ninguna otra librería) pero **está compilado cruzado desde
+> Linux y no se ha podido ejecutar para probarlo**. Si diera problemas, tira de
+> cualquiera de los dos caminos siguientes.
+
+### 2. WSL
+
+Si tienes o quieres tener WSL, es el camino más parecido a lo probado:
+
+```powershell
+wsl --install          # solo la primera vez, reinicia después
+```
+
+Y ya dentro de Ubuntu, exactamente los mismos pasos que en Linux:
+
+```bash
+sudo apt install build-essential git nodejs npm
+git clone <este repo> && cd raidbots-legion
+npm install && npm run setup:simc && npm run build:itemdb
+npm run build:patchdb && npm run build:enhancements
+npm run build && npm start
+```
+
+La app queda igualmente en <http://localhost:7331>, y se abre desde el navegador
+de Windows con normalidad.
+
+### 3. Compilar SimulationCraft en Windows
+
+Necesitas Visual Studio con las herramientas de C++. Clona
+`https://github.com/simulationcraft/simc` en la rama `legion-dev`, abre
+`simc_vs2017.sln`, compila en Release x64 y copia el `simc.exe` resultante a
+`bin\simc.exe` dentro del proyecto. Luego genera las bases de datos:
+
+```powershell
+npm run build:itemdb -- --simc C:\ruta\a\simc
+npm run build:patchdb -- --simc C:\ruta\a\simc
+npm run build:enhancements -- --simc C:\ruta\a\simc
+```
+
+### Dónde busca la app el binario
+
+Por orden: la variable de entorno `SIMC_PATH`, luego
+`vendor\simc\engine\simc.exe`, luego `bin\simc.exe`. Para fijarla a mano:
+
+```powershell
+$env:SIMC_PATH = "C:\ruta\a\simc.exe"
+npm start
+```
+
 ## Uso
 
 ```bash
