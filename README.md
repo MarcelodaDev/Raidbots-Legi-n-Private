@@ -106,12 +106,20 @@ para ver que quedó una carpeta más adentro de lo debido.
 > Windows de verdad. Si diera problemas, tira de cualquiera de los dos caminos
 > siguientes.
 
-> **Si lo recompilas tú** (`npm run build:simc-windows`), usa la variante
-> *posix* de mingw-w64. Con `x86_64-w64-mingw32-g++` a secas, que en
-> Debian/Ubuntu trae el modelo de hilos `win32`, el binario compila y enlaza sin
-> una sola advertencia pero no arranca: `std::thread` queda inservible y
-> SimulationCraft es multihilo entero. El script lo comprueba y se planta si el
-> modelo no es el correcto.
+> **Si lo recompilas tú** (`npm run build:simc-windows`), hay dos trampas, y
+> las dos dan el mismo síntoma: un ejecutable que no imprime nada.
+>
+> 1. **`-march=native`**, que el objetivo `optimized` del Makefile de
+>    SimulationCraft añade por su cuenta. Compila para la CPU de la máquina que
+>    compila, así que en cualquier otra muere en la primera instrucción que no
+>    soporte. El script pasa `OPTS` por línea de comandos para anularlo y
+>    después comprueba sobre el binario que no haya quedado ni una instrucción
+>    AVX.
+> 2. **El modelo de hilos del compilador.** Hace falta
+>    `x86_64-w64-mingw32-g++-posix`; con la variante `win32` que traen
+>    Debian y Ubuntu por defecto, `std::thread` queda inservible y
+>    SimulationCraft es multihilo entero. El script se planta si el modelo no es
+>    el correcto.
 
 ### 2. WSL
 

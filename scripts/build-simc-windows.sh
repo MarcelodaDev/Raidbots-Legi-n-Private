@@ -5,9 +5,19 @@
 # Produce un simc.exe enlazado estático: no necesita ni Visual C++ ni el
 # runtime de MinGW en la máquina destino.
 #
-# EL DETALLE QUE IMPORTA
-# ----------------------
-# Hay que usar la variante *posix* del compilador de mingw-w64:
+# DOS DETALLES QUE IMPORTAN
+# -------------------------
+# 1) -march=native NO puede quedarse.
+#
+# El objetivo `optimized` del Makefile de SimulationCraft añade
+# `-march=native`, que compila para la CPU de la máquina que compila. En un
+# binario que se va a distribuir eso es fatal: en cuanto el PC de destino no
+# soporte alguna instrucción, el proceso muere sin imprimir nada. Se entregó
+# un binario así y el síntoma era justo ese, un exe mudo. Por eso se pasa OPTS
+# por línea de comandos, que anula el `+=` del objetivo, con una línea base
+# portable (`-march=x86-64`).
+#
+# 2) Hay que usar la variante *posix* del compilador de mingw-w64:
 #
 #   x86_64-w64-mingw32-g++-posix   ✅  (Thread model: posix)
 #   x86_64-w64-mingw32-g++         ❌  (Thread model: win32 en Debian/Ubuntu)
@@ -52,13 +62,16 @@ fi
 echo "==> Compilando SimulationCraft para Windows"
 echo "    fuente: $SOURCE"
 echo "    modelo de hilos: $MODEL"
+echo "    CPU objetivo: x86-64 genérica (nunca -march=native en algo a repartir)"
 
-# PATHSEP=/ es necesario porque el Makefile, en modo Windows, usa la barra
+# OPTS por línea de comandos anula el `OPTS += -march=native` del objetivo.
+# PATHSEP=/ hace falta porque el Makefile, en modo Windows, usa la barra
 # invertida y eso rompe make cuando se ejecuta en Linux.
 make -C "$SOURCE/engine" \
   OS=WINDOWS \
   PATHSEP=/ \
   CXX="$CXX_POSIX" \
+  OPTS="-ffast-math -fomit-frame-pointer -march=x86-64 -mtune=generic" \
   -j"$JOBS" \
   optimized
 
@@ -70,6 +83,22 @@ fi
 
 mkdir -p "$ROOT/bin"
 cp "$BIN" "$ROOT/bin/simc.exe"
+
+# Verificación sobre el binario, no sobre los flags: si se hubiera colado
+# -march=native en una máquina moderna, aparecerían instrucciones AVX y el exe
+# solo valdría aquí. Comprobar el resultado es más fiable que confiar en que la
+# línea de compilación era la correcta.
+if command -v objdump >/dev/null 2>&1; then
+  AVX="$(objdump -d "$ROOT/bin/simc.exe" 2>/dev/null \
+    | grep -cE '\s(vmovap|vpxor|vzeroupper|vbroadcast|vfmadd)' || true)"
+  if [ "${AVX:-0}" -gt 0 ]; then
+    echo "ERROR: el binario usa instrucciones AVX ($AVX). Se compiló para esta" >&2
+    echo "  CPU y fallará en máquinas más antiguas. Revisa que OPTS no traiga" >&2
+    echo "  -march=native." >&2
+    exit 1
+  fi
+  echo "    sin instrucciones AVX: vale para cualquier x86-64"
+fi
 
 echo "==> Listo: $ROOT/bin/simc.exe"
 echo "    dependencias:"
