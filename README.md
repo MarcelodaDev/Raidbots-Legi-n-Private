@@ -77,8 +77,15 @@ la compilación entera.
 
 1. Instala [Node.js 20+](https://nodejs.org).
 2. Descarga el proyecto y descomprímelo, por ejemplo en `C:\raidbots-legion`.
-3. Descomprime el paquete de Windows y copia sus carpetas `bin` y `data`
-   **dentro** de la carpeta del proyecto.
+3. Descomprime el paquete de Windows **dentro** de la carpeta del proyecto. Las
+   carpetas `bin` y `data` tienen que quedar al mismo nivel que `package.json`,
+   no dentro de otra carpeta:
+
+   ```
+   C:\raidbots-legion\bin\simc.exe
+   C:\raidbots-legion\data\items.json
+   C:\raidbots-legion\package.json
+   ```
 4. Abre PowerShell ahí y ejecuta:
 
    ```powershell
@@ -89,7 +96,9 @@ la compilación entera.
 
 5. Abre <http://localhost:7331>.
 
-Para comprobar que todo está en su sitio: `npm run check:simc`.
+Para comprobar que todo está en su sitio: `npm run check:simc`. Si no encuentra
+el binario, te dice **en qué rutas exactas ha buscado**, que casi siempre basta
+para ver que quedó una carpeta más adentro de lo debido.
 
 > El `simc.exe` del paquete está compilado de forma estática (no necesita
 > Visual C++ ni ninguna otra librería) pero **está compilado cruzado desde

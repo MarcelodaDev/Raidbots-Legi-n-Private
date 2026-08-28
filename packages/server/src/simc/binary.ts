@@ -25,13 +25,24 @@ let cached: SimcStatus | null = null;
 export function resolveSimcPath(): string | undefined {
   for (const candidate of candidatePaths()) {
     try {
-      fs.accessSync(candidate, fs.constants.X_OK);
+      // En Windows no hay permiso de ejecución que comprobar, así que basta
+      // con que el fichero exista.
+      const mode = process.platform === 'win32' ? fs.constants.F_OK : fs.constants.X_OK;
+      fs.accessSync(candidate, mode);
       return candidate;
     } catch {
       // seguimos buscando
     }
   }
   return undefined;
+}
+
+/** Rutas probadas y si existe algo en cada una, para poder diagnosticar. */
+export function simcSearchReport(): { path: string; exists: boolean }[] {
+  return candidatePaths().map((candidate) => ({
+    path: candidate,
+    exists: fs.existsSync(candidate),
+  }));
 }
 
 /**
@@ -45,11 +56,20 @@ export async function getSimcStatus(force = false): Promise<SimcStatus> {
 
   const simcPath = resolveSimcPath();
   if (!simcPath) {
+    // Decir dónde se ha buscado ahorra la mitad de los problemas de
+    // instalación: casi siempre el binario está, pero una carpeta más adentro.
+    const tried = simcSearchReport()
+      .map((entry) => `  ${entry.exists ? '(existe pero no se pudo usar)' : 'no está'}  ${entry.path}`)
+      .join('\n');
     cached = {
       available: false,
+      searched: simcSearchReport(),
       error:
-        'No se encontró el binario de SimulationCraft. Ejecuta `npm run setup:simc` ' +
-        'o define la variable de entorno SIMC_PATH.',
+        'No se encontró el binario de SimulationCraft. Rutas probadas:\n' +
+        tried +
+        `\n\nCopia el binario a ${path.join(ROOT, 'bin')} (debe quedar como ` +
+        `${path.join(ROOT, 'bin', process.platform === 'win32' ? 'simc.exe' : 'simc')}), ` +
+        'o define la variable SIMC_PATH apuntando al binario.',
     };
     return cached;
   }

@@ -627,6 +627,8 @@ export interface SimcStatus {
   version?: string;
   wowVersion?: string;
   error?: string;
+  /** Rutas donde se buscó el binario, para diagnosticar cuando no aparece. */
+  searched?: { path: string; exists: boolean }[];
 }
 
 export interface ServerMeta {

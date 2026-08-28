@@ -60,7 +60,18 @@ export function CharactersPage() {
       {meta && !meta.simc.available && (
         <div className="notice error">
           <strong>SimulationCraft no está disponible.</strong>
-          <div style={{ marginTop: 6 }}>{meta.simc.error}</div>
+          {/* El mensaje trae las rutas donde se buscó, una por línea. */}
+          <pre
+            style={{
+              marginTop: 6,
+              marginBottom: 0,
+              whiteSpace: 'pre-wrap',
+              fontSize: 12.5,
+              fontFamily: 'inherit',
+            }}
+          >
+            {meta.simc.error}
+          </pre>
         </div>
       )}
 
