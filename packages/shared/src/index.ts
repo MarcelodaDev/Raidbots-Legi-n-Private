@@ -118,6 +118,8 @@ export interface Character {
    * exporta, así que se puede gestionar a mano desde la app.
    */
   bag: GearItem[];
+  /** Fase de contenido del servidor donde juega este personaje. */
+  patchId?: string;
   /** Perfil .simc original, saneado. Es la base de todas las simulaciones. */
   profile: string;
   createdAt: string;
@@ -437,6 +439,12 @@ export interface ItemSearchQuery {
   limit?: number;
   /** Clase en formato simc: filtra lo que ese personaje puede equipar. */
   class?: string;
+  /** Fase del servidor: recorta al ilvl máximo de esa fase. */
+  patch?: string;
+  /** Solo ítems que aparecen en los perfiles de referencia de la fase. */
+  patchOnly?: boolean;
+  /** Incluir equipo que parece de un tier posterior a la fase. */
+  includeLaterTiers?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -483,6 +491,71 @@ export const CLASS_ARMOR_TYPE: Record<string, number> = {
 export const ARMOR_TYPED_INVTYPES = new Set([1, 3, 5, 6, 7, 8, 9, 10, 20]);
 
 // ---------------------------------------------------------------------------
+// Fases de contenido (servidores progresivos)
+// ---------------------------------------------------------------------------
+
+/** Una pieza del equipo de referencia de una spec en una fase. */
+export interface PatchGearPiece {
+  slot: GearSlot;
+  itemId: number;
+  name: string;
+  ilevel: number;
+  quality: number;
+  /** Línea de ítem tal y como la escribe simc, con bonus_id y encantamiento. */
+  encoded: string;
+}
+
+export interface PatchSpecGear {
+  class: string;
+  spec: string;
+  /** Nombre del perfil de simc del que sale (por ejemplo `T21_Mage_Frost`). */
+  profile: string;
+  talents: string;
+  gear: PatchGearPiece[];
+  /** Otros perfiles de la misma spec en esa fase (variantes de build). */
+  variants: string[];
+}
+
+/**
+ * Una fase de contenido de un servidor progresivo.
+ *
+ * Sale de los perfiles por tier de SimulationCraft. Ojo: esos perfiles están
+ * escritos sobre el juego final de 7.3.5, así que su equipo es el del tier pero
+ * sus mecánicas son las de 7.3.5. Los números de aquí son valores por defecto
+ * razonables, no una reconstrucción histórica de cada parche.
+ */
+export interface PatchPhase {
+  id: string;
+  label: string;
+  description: string;
+  order: number;
+  /** ilvl máximo del equipo de la fase, sin contar el arma artefacto. */
+  ilevelCap: number;
+  /** ilvl del arma artefacto en esa fase (escala con las reliquias). */
+  artifactIlevel: number;
+  /**
+   * Id de ítem más alto visto en la fase. Los ids se asignan por bloques según
+   * se desarrolla el contenido, así que sirve de frontera con los tiers
+   * posteriores. Es una heurística, no un dato de la DBC.
+   */
+  maxItemId: number;
+  /** Legendarias equipadas como mucho en los perfiles de la fase. */
+  maxLegendaries: number;
+  /** Si los perfiles de la fase traen datos de Crisol de Luznether. */
+  profilesUseCrucible: boolean;
+  profileCount: number;
+  specCount: number;
+  itemCount: number;
+  /** Perfiles de simc que no se pudieron cargar al generar los datos. */
+  skipped: string[];
+}
+
+/** Fase con su catálogo de ítems, para filtrar el buscador. */
+export interface PatchDetail extends PatchPhase {
+  items: { id: number; name: string; ilevel: number; quality: number; slots: GearSlot[] }[];
+}
+
+// ---------------------------------------------------------------------------
 // Metadatos y estado del servidor
 // ---------------------------------------------------------------------------
 
@@ -497,6 +570,7 @@ export interface SimcStatus {
 export interface ServerMeta {
   simc: SimcStatus;
   itemDb: { available: boolean; items: number; consumables: number };
+  patches: PatchPhase[];
   fightStyles: readonly string[];
   defaults: SimOptions;
   cpuCount: number;

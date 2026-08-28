@@ -6,11 +6,13 @@ import fastifyStatic from '@fastify/static';
 import { ROOT, config, ensureDirs } from './config.js';
 import { registerRoutes } from './routes.js';
 import { loadItemDb, itemDbStatus } from './data/itemdb.js';
+import { loadPatches, patchDbStatus } from './data/patches.js';
 import { getSimcStatus } from './simc/binary.js';
 
 async function main(): Promise<void> {
   ensureDirs();
   loadItemDb();
+  loadPatches();
 
   const app = Fastify({
     logger: { level: process.env.LOG_LEVEL ?? 'info' },
@@ -48,6 +50,13 @@ async function main(): Promise<void> {
     items.available
       ? `Base de ítems: ${items.items} ítems, ${items.consumables} consumibles`
       : 'Base de ítems no generada. Ejecuta `npm run build:itemdb`.',
+  );
+
+  const patches = patchDbStatus();
+  app.log.info(
+    patches.available
+      ? `Fases de contenido: ${patches.phases}`
+      : 'Fases no generadas. Ejecuta `npm run build:patchdb`.',
   );
 }
 

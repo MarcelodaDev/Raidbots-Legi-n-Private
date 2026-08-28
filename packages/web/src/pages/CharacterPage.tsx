@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import {
   SIMMED_SLOTS,
   SLOT_LABELS,
   type Character,
   type GearItem,
   type GearSlot,
+  type ServerMeta,
 } from '@rbl/shared';
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
+import { PhaseGearCard } from '../components/PhaseGearCard.js';
 
 export function CharacterPage() {
   const { id } = useParams<{ id: string }>();
+  const meta = useOutletContext<ServerMeta | null>();
   const [character, setCharacter] = useState<Character | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [savingBag, setSavingBag] = useState(false);
@@ -32,6 +35,20 @@ export function CharacterPage() {
     } finally {
       setSavingBag(false);
     }
+  };
+
+  const phases = meta?.patches ?? [];
+  const phase = phases.find((entry) => entry.id === character.patchId);
+
+  const setPhase = async (patchId: string) => {
+    setCharacter(await api.updateCharacter(character.id, { patchId }));
+  };
+
+  /** Añade piezas al inventario sin duplicar lo que ya está. */
+  const addManyToBag = (items: GearItem[]) => {
+    const known = new Set(character.bag.map((item) => `${item.itemId}-${item.slot}`));
+    const fresh = items.filter((item) => !known.has(`${item.itemId}-${item.slot}`));
+    if (fresh.length) void saveBag([...character.bag, ...fresh]);
   };
 
   const addToBag = (itemId: number, name: string, slots: GearSlot[], ilevel: number) => {
@@ -59,11 +76,42 @@ export function CharacterPage() {
         nivel {character.level}
       </p>
 
-      <div className="row" style={{ marginBottom: 20 }}>
+      <div className="row" style={{ marginBottom: 20, alignItems: 'flex-end' }}>
         <Link to={`/personajes/${character.id}/simular`}>
           <button>Simular</button>
         </Link>
+
+        {phases.length > 0 && (
+          <label className="field" style={{ minWidth: 320 }}>
+            Fase del servidor
+            <select
+              value={character.patchId ?? ''}
+              onChange={(event) => void setPhase(event.target.value)}
+            >
+              <option value="">Sin fase (todo 7.3.5)</option>
+              {phases.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.label} · ilvl ≤ {entry.ilevelCap}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
+
+      {phase && (
+        <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
+          Fase <strong>{phase.label}</strong>: {phase.description} El buscador de
+          ítems se limita a ilvl {phase.ilevelCap} y Top Gear usa{' '}
+          {phase.maxLegendaries} legendarias por defecto.
+        </div>
+      )}
+
+      <PhaseGearCard
+        character={character}
+        phase={phase}
+        onAddToBag={addManyToBag}
+      />
 
       <div className="card">
         <h2>Equipo</h2>
@@ -129,6 +177,7 @@ export function CharacterPage() {
           <>
             <ItemPicker
               characterClass={character.class}
+              patchId={character.patchId}
               onPick={(item, ilevel) =>
                 addToBag(item.id, item.name, item.slots, ilevel)
               }

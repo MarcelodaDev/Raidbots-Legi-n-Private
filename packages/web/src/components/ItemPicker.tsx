@@ -14,6 +14,11 @@ interface Props {
    * una pieza inválida y que SimulationCraft cancele la simulación entera.
    */
   characterClass?: string;
+  /**
+   * Fase del servidor. Recorta la búsqueda al ilvl máximo de esa fase: en un
+   * servidor progresivo el equipo de tiers posteriores todavía no existe.
+   */
+  patchId?: string;
 }
 
 const SEARCHABLE_SLOTS = GEAR_SLOTS.filter(
@@ -29,6 +34,7 @@ export function ItemPicker({
   slot,
   actionLabel = 'Añadir',
   characterClass,
+  patchId,
 }: Props) {
   const [query, setQuery] = useState('');
   const [slotFilter, setSlotFilter] = useState<GearSlot | ''>(slot ?? '');
@@ -36,6 +42,8 @@ export function ItemPicker({
   const [results, setResults] = useState<ItemRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [ilevelOverride, setIlevelOverride] = useState<Record<number, number>>({});
+  const [patchOnly, setPatchOnly] = useState(false);
+  const [includeLaterTiers, setIncludeLaterTiers] = useState(false);
 
   useEffect(() => {
     const handle = setTimeout(() => {
@@ -51,6 +59,9 @@ export function ItemPicker({
           minIlevel,
           limit: 60,
           class: characterClass,
+          patch: patchId,
+          patchOnly: patchOnly ? 'true' : undefined,
+          includeLaterTiers: includeLaterTiers ? 'true' : undefined,
         })
         .then(setResults)
         .catch(() => setResults([]))
@@ -58,7 +69,15 @@ export function ItemPicker({
     }, 250);
 
     return () => clearTimeout(handle);
-  }, [query, slotFilter, minIlevel, characterClass]);
+  }, [
+    query,
+    slotFilter,
+    minIlevel,
+    characterClass,
+    patchId,
+    patchOnly,
+    includeLaterTiers,
+  ]);
 
   const hint = useMemo(() => {
     if (loading) return 'Buscando…';
@@ -105,8 +124,35 @@ export function ItemPicker({
         </label>
       </div>
 
+      {patchId && (
+        <div style={{ display: 'grid', gap: 6, marginTop: 10, fontSize: 13 }}>
+          <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              type="checkbox"
+              style={{ width: 'auto' }}
+              checked={patchOnly}
+              onChange={(event) => setPatchOnly(event.target.checked)}
+            />
+            Solo piezas que aparecen en los perfiles de referencia de mi fase
+          </label>
+          <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              type="checkbox"
+              style={{ width: 'auto' }}
+              checked={includeLaterTiers}
+              onChange={(event) => setIncludeLaterTiers(event.target.checked)}
+            />
+            Incluir equipo que parece de un tier posterior
+            <span style={{ color: 'var(--ink-muted)' }}>
+              (se descarta por rango de id de ítem, que es una aproximación)
+            </span>
+          </label>
+        </div>
+      )}
+
       <p className="hint" style={{ margin: '10px 0 0' }}>
         {hint}
+        {patchId ? ' · limitado al ilvl de tu fase' : ''}
       </p>
 
       {results.length > 0 && (

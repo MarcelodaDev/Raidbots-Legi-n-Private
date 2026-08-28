@@ -16,6 +16,7 @@
     "start": "npm run start --workspace @rbl/server",
     "setup:simc": "bash scripts/setup-simc.sh",
     "build:itemdb": "node scripts/build-item-db.mjs",
+    "build:patchdb": "node scripts/build-patch-db.mjs",
     "typecheck": "tsc --noEmit -p packages/server && tsc --noEmit -p packages/web",
     "check:simc": "node scripts/check-simc.mjs"
   },

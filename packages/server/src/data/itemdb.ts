@@ -9,6 +9,7 @@ import {
   type ItemSearchQuery,
 } from '@rbl/shared';
 import { paths } from '../config.js';
+import { getPhase, itemIdsUpTo } from './patches.js';
 
 let items: ItemRecord[] = [];
 let byId = new Map<number, ItemRecord>();
@@ -89,12 +90,24 @@ export function searchItems(query: ItemSearchQuery): ItemRecord[] {
   const term = query.q?.trim().toLowerCase();
   const termId = term ? Number.parseInt(term, 10) : Number.NaN;
 
+  // En un servidor progresivo no existe todavía el equipo de tiers futuros.
+  const phase = query.patch ? getPhase(query.patch) : undefined;
+  const maxIlevel = Math.min(
+    query.maxIlevel ?? Number.POSITIVE_INFINITY,
+    phase?.ilevelCap ?? Number.POSITIVE_INFINITY,
+  );
+  const maxItemId =
+    phase && !query.includeLaterTiers ? phase.maxItemId : Number.POSITIVE_INFINITY;
+  const phaseItems = query.patch && query.patchOnly ? itemIdsUpTo(query.patch) : undefined;
+
   const results: ItemRecord[] = [];
   for (const item of items) {
     if (query.slot && !item.slots.includes(query.slot)) continue;
     if (query.class && !canClassEquip(item, query.class)) continue;
+    if (phaseItems && !phaseItems.has(item.id)) continue;
+    if (item.id > maxItemId) continue;
     if (query.minIlevel && item.ilevel < query.minIlevel) continue;
-    if (query.maxIlevel && item.ilevel > query.maxIlevel) continue;
+    if (item.ilevel > maxIlevel) continue;
     if (query.quality !== undefined && item.quality !== query.quality) continue;
     if (term) {
       const nameMatch = item.name.toLowerCase().includes(term);

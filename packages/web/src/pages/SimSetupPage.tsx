@@ -113,6 +113,13 @@ export function SimSetupPage() {
     if (meta) setOptions((prev) => ({ ...prev, threads: meta.defaults.threads }));
   }, [meta]);
 
+  // El límite de legendarias depende de la fase del servidor.
+  useEffect(() => {
+    if (!character || !meta) return;
+    const phase = meta.patches.find((entry) => entry.id === character.patchId);
+    if (phase?.maxLegendaries) setMaxLegendaries(phase.maxLegendaries);
+  }, [character, meta]);
+
   // Al abrir Top Gear precargamos el inventario del personaje como candidatos.
   useEffect(() => {
     if (tab !== 'topgear' || !character) return;
@@ -285,6 +292,7 @@ export function SimSetupPage() {
         {(tab === 'droptimizer' || tab === 'topgear') && (
           <CandidatesEditor
             characterClass={character.class}
+            patchId={character.patchId}
             candidates={candidates}
             setCandidates={setCandidates}
             showIlevelTarget={tab === 'droptimizer'}
@@ -478,6 +486,7 @@ function OptionsCard({
 
 function CandidatesEditor({
   characterClass,
+  patchId,
   candidates,
   setCandidates,
   showIlevelTarget,
@@ -492,6 +501,7 @@ function CandidatesEditor({
   setMaxCombinations,
 }: {
   characterClass: string;
+  patchId?: string;
   candidates: CandidateItem[];
   setCandidates: (items: CandidateItem[]) => void;
   showIlevelTarget: boolean;
@@ -597,6 +607,7 @@ function CandidatesEditor({
 
       <ItemPicker
         characterClass={characterClass}
+        patchId={patchId}
         onPick={(item, ilevel) =>
           setCandidates([
             ...candidates,

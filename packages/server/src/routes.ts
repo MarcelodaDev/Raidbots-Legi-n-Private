@@ -19,6 +19,13 @@ import {
   searchItems,
   slotsForItem,
 } from './data/itemdb.js';
+import {
+  getPhase,
+  getPhaseGear,
+  listPhases,
+  loadPatches,
+  patchDbStatus,
+} from './data/patches.js';
 import { planSim, queue } from './queue.js';
 import {
   deleteCharacter,
@@ -41,6 +48,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     return {
       simc,
       itemDb: itemDbStatus(),
+      patches: listPhases(),
       fightStyles: FIGHT_STYLES,
       defaults: { ...DEFAULT_SIM_OPTIONS, threads: config.cpuCount },
       cpuCount: config.cpuCount,
@@ -50,7 +58,45 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
   app.post('/api/meta/refresh', async () => {
     invalidateSimcCache();
     loadItemDb();
-    return { simc: await getSimcStatus(true), itemDb: itemDbStatus() };
+    loadPatches();
+    return {
+      simc: await getSimcStatus(true),
+      itemDb: itemDbStatus(),
+      patches: patchDbStatus(),
+    };
+  });
+
+  // -------------------------------------------------------------------------
+  // Fases de contenido
+  // -------------------------------------------------------------------------
+
+  app.get('/api/patches', async () => listPhases());
+
+  app.get<{ Params: { id: string } }>('/api/patches/:id', async (req, reply) => {
+    const phase = getPhase(req.params.id);
+    if (!phase) return reply.code(404).send({ error: 'Fase no encontrada.' });
+    const { specs, ...rest } = phase;
+    return { ...rest, specs: Object.keys(specs ?? {}) };
+  });
+
+  /** Equipo de referencia de una spec en una fase. */
+  app.get<{
+    Params: { id: string };
+    Querystring: { class?: string; spec?: string };
+  }>('/api/patches/:id/gear', async (req, reply) => {
+    const { class: className, spec } = req.query;
+    if (!className || !spec) {
+      return reply.code(400).send({ error: 'Faltan los parámetros class y spec.' });
+    }
+    const gear = getPhaseGear(req.params.id, className, spec);
+    if (!gear) {
+      return reply.code(404).send({
+        error:
+          `No hay equipo de referencia para ${className} ${spec} en esa fase. ` +
+          'SimulationCraft no trae perfil de esa spec para ese tier.',
+      });
+    }
+    return gear;
   });
 
   app.get('/api/consumables', async () => getConsumables());
@@ -178,6 +224,9 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       quality: q.quality !== undefined ? Number(q.quality) : undefined,
       limit: q.limit ? Number(q.limit) : undefined,
       class: q.class,
+      patch: q.patch,
+      patchOnly: String(q.patchOnly) === 'true',
+      includeLaterTiers: String(q.includeLaterTiers) === 'true',
     });
   });
 

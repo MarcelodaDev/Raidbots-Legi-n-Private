@@ -1,6 +1,8 @@
 import type {
   ArtifactTrait,
   Character,
+  PatchPhase,
+  PatchSpecGear,
   ConsumableDb,
   GearItem,
   ItemRecord,
@@ -34,6 +36,12 @@ export const api = {
   meta: () => request<ServerMeta>('/api/meta'),
   refreshMeta: () => request<unknown>('/api/meta/refresh', { method: 'POST' }),
   consumables: () => request<ConsumableDb>('/api/consumables'),
+
+  patches: () => request<PatchPhase[]>('/api/patches'),
+  patchGear: (patchId: string, className: string, spec: string) =>
+    request<PatchSpecGear>(
+      `/api/patches/${patchId}/gear?class=${encodeURIComponent(className)}&spec=${encodeURIComponent(spec)}`,
+    ),
 
   characters: () => request<Character[]>('/api/characters'),
   character: (id: string) => request<Character>(`/api/characters/${id}`),

@@ -38,6 +38,12 @@ export function App() {
           ) : (
             <span className="badge warn">Sin base de ítems</span>
           )}
+          {meta &&
+            (meta.patches.length ? (
+              <span className="badge ok">{meta.patches.length} fases</span>
+            ) : (
+              <span className="badge warn">Sin fases</span>
+            ))}
         </div>
       </aside>
 

@@ -8,3 +8,6 @@ data/items.json
 
 # Datos generados desde la DBC de simc (npm run build:itemdb)
 data/consumables.json
+
+# Fases generadas desde los perfiles de simc (npm run build:patchdb)
+data/patches.json

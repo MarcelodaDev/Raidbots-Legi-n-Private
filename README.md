@@ -22,6 +22,10 @@ Legion ya están implementados y validados ahí.
 
 Otras cosas que trae:
 
+- **Fases de servidor progresivo**: eliges en qué tier va tu servidor (pre-banda,
+  T19, T20, T21) y la app recorta el buscador de ítems a lo que existe en esa
+  fase y te enseña el equipo de referencia de tu spec para ese tier, con la
+  comparativa slot a slot contra lo que llevas puesto.
 - Importación con la cadena del **addon SimulationCraft** (`/simc` en el juego).
 - **Gestor de inventario propio**: el addon de Legion no exporta las bolsas de
   forma fiable, así que las piezas para Top Gear se añaden desde un buscador
@@ -43,6 +47,7 @@ Debian/Ubuntu, `xcode-select --install` en macOS).
 npm install          # dependencias de la app
 npm run setup:simc   # clona y compila SimulationCraft 7.3.5 (10-20 min)
 npm run build:itemdb # genera la base de ítems desde la DBC de simc
+npm run build:patchdb # genera las fases de contenido desde los perfiles de simc
 npm run check:simc   # comprueba que todo está en su sitio
 ```
 
@@ -93,6 +98,7 @@ packages/
 scripts/
   setup-simc.sh      Clona, parchea y compila SimulationCraft 7.3.5
   build-item-db.mjs  Genera data/items.json y data/consumables.json
+  build-patch-db.mjs Genera data/patches.json (fases y equipo de referencia)
   check-simc.mjs     Diagnóstico de la instalación
 data/       Base de ítems y consumibles (generados)
 .rbl/       Personajes, historial y resultados (estado local)
@@ -118,9 +124,47 @@ Detalles que merece la pena conocer:
   ilvl resultante del arma y la relación es monótona, así que la app busca el
   valor de `relic_ilevel` que lo reproduce. Con eso el comparador de ilvl no
   depende de que el usuario adivine nada.
+- **Las fases salen de los perfiles por tier de simc** (`profiles/PreRaids`,
+  `Tier19`, `Tier20`, `Tier21`), que son los que mantiene la comunidad para cada
+  tier de banda. Cada perfil se carga en el motor para que sea él quien resuelva
+  el ilvl efectivo de cada pieza, y de ahí se deducen el tope de ilvl de la fase
+  y cuántas legendarias equipa.
 - **Los perfiles pegados se sanean**: un `.simc` puede escribir ficheros o hacer
   peticiones de red, y aquí se ejecuta un binario de verdad, así que esas
   opciones se filtran al importar.
+
+## Fases de servidor progresivo
+
+Cada personaje se asigna a una fase. Eso cambia tres cosas:
+
+1. **El buscador de ítems** se limita al ilvl máximo de esa fase y descarta el
+   equipo que parece de un tier posterior.
+2. **Top Gear** usa como límite de legendarias el que se ve en los perfiles de
+   esa fase.
+3. **Aparece el equipo de referencia** de tu spec para ese tier, comparado slot a
+   slot con lo que llevas, y puedes mandar de un clic las piezas que te faltan al
+   inventario para simularlas.
+
+| Fase | ilvl tope | Specs con referencia |
+|---|---|---|
+| Pre-banda | 865 | 28 |
+| T19 · Sueño Esmeralda → Palacio Nocturno | 910 | 23 |
+| T20 · Tumba de Sargeras | 970 | 21 |
+| T21 · Antorus, el Trono Ardiente | 1000 | 28 |
+
+Hay dos matices que conviene tener claros:
+
+- Los perfiles de simc están escritos sobre el juego final de 7.3.5, así que su
+  **equipo** es el del tier pero sus **mecánicas** son las de 7.3.5. Por eso los
+  números de cada fase (tope de ilvl, legendarias) son valores por defecto
+  editables, no una reconstrucción histórica del parche.
+- Descartar el equipo de tiers posteriores se hace por rango de id de ítem: los
+  ids se asignan por bloques según se desarrolla el contenido, así que funciona
+  bien en la práctica, pero es una aproximación. Hay una casilla para desactivarlo
+  y otra para ver solo las piezas que aparecen en los perfiles de referencia.
+
+Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
+nada más.
 
 ## Limitaciones conocidas
 
@@ -140,6 +184,10 @@ Detalles que merece la pena conocer:
   privados lo cambian a menudo, así que ajústalo a lo que tenga el tuyo.
 - **Un solo personaje por simulación**: no hay sims de banda ni de varios
   jugadores a la vez.
+- **Las fases no traen tablas de botín por jefe**: la referencia es el equipo BiS
+  del tier según simc, no "qué suelta cada jefe". Tres perfiles de T20 (guerrero
+  Armas y Furia, druida Feral) no se pueden cargar porque usan un ítem que no
+  está en la DBC de 7.3.5, así que esas specs no tienen referencia en esa fase.
 
 ## Servidores privados
 
