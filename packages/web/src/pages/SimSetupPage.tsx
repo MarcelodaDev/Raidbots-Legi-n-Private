@@ -182,6 +182,7 @@ export function SimSetupPage() {
   const [maxLegendaries, setMaxLegendaries] = useState(2);
   const [maxCombinations, setMaxCombinations] = useState(2000);
   const [perSlot, setPerSlot] = useState(4);
+  const [includeNewLegendaries, setIncludeNewLegendaries] = useState(false);
   const [upgradeIlevels, setUpgradeIlevels] = useState<number[]>([]);
   const [talentMode, setTalentMode] = useState<'rows' | 'full'>('rows');
   const [selectedConsumables, setSelectedConsumables] = useState<{
@@ -295,7 +296,14 @@ export function SimSetupPage() {
       case 'droptimizer':
         return { type: 'droptimizer', items: candidates, targetIlevel, keepEnchants };
       case 'upgrades':
-        return { type: 'upgrades', perSlot, slots: [], ilevels: upgradeIlevels, keepEnchants };
+        return {
+          type: 'upgrades',
+          perSlot,
+          slots: [],
+          ilevels: upgradeIlevels,
+          includeNewLegendaries,
+          keepEnchants,
+        };
       case 'topgear':
         return {
           type: 'topgear',
@@ -347,6 +355,7 @@ export function SimSetupPage() {
     maxCombinations,
     perSlot,
     upgradeIlevels,
+    includeNewLegendaries,
     talentMode,
     selectedConsumables,
     selectedTraits,
@@ -488,8 +497,11 @@ export function SimSetupPage() {
             setPerSlot={setPerSlot}
             ilevels={upgradeIlevels}
             setIlevels={setUpgradeIlevels}
+            includeNewLegendaries={includeNewLegendaries}
+            setIncludeNewLegendaries={setIncludeNewLegendaries}
             keepEnchants={keepEnchants}
             setKeepEnchants={setKeepEnchants}
+            maxLegendaries={maxLegendaries}
             profilesetCount={plan?.profilesetCount ?? 0}
             secondsPerProfile={meta?.secondsPerProfile}
           />
@@ -1206,8 +1218,11 @@ function UpgradesEditor({
   setPerSlot,
   ilevels,
   setIlevels,
+  includeNewLegendaries,
+  setIncludeNewLegendaries,
   keepEnchants,
   setKeepEnchants,
+  maxLegendaries,
   profilesetCount,
   secondsPerProfile,
 }: {
@@ -1217,8 +1232,11 @@ function UpgradesEditor({
   setPerSlot: (value: number) => void;
   ilevels: number[];
   setIlevels: (value: number[]) => void;
+  includeNewLegendaries: boolean;
+  setIncludeNewLegendaries: (value: boolean) => void;
   keepEnchants: boolean;
   setKeepEnchants: (value: boolean) => void;
+  maxLegendaries: number;
   profilesetCount: number;
   secondsPerProfile?: number;
 }) {
@@ -1289,6 +1307,37 @@ function UpgradesEditor({
           </span>
         </label>
       </div>
+
+      <label
+        style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}
+      >
+        <input
+          type="checkbox"
+          style={{ width: 'auto' }}
+          checked={includeNewLegendaries}
+          onChange={(event) => setIncludeNewLegendaries(event.target.checked)}
+        />
+        <span className="field-label">
+          Proponer legendarias en huecos donde no llevo ninguna
+          <Help term="legendaryCap" />
+        </span>
+      </label>
+
+      <p className="hint" style={{ marginTop: 0 }}>
+        {includeNewLegendaries ? (
+          <>
+            Van a salir legendarias en todos los huecos. Ojo: en Legion solo se
+            llevan <strong>{maxLegendaries}</strong> a la vez, así que de todas
+            las que veas solo podrás quedarte con esas.
+          </>
+        ) : (
+          <>
+            Las legendarias solo se prueban en los huecos donde ya llevas una,
+            que es donde el cambio es justo. Si no, el primer puesto de cada
+            hueco sería una legendaria y no podrías ponértelas todas.
+          </>
+        )}
+      </p>
 
       {profilesetCount > 0 && (
         <p className="hint" style={{ margin: 0 }}>

@@ -17,6 +17,9 @@ const nf2 = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
 /** Cuántas piezas se enseñan por hueco. */
 const TOP = 3;
 
+/** Calidad de una pieza legendaria. */
+const LEGENDARY = 5;
+
 interface Candidate {
   itemId: number;
   name: string;
@@ -35,6 +38,8 @@ interface SlotGroup {
   replaces?: string;
   replacesId?: number;
   replacesIlevel?: number;
+  /** Si lo que llevas ahí ya es legendario, cambiarlo no altera el total. */
+  replacesIsLegendary?: boolean;
   candidates: Candidate[];
 }
 
@@ -55,6 +60,7 @@ function groupBySlot(profilesets: ProfilesetResult[]): SlotGroup[] {
         replaces: entry.meta.replaces ? String(entry.meta.replaces) : undefined,
         replacesId: Number(entry.meta.replacesId) || undefined,
         replacesIlevel: Number(entry.meta.replacesIlevel) || undefined,
+        replacesIsLegendary: entry.meta.replacesIsLegendary === true,
         candidates: [],
       };
       slots.set(slot, group);
@@ -102,6 +108,17 @@ export function UpgradesView({ profilesets }: { profilesets: ProfilesetResult[] 
   if (!groups.length) return null;
 
   const improving = groups.filter((g) => (g.candidates[0]?.bestDelta ?? 0) > 0);
+
+  // Legendarias propuestas donde ahora no hay ninguna: son las que chocan con el
+  // tope de dos, y conviene decirlo antes de que alguien planee ponerse cinco.
+  const newLegendaries = groups.reduce(
+    (acc, group) =>
+      acc +
+      group.candidates
+        .slice(0, TOP)
+        .filter((c) => c.quality === LEGENDARY && !group.replacesIsLegendary).length,
+    0,
+  );
   const ilevels = [
     ...new Set(profilesets.map((p) => Number(p.meta?.ilevel)).filter(Boolean)),
   ].sort((a, b) => a - b);
@@ -118,6 +135,16 @@ export function UpgradesView({ profilesets }: { profilesets: ProfilesetResult[] 
         {ilevels.length ? ` (${ilevels.join(', ')})` : ''} en el que la pieza ya
         te sube: por debajo de ese nivel no te compensa cambiarla.
       </p>
+
+      {newLegendaries > 0 && (
+        <div className="notice">
+          Hay <strong>{newLegendaries}</strong>{' '}
+          {newLegendaries === 1 ? 'legendaria propuesta' : 'legendarias propuestas'}{' '}
+          en huecos donde ahora no llevas ninguna. En Legion solo se llevan dos a
+          la vez, así que no puedes quedarte con todas: mira cuál te sube más y ve
+          a por esa.
+        </div>
+      )}
 
       <div className={`verdict ${improving.length ? 'good' : 'flat'}`}>
         {improving.length ? (
@@ -162,6 +189,14 @@ export function UpgradesView({ profilesets }: { profilesets: ProfilesetResult[] 
                       quality={candidate.quality}
                       size="sm"
                     />
+                    {candidate.quality === LEGENDARY && (
+                      <span
+                        className="badge"
+                        style={{ marginLeft: 8, color: '#ff8000', borderColor: '#ff8000' }}
+                      >
+                        legendaria
+                      </span>
+                    )}
                   </td>
                   <td className="num">
                     {candidate.fromIlevel ? (

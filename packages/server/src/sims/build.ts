@@ -113,6 +113,9 @@ const UPGRADE_SLOTS: GearSlot[] = SIMMED_SLOTS.filter(
   (slot) => slotFamily(slot) !== 'trinket' && slot !== 'main_hand' && slot !== 'off_hand',
 );
 
+/** Calidad de una pieza legendaria en la DBC. */
+const LEGENDARY = 5;
+
 export interface UpgradePlan {
   /** Candidatos elegidos por hueco, ya ordenados. */
   bySlot: { slot: GearSlot; candidates: ScoredItem[] }[];
@@ -121,6 +124,8 @@ export interface UpgradePlan {
   total: number;
   /** Si no hay pesos guardados no se puede ordenar nada. */
   missingWeights: boolean;
+  /** Legendarias que ya lleva puestas el personaje. */
+  equippedLegendaries: number;
 }
 
 /** Los ilvls a probar, saneados: ordenados, sin repetidos y dentro de la fase. */
@@ -144,8 +149,20 @@ export function describeUpgrades(
   factors: ScaleFactor[] | undefined,
 ): UpgradePlan {
   const ilevels = upgradeIlevels(cfg, ilevelCapOf(character.patchId ?? ''));
+
+  const equippedLegendaries = SIMMED_SLOTS.filter((slot) => {
+    const worn = character.gear[slot];
+    return worn && getItemQuality(worn.itemId) === LEGENDARY;
+  }).length;
+
   if (!factors?.length) {
-    return { bySlot: [], ilevels, total: 0, missingWeights: true };
+    return {
+      bySlot: [],
+      ilevels,
+      total: 0,
+      missingWeights: true,
+      equippedLegendaries,
+    };
   }
 
   const weights = weightsByStat(factors);
@@ -155,20 +172,31 @@ export function describeUpgrades(
 
   const bySlot: UpgradePlan['bySlot'] = [];
   for (const slot of slots) {
-    const pool = slotCandidates(slot, character.class, character.patchId);
-    // Lo que ya llevas puesto no se prueba contra sí mismo.
     const equipped = character.gear[slot]?.itemId;
-    const candidates = pickSlotCandidates(
-      pool.filter((item) => item.id !== equipped),
-      weights,
-      cfg.perSlot,
+    const wearsLegendaryHere =
+      equipped !== undefined && getItemQuality(equipped) === LEGENDARY;
+
+    const pool = slotCandidates(slot, character.class, character.patchId).filter(
+      (item) => {
+        // Lo que ya llevas puesto no se prueba contra sí mismo.
+        if (item.id === equipped) return false;
+        if (item.quality !== LEGENDARY) return true;
+
+        // Una legendaria gana casi siempre por potencia bruta, pero en Legion
+        // solo se llevan dos. Si en este hueco ya hay una, cambiarla por otra
+        // es un cambio justo y se prueba igualmente; si no, solo entra cuando
+        // el jugador ha dicho que quiere verlas.
+        return wearsLegendaryHere || cfg.includeNewLegendaries;
+      },
     );
+
+    const candidates = pickSlotCandidates(pool, weights, cfg.perSlot);
     if (candidates.length) bySlot.push({ slot, candidates });
   }
 
   const perCandidate = ilevels.length || 1;
   const total = bySlot.reduce((acc, entry) => acc + entry.candidates.length * perCandidate, 0);
-  return { bySlot, ilevels, total, missingWeights: false };
+  return { bySlot, ilevels, total, missingWeights: false, equippedLegendaries };
 }
 
 function buildUpgrades(
@@ -226,6 +254,8 @@ function buildUpgrades(
             replaces: equipped?.name ?? equipped?.itemId,
             replacesId: equipped?.itemId,
             replacesIlevel: equipped?.ilevel,
+            replacesIsLegendary:
+              equipped !== undefined && getItemQuality(equipped.itemId) === LEGENDARY,
           },
         });
       }

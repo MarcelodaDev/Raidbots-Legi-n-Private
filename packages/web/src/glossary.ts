@@ -153,6 +153,11 @@ export const GLOSSARY = {
     text: 'Repasa todas las piezas de tu fase que tu clase puede llevar, se queda con las más prometedoras de cada hueco y las simula de verdad. Te dice cuáles te suben el DPS y desde qué nivel de objeto empiezan a merecer la pena.',
   },
 
+  legendaryCap: {
+    title: 'Legendarias y el tope de dos',
+    text: 'Una legendaria gana casi siempre por potencia bruta, así que si se proponen en todos los huecos el primer puesto de cada uno sería una legendaria… y en Legion solo puedes llevar dos. Con esto apagado solo se prueban en los huecos donde ya llevas una, que es donde cambiarla no altera el total. Enciéndelo si quieres ver cuál te convendría conseguir.',
+  },
+
   perSlot: {
     title: 'Candidatos por hueco',
     text: 'Cuántas piezas se pelean en cada hueco. Se eligen antes sin simular: la mitad por llevar las estadísticas que a ti te rentan y la mitad por tener más ilvl, para no perder ninguna de las dos formas de ser mejor. Más candidatos afinan más, pero tardan más.',

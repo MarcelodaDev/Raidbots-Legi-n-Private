@@ -309,6 +309,21 @@ Dos decisiones que conviene conocer:
 equivoca no hay error: la pieza buena simplemente nunca se simula y nadie se
 entera.
 
+### Legendarias y el tope de dos
+
+Una legendaria gana casi siempre por potencia bruta, así que sin filtrar el
+primer puesto de **todos** los huecos sería una legendaria — y en Legion solo se
+llevan dos. La lista daría a entender que puedes ponértelas todas.
+
+Por defecto las legendarias solo se prueban en los huecos donde **ya llevas
+una**: ahí el cambio es justo, porque el total no varía. Hay una casilla para
+verlas en todos los huecos, y entonces los resultados avisan de cuántas se
+proponen y marcan cada una.
+
+Comprobado con un mago que lleva una legendaria en el anillo 2: apagada salen 2
+candidatas legendarias y solo en ese hueco; encendida salen 13 repartidas por 11
+huecos.
+
 ### Abalorios, aparte
 
 Los abalorios no entran en el buscador de mejoras: casi todo su valor está en el

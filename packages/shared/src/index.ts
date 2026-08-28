@@ -249,6 +249,17 @@ export interface UpgradesConfig {
   slots: GearSlot[];
   /** ilvls a los que se prueba cada candidato, para saber desde cuál mejora. */
   ilevels: number[];
+  /**
+   * Probar legendarias en huecos donde todavía no llevas ninguna.
+   *
+   * Una legendaria gana casi siempre por potencia bruta, así que sin esto
+   * apagado el primer puesto de cada hueco sería una legendaria y la lista
+   * daría a entender que puedes ponértelas todas. En Legion solo se llevan dos.
+   *
+   * Con la opción apagada las legendarias solo se prueban donde ya llevas una:
+   * ahí el cambio es justo, porque el total de legendarias no varía.
+   */
+  includeNewLegendaries: boolean;
   keepEnchants: boolean;
 }
 
