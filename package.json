@@ -15,6 +15,7 @@
     "build": "npm run build --workspace @rbl/web",
     "start": "npm run start --workspace @rbl/server",
     "setup:simc": "bash scripts/setup-simc.sh",
+    "build:simc-windows": "bash scripts/build-simc-windows.sh",
     "build:itemdb": "node scripts/build-item-db.mjs",
     "build:patchdb": "node scripts/build-patch-db.mjs",
     "build:enhancements": "node scripts/build-enhancements-db.mjs",

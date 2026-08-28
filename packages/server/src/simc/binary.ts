@@ -109,7 +109,12 @@ export async function getSimcStatus(force = false): Promise<SimcStatus> {
       cached = {
         available: false,
         path: simcPath,
-        error: `No se pudo ejecutar el binario: ${e.message ?? 'error desconocido'}`,
+        error:
+          `El binario está en ${simcPath}, pero no arrancó.\n\n` +
+          `${e.message ?? 'error desconocido'}\n\n` +
+          'Pruébalo suelto desde una terminal en esa ruta: debe imprimir su ' +
+          'versión y luego quejarse de que no le has dado nada que simular. ' +
+          'Si no imprime nada, el binario no sirve para tu sistema.',
       };
     }
   }

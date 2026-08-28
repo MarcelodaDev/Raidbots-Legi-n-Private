@@ -57,7 +57,16 @@ export function App() {
 function SimcBadge({ meta, error }: { meta: ServerMeta | null; error: string | null }) {
   if (error) return <span className="badge error">Servidor caído</span>;
   if (!meta) return <span className="badge">Comprobando…</span>;
-  if (!meta.simc.available) return <span className="badge error">SimC no encontrado</span>;
+  if (!meta.simc.available) {
+    // Distinguir los dos casos importa: "no está" se arregla moviendo un
+    // fichero, "está pero no arranca" es un problema del binario.
+    const found = Boolean(meta.simc.path);
+    return (
+      <span className="badge error" title={meta.simc.error}>
+        {found ? 'SimC no arranca' : 'SimC no encontrado'}
+      </span>
+    );
+  }
   return (
     <span className="badge ok" title={meta.simc.path}>
       SimC {meta.simc.version}

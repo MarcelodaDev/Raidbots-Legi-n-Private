@@ -53,7 +53,18 @@ if (!simcPath) {
   const match = header.match(/SimulationCraft\s+(\S+)\s+for\s+World\s+of\s+Warcraft\s+(\S+)/i);
   if (!match) {
     ok = false;
-    console.log(`✗ SimulationCraft: el binario de ${simcPath} no respondió`);
+    console.log(`✗ SimulationCraft: el binario de ${simcPath} no respondió.`);
+    console.log('  El fichero está, pero al ejecutarlo no imprime su versión.');
+    console.log('  Pruébalo suelto para ver el error real:');
+    console.log(`    ${simcPath}`);
+    if (header.trim()) {
+      console.log('  Lo que sí imprimió:');
+      for (const line of header.trim().split('\n').slice(0, 5)) {
+        console.log(`    ${line}`);
+      }
+    } else {
+      console.log('  No imprimió absolutamente nada.');
+    }
   } else {
     const [, version, wow] = match;
     const legion = wow.startsWith('7.3');

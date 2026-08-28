@@ -100,10 +100,18 @@ Para comprobar que todo está en su sitio: `npm run check:simc`. Si no encuentra
 el binario, te dice **en qué rutas exactas ha buscado**, que casi siempre basta
 para ver que quedó una carpeta más adentro de lo debido.
 
-> El `simc.exe` del paquete está compilado de forma estática (no necesita
-> Visual C++ ni ninguna otra librería) pero **está compilado cruzado desde
-> Linux y no se ha podido ejecutar para probarlo**. Si diera problemas, tira de
-> cualquiera de los dos caminos siguientes.
+> El `simc.exe` del paquete está compilado de forma estática: no necesita
+> Visual C++ ni ninguna otra librería. Se ha comprobado ejecutándolo (arranca y
+> completa una simulación real a varios hilos), aunque bajo Wine y no sobre
+> Windows de verdad. Si diera problemas, tira de cualquiera de los dos caminos
+> siguientes.
+
+> **Si lo recompilas tú** (`npm run build:simc-windows`), usa la variante
+> *posix* de mingw-w64. Con `x86_64-w64-mingw32-g++` a secas, que en
+> Debian/Ubuntu trae el modelo de hilos `win32`, el binario compila y enlaza sin
+> una sola advertencia pero no arranca: `std::thread` queda inservible y
+> SimulationCraft es multihilo entero. El script lo comprueba y se planta si el
+> modelo no es el correcto.
 
 ### 2. WSL
 
