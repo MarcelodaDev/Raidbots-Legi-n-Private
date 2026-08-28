@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   SLOT_LABELS,
+  buildPawnScale,
   type GearSlot,
   type ProfilesetResult,
   type SimResult,
@@ -377,6 +378,73 @@ function collapseByItem(
 
 // ---------------------------------------------------------------------------
 
+/**
+ * La cadena para el addon Pawn.
+ *
+ * Con esto pegado en el juego, Pawn enseña en el tooltip de cada pieza cuánto
+ * vale para ti, usando los pesos que acaba de calcular esta simulación.
+ */
+function PawnCard({ result }: { result: SimResult }) {
+  const [copied, setCopied] = useState(false);
+
+  const scale = buildPawnScale(
+    result.characterName,
+    result.class,
+    result.spec,
+    result.scaleFactors ?? [],
+  );
+
+  if (!scale) return null;
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(scale.text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Sin permiso de portapapeles queda seleccionarlo a mano, que para eso
+      // el texto está a la vista y en un campo seleccionable.
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 24, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
+      <div className="slot-name field-label" style={{ marginBottom: 6 }}>
+        Para el addon Pawn
+        <Help term="pawn" />
+      </div>
+      <p className="hint">
+        Pega esto en el juego y Pawn te dirá, en el tooltip de cada pieza que te
+        caiga, cuánto vale para ti. En el juego:{' '}
+        <code>/pawn</code> → <strong>Escalas</strong> →{' '}
+        <strong>Importar</strong> → pegar con Ctrl+V.
+      </p>
+
+      <input
+        readOnly
+        value={scale.text}
+        onFocus={(event) => event.currentTarget.select()}
+        style={{
+          fontFamily: 'ui-monospace, Menlo, Consolas, monospace',
+          fontSize: 12.5,
+        }}
+      />
+
+      <div className="row" style={{ marginTop: 10, alignItems: 'center' }}>
+        <button className="secondary" onClick={copy}>
+          {copied ? '✓ Copiado' : 'Copiar la cadena'}
+        </button>
+        {scale.skipped.length > 0 && (
+          <span style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
+            Pawn no maneja {scale.skipped.join(', ')}, así que se queda fuera.
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ScaleFactorsCard({ result }: { result: SimResult }) {
   const factors = result.scaleFactors ?? [];
   const max = Math.max(...factors.map((factor) => Math.abs(factor.value)), 0.0001);
@@ -420,6 +488,8 @@ function ScaleFactorsCard({ result }: { result: SimResult }) {
           ))}
         </tbody>
       </table>
+
+      <PawnCard result={result} />
     </div>
   );
 }

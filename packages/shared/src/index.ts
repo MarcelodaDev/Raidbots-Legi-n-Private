@@ -723,3 +723,5 @@ export function slotFamily(slot: GearSlot): string {
   if (slot === 'trinket1' || slot === 'trinket2') return 'trinket';
   return slot;
 }
+
+export { buildPawnScale, type PawnScale } from './pawn.js';

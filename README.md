@@ -285,6 +285,36 @@ Hay dos matices que conviene tener claros:
 Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
 nada más.
 
+## Cadena para Pawn
+
+Cuando la simulación calcula el valor de cada estadística (la casilla
+«Calcular también cuánto vale cada estadística»), debajo de la tabla sale la
+cadena lista para el addon [Pawn](https://www.curseforge.com/wow/addons/pawn):
+
+```
+( Pawn: v1: "T21_Mage_Frost": Class=Mage, Spec=Frost, Intellect=1.00,
+  CritRating=0.94, HasteRating=1.21, MasteryRating=0.79, Versatility=1.40 )
+```
+
+En el juego: `/pawn` → Escalas → Importar → pegar. A partir de ahí Pawn te dice
+en el tooltip de cada pieza que te caiga si te mejora.
+
+Detalles de la implementación (`packages/shared/src/pawn.ts`):
+
+- Se reescala para que la estadística principal valga 1, que es como se leen
+  normalmente («el crítico me vale 0,94 de lo que me vale el intelecto»). A Pawn
+  solo le importan las proporciones, así que el resultado es el mismo.
+- Los decimales van con punto. Formatearlos con `es-ES` metería comas y Pawn
+  leería `1,25` como dos campos distintos.
+- La especialización llega de simc como nombre para enseñar («Frost Mage»), así
+  que se le quita la clase del final: Pawn espera `Spec=Frost`.
+- Lo que Pawn no maneja (por ejemplo `SP`) se deja fuera y se dice cuál ha sido,
+  en vez de dar por buena una cadena a la que le falta algo.
+
+`npm run test:pawn` comprueba el formato carácter a carácter. Existe porque un
+fallo aquí no se ve en la app: se ve dentro del juego, cuando Pawn dice que la
+cadena no vale y no explica por qué.
+
 ## Nombres e iconos de los ítems
 
 La app parte de los ids que ya tiene en su base de datos y les pone cara: pide

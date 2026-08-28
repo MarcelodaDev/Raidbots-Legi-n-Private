@@ -148,6 +148,11 @@ export const GLOSSARY = {
     text: 'Cuánto DPS ganas o pierdes con ese cambio, comparado con tu personaje ahora mismo. En verde y con ▲ si mejora, en rojo y con ▼ si empeora.',
   },
 
+  pawn: {
+    title: 'Pawn',
+    text: 'Un addon que enseña en el tooltip de cada pieza si es mejor que la que llevas. Para acertar necesita saber cuánto vale para ti cada estadística, y eso es justo lo que acaba de calcular esta simulación: se pega la cadena y ya lo sabe.',
+  },
+
   breakdown: {
     title: 'Daño por habilidad',
     text: 'De dónde sale tu daño: qué porcentaje pone cada hechizo o ataque. Sirve para ver si algo importante se está usando menos de lo que debería.',
