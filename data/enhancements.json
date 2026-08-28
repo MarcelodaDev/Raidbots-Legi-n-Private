@@ -1,0 +1,7580 @@
+{
+ "gems": [
+  {
+   "id": 152035,
+   "name": "Blazing Dreadsteed Horseshoe",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152290,
+   "name": "Censer of Dark Intent",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155853,
+   "name": "Conch of the Thunderer",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155848,
+   "name": "Condensed Blight Orb",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152056,
+   "name": "Corrupting Dewclaw",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152046,
+   "name": "Coven Prayer Bead",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152057,
+   "name": "Crepuscular Skitterer Egg",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155847,
+   "name": "Cruor of the Avenger",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152048,
+   "name": "Decimator Crankshaft",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152031,
+   "name": "Doomfire Dynamo",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152061,
+   "name": "Droplets of the Cleansing Storm",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152051,
+   "name": "Eidolon of Life",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152053,
+   "name": "Essence of the Burgeoning Brood",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152024,
+   "name": "Fallen Magi's Seerstone",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152293,
+   "name": "Fasces of the Endless Legions",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152294,
+   "name": "Fel Mistress' Brand",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152049,
+   "name": "Fel-Engraved Handbell",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155849,
+   "name": "Flickering Ember of Rage",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152291,
+   "name": "Fraternal Fervor",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152346,
+   "name": "Frigid Earring",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152040,
+   "name": "Frigid Gloomstone",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152027,
+   "name": "Gravitational Condensate",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152036,
+   "name": "Hellfire Ignition Switch",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152042,
+   "name": "Hoarfrost-Beast Talon",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152047,
+   "name": "Ironvine Thorn",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152055,
+   "name": "Kin'garoth's Oil-Sump",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152043,
+   "name": "Lightshield Amplifier",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152344,
+   "name": "Meto's Orb of Entropy",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155846,
+   "name": "Miniaturized Cosmic Beacon",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155855,
+   "name": "Mote of the Forgemaster",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152050,
+   "name": "Mysterious Petrified Egg",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152092,
+   "name": "Nathrezim Incisor",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152060,
+   "name": "Neuroshock Electrode",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152034,
+   "name": "Obliterator Propellant",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152347,
+   "name": "Occularus' Unblemished Lens",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152026,
+   "name": "Prototype Titan-Disc",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152038,
+   "name": "Pyretic Bronze Clasp",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155851,
+   "name": "Reorigination Spark",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155850,
+   "name": "Rime of the Spirit Realm",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155854,
+   "name": "Root of the Lifebinder",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152030,
+   "name": "Scourge of Perverse Desire",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152029,
+   "name": "Shivarran Cachabon",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152033,
+   "name": "Sliver of Corruption",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152348,
+   "name": "Sotanathor's Thundering Hoof",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152044,
+   "name": "Spark of Everburning Light",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152292,
+   "name": "Spike of Immortal Command",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152052,
+   "name": "Sporemound Seedling",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152028,
+   "name": "Spurting Reaver Heart",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152058,
+   "name": "Stormcaller's Fury",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152041,
+   "name": "Sublimating Portal Frost",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152295,
+   "name": "Svirax's Grim Trophy",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152025,
+   "name": "Thu'rayan Lash",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152037,
+   "name": "Tormentor's Brand",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152032,
+   "name": "Twisted Engineer's Fel-Infuser",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152054,
+   "name": "Unwavering Soul Essence",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152045,
+   "name": "Venerated Puresoul Idol",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152345,
+   "name": "Vilemus' Bile",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152039,
+   "name": "Viscous Reaver-Coolant",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 155852,
+   "name": "Volatile Soul Fragment",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 152059,
+   "name": "Whistling Ulna",
+   "ilevel": 930,
+   "reqLevel": 110
+  },
+  {
+   "id": 144227,
+   "name": "Soul of Frost",
+   "ilevel": 905,
+   "reqLevel": 110
+  },
+  {
+   "id": 147760,
+   "name": "Apocron's Energy Core",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147086,
+   "name": "Befouled Effigy of Elune",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147758,
+   "name": "Beguiling Revelation",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147097,
+   "name": "Blessing of the White Lady",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147080,
+   "name": "Blood of the Unworthy",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147099,
+   "name": "Boon of the Prophet",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147108,
+   "name": "Brand of Relentless Agony",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147755,
+   "name": "Brutallus's Wretched Heart",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147100,
+   "name": "Calcified Barnacle",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147759,
+   "name": "Charged Felfire Casing",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147076,
+   "name": "Charred Hymnal of the Moon",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147101,
+   "name": "Chiseled Starlight",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147091,
+   "name": "Cleansing Ignition Catalyst",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147756,
+   "name": "Crashing Ember",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147112,
+   "name": "Felsoul Vortex",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147089,
+   "name": "Ferocity of the Devout",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147113,
+   "name": "Flawless Hurricane Pearl",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147098,
+   "name": "Fragment of Grace",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147093,
+   "name": "Globe of Frothing Eddies",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147757,
+   "name": "Globule of Submersion",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147106,
+   "name": "Glowing Prayer Candle",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147754,
+   "name": "Gory Dreadlord Horn",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147110,
+   "name": "Grimacing Highborne Skull",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147109,
+   "name": "Harjatan's Leering Eye",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147092,
+   "name": "Ice-Threaded Conch",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147104,
+   "name": "Icon of Perverse Animation",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147084,
+   "name": "Imploding Infernal Star",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147077,
+   "name": "Inexorable Truth Serum",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147096,
+   "name": "Inquisition's Master Key",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147082,
+   "name": "Man'ari Blood Pact",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147105,
+   "name": "Moontalon's Feather",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147078,
+   "name": "Mote of Astral Suffusion",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147085,
+   "name": "Mutated Nautilus",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147114,
+   "name": "Preserved Starlight Incense",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147081,
+   "name": "Pungent Chum",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147102,
+   "name": "Reactive Pylon Casing",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147087,
+   "name": "Ruinous Ashes",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147761,
+   "name": "Sandblasted Conch",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147111,
+   "name": "Scornful Reflection",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147088,
+   "name": "Smoldering Thumbscrews",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147095,
+   "name": "Sphere of Entropy",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147090,
+   "name": "Stabilized Extinction Protocol",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 151189,
+   "name": "Tears of the Maiden",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147079,
+   "name": "Torn Fabric of Reality",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147115,
+   "name": "Unfurling Origination",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147107,
+   "name": "Valorous Spark of Hope",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 147094,
+   "name": "Virus of Lethargy",
+   "ilevel": 890,
+   "reqLevel": 110
+  },
+  {
+   "id": 150996,
+   "name": "Archaic Meditation Crystal",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 151002,
+   "name": "Argussian Wrought Blade",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 151000,
+   "name": "Construct Forge Cinder",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 150998,
+   "name": "Cragscaler Heart",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 152695,
+   "name": "Crest of the Grand Army",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 150997,
+   "name": "Crystallized Aether",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 152690,
+   "name": "Darkfall Arcanum",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 152692,
+   "name": "Devastator Anchor Crystal",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 152691,
+   "name": "Doomcaller Heart",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 152694,
+   "name": "Felbound Drudge's Sorrow",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 153421,
+   "name": "Grinning Vilefiend Skull",
+   "ilevel": 880,
+   "reqLevel": 0
+  },
+  {
+   "id": 152696,
+   "name": "Manacle of Dominance",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 152697,
+   "name": "Mark of Defiant Survival",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 151003,
+   "name": "Petrified Seedling",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 151001,
+   "name": "Phial of Kaarinos Frost",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 152715,
+   "name": "Scarwing Talon",
+   "ilevel": 880,
+   "reqLevel": 0
+  },
+  {
+   "id": 151015,
+   "name": "Skyfin Tail Barb",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 151004,
+   "name": "Voidbent Isolon Effigy",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 152693,
+   "name": "Volatile Devastator Round",
+   "ilevel": 880,
+   "reqLevel": 110
+  },
+  {
+   "id": 150999,
+   "name": "Wakener's Demonic Focus",
+   "ilevel": 880,
+   "reqLevel": 1
+  },
+  {
+   "id": 140813,
+   "name": "Arcana Crux",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140844,
+   "name": "Archaic Nathrezim Keepsake",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143524,
+   "name": "Bones of the Restless",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140822,
+   "name": "Breath of Dusk",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140840,
+   "name": "Chittering Mandible",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140842,
+   "name": "Collapsing Epoch",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140838,
+   "name": "Construct Personality Sphere",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143532,
+   "name": "Echoing Madness",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140837,
+   "name": "Exothermic Core",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140810,
+   "name": "Farsight Spiritjewel",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140825,
+   "name": "Felfire Pitch",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140826,
+   "name": "Felstained Jawbone Fragments",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140816,
+   "name": "Fingernail of the Fel Brute",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140843,
+   "name": "Flickering Timespark",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140818,
+   "name": "Foreign Contaminant",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143528,
+   "name": "Glimpse of the Afterlife",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140845,
+   "name": "Glistening Meteorite Shard",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140832,
+   "name": "Heart of Frost",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140815,
+   "name": "Infused Chitin Fragment",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140817,
+   "name": "Lionshead Lapel Clasp",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140827,
+   "name": "Manatoxin Gland",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143525,
+   "name": "Necrotic Dominion",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143531,
+   "name": "Nightmares of the Dead",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140839,
+   "name": "Parasitic Spore",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140820,
+   "name": "Phial of Fel Blood",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140821,
+   "name": "Precipice of Eternity",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143530,
+   "name": "Ritual of Animation",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143527,
+   "name": "Scale of Arcanagos",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143526,
+   "name": "Searing Cinder",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140812,
+   "name": "Soggy Manascrubber Brush",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140834,
+   "name": "Soul of Flame",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143529,
+   "name": "Star of Hollow Spite",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140833,
+   "name": "Sundered Comet",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140836,
+   "name": "Sunflare Coal",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140831,
+   "name": "Suspended Nightwell Droplet",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 143523,
+   "name": "Talisman of the Violet Eye",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140841,
+   "name": "Tempest of the Heavens",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140835,
+   "name": "Unkindled Ember",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140819,
+   "name": "Vampiric Fetish",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140823,
+   "name": "Warchief's Shattered Tusk",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 140824,
+   "name": "Writ of Subjugation",
+   "ilevel": 875,
+   "reqLevel": 110
+  },
+  {
+   "id": 156805,
+   "name": "Bloodtotem Brand",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156804,
+   "name": "Bloody Kvaldir Pennant",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156821,
+   "name": "Darkened Brulstone",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156810,
+   "name": "Felskorn Mania",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156819,
+   "name": "Fertile Soil",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156812,
+   "name": "Fires of Heaven",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156813,
+   "name": "Frozen Ley Scar",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156811,
+   "name": "Gift of Flame",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156816,
+   "name": "Hatecoil Badge of Glory",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156802,
+   "name": "Mana-Saber Eye",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156803,
+   "name": "Seawitch's Foci",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156815,
+   "name": "Shieldmaiden's Prayer",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156814,
+   "name": "Snowmane Totem",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156820,
+   "name": "Specter of Helheim",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156817,
+   "name": "Stonedark Idol",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156822,
+   "name": "Stormwing's Roar",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156818,
+   "name": "Tranquil Clipping",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 156823,
+   "name": "Whirlpool Seed",
+   "ilevel": 870,
+   "reqLevel": 101
+  },
+  {
+   "id": 141516,
+   "name": "\"Liberated\" Un'goro Relic",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 142308,
+   "name": "Ageless Winter",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 142310,
+   "name": "Anthology of Horrors",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 142176,
+   "name": "Arcing Static Charge",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 141514,
+   "name": "Barnacled Mistcaller Orb",
+   "ilevel": 860,
+   "reqLevel": 1
+  },
+  {
+   "id": 141522,
+   "name": "Calamir's Jaw",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 146932,
+   "name": "Condensed Storm's Fury",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 141518,
+   "name": "Decaying Dragonfang",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 141517,
+   "name": "Drugon's Snowglobe",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 142309,
+   "name": "Fauna Analysis Widget",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 146926,
+   "name": "Fel Command Beacon",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 141523,
+   "name": "Fel-Scented Bait",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 142180,
+   "name": "Grisly Schism",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 146928,
+   "name": "Heat Absorbing Prism",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 146933,
+   "name": "Highborne Martyr's Blood",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 141520,
+   "name": "Imp-Eye Diamond",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 146927,
+   "name": "Inferno Oil",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 141515,
+   "name": "Leystone Nugget",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 146925,
+   "name": "Mature Morrowsprout",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 146931,
+   "name": "Mephistroth's Rib",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 142307,
+   "name": "Miniature Bonfire",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 146929,
+   "name": "Moonstone Figurine",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 141519,
+   "name": "Pillaged Titan Disc",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 146930,
+   "name": "Pure Arcane Powder",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 142306,
+   "name": "Rift Stabilization Shard",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 141521,
+   "name": "Sea Giant Toothpick Fragment",
+   "ilevel": 860,
+   "reqLevel": 110
+  },
+  {
+   "id": 142181,
+   "name": "Seeping Corruption",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 142305,
+   "name": "Suffused Manapearl",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 146934,
+   "name": "Untouched Holy Candle",
+   "ilevel": 860,
+   "reqLevel": 0
+  },
+  {
+   "id": 142182,
+   "name": "Viz'aduum's Mindstone",
+   "ilevel": 860,
+   "reqLevel": 101
+  },
+  {
+   "id": 142512,
+   "name": "Accursed Cuspid",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142175,
+   "name": "Arcanum of Weightlessness",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142193,
+   "name": "Begrudging Confessions",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142184,
+   "name": "Candle of Flickering Lumens",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142515,
+   "name": "Chilled Incisor",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 140040,
+   "name": "Comet Dust",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 140078,
+   "name": "Crystalized Leypetal",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 140070,
+   "name": "Deep Cave Ice Crystal",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142191,
+   "name": "Dirge of the Hunted",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142519,
+   "name": "Favor of the Prime Designate",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142185,
+   "name": "Fear of Predation",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 140076,
+   "name": "Felborne Energist's Gem",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 140071,
+   "name": "First Page of the Book of Shadows",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142518,
+   "name": "Fury of the Sea",
+   "ilevel": 855,
+   "reqLevel": 1
+  },
+  {
+   "id": 142192,
+   "name": "Ghastly Curse",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142194,
+   "name": "Gloomy Vortex",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 140077,
+   "name": "Goldleaf Arcwine Phial",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 140072,
+   "name": "Headpiece of the Elunian Cycle",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142177,
+   "name": "Jagged Emerald",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 140073,
+   "name": "Khadgar's Pocket Warmer",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142183,
+   "name": "Lava-Quenched Hoofplate",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142190,
+   "name": "Love's Intermission",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142179,
+   "name": "Memory of Betrayal",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142186,
+   "name": "Mrrmgmrl Grmmlmglrg",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142189,
+   "name": "Perfectly Preserved Apple",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 140075,
+   "name": "Petrified Ancient Bark",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142510,
+   "name": "Phylactery of Unwilling Servitude",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142514,
+   "name": "Ravens' Sight",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142178,
+   "name": "Ruffian's Poisoned Blade",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 140074,
+   "name": "Sin'dorei Blood Gems",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142516,
+   "name": "Sizzling Fang",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142188,
+   "name": "Spellbound Rose Petal",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 142517,
+   "name": "Swell of the Tides",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142513,
+   "name": "Token of the Lightning Keeper",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 140069,
+   "name": "Trueflight Arrow",
+   "ilevel": 855,
+   "reqLevel": 98
+  },
+  {
+   "id": 142511,
+   "name": "Unforged Titansteel",
+   "ilevel": 855,
+   "reqLevel": 110
+  },
+  {
+   "id": 142187,
+   "name": "Virtuous Directive",
+   "ilevel": 855,
+   "reqLevel": 101
+  },
+  {
+   "id": 139267,
+   "name": "Azsharan Councillor's Clasp",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 138228,
+   "name": "Bioluminescent Mushroom",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139263,
+   "name": "Blessing of Cenarius",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139260,
+   "name": "Bloodied Bear Fang",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139269,
+   "name": "Crystallized Drop of Eternity",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139259,
+   "name": "Cube of Malice",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139251,
+   "name": "Despoiled Dragonscale",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 138227,
+   "name": "Entrancing Stone",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139253,
+   "name": "Fel-Bloated Venom Sac",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139266,
+   "name": "Fragment of Eternal Spite",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139257,
+   "name": "Gore-Drenched Fetish",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 143586,
+   "name": "Mega Cleansed Grovewalker Core",
+   "ilevel": 850,
+   "reqLevel": 1
+  },
+  {
+   "id": 138229,
+   "name": "Nightmare - Boss 3 - Relic STORM",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 138226,
+   "name": "Nightmare Engulfed Jewel",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139268,
+   "name": "Nightmarish Elm Branch",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139252,
+   "name": "Preserved Worldseed",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139265,
+   "name": "Radiant Dragon Egg",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139258,
+   "name": "Radiating Metallic Shard",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139262,
+   "name": "Reverberating Femur",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139255,
+   "name": "Scything Quill",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139249,
+   "name": "Shaladrassil's Blossom",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139254,
+   "name": "Shrieking Bloodstone",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139256,
+   "name": "Sloshing Core of Hatred",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 137008,
+   "name": "Stormfury Diamond",
+   "ilevel": 850,
+   "reqLevel": 1
+  },
+  {
+   "id": 143584,
+   "name": "Super Cleansed Grovewalker Core",
+   "ilevel": 850,
+   "reqLevel": 1
+  },
+  {
+   "id": 139261,
+   "name": "Tuft of Ironfur",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 143585,
+   "name": "Ultra Cleansed Grovewalker Core",
+   "ilevel": 850,
+   "reqLevel": 1
+  },
+  {
+   "id": 139250,
+   "name": "Unwaking Slumber",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 139264,
+   "name": "Uplifting Emerald",
+   "ilevel": 850,
+   "reqLevel": 110
+  },
+  {
+   "id": 134081,
+   "name": "Adamant Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 134079,
+   "name": "Ardent Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 134076,
+   "name": "Crystallized Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 134078,
+   "name": "Dark Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 131731,
+   "name": "Glinting Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 134077,
+   "name": "Glowing Shard of Sciallax",
+   "ilevel": 840,
+   "reqLevel": 110
+  },
+  {
+   "id": 142056,
+   "name": "Arcanum of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142063,
+   "name": "Dusk of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142058,
+   "name": "Fel Ward of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142059,
+   "name": "Flame of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142064,
+   "name": "Gale Wind of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142057,
+   "name": "Heartbeat of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142060,
+   "name": "Icy Core of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142061,
+   "name": "Iron Will of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142055,
+   "name": "Light of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 142062,
+   "name": "Prosperity of the Order",
+   "ilevel": 825,
+   "reqLevel": 110
+  },
+  {
+   "id": 136717,
+   "name": "Absolved Ravencrest Brooch",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137421,
+   "name": "Accelerating Torrent",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144458,
+   "name": "Agronox's Unsullied Heartwood",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151289,
+   "name": "Badge of the Fallen Vindicator",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137472,
+   "name": "Betrug's Vigor",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137375,
+   "name": "Blazing Hydra Flame Sac",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151296,
+   "name": "Blood of the Vanquished",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137363,
+   "name": "Bloodied Spearhead",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137468,
+   "name": "Bonecrushing Hail",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137476,
+   "name": "Brand of Tyranny",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136973,
+   "name": "Burden of Vigilance",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151297,
+   "name": "Carved Argunite Idol",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137402,
+   "name": "Cleansing Isotope",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137308,
+   "name": "Clotted Sap of the Grove",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151294,
+   "name": "Coalesced Void",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137365,
+   "name": "Condensed Saltsea Globule",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137307,
+   "name": "Corrupted Knot",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137272,
+   "name": "Cruelty of Dantalionax",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137495,
+   "name": "Crux of Blind Faith",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137340,
+   "name": "Crystalline Energies",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136719,
+   "name": "Curdled Soul Essence",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151295,
+   "name": "Darkstorm Arrowhead",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151290,
+   "name": "Darktide Fervor",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137471,
+   "name": "Drop of True Blood",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137493,
+   "name": "Edge of the First Blade",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137548,
+   "name": "Elune's Light",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136974,
+   "name": "Empowerment of Thunder",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144465,
+   "name": "Essence of the Legion Tempest",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136771,
+   "name": "Eyir's Blessing",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137463,
+   "name": "Fealty of Nerub",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144462,
+   "name": "Fel-Tempered Link",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137491,
+   "name": "Felsworn Covenant",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133687,
+   "name": "Fenryr's Bloodstained Fang",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137465,
+   "name": "Festerface's Rotted Gut",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137412,
+   "name": "Fistful of Eyes",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137492,
+   "name": "Flamewreath Spark",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137545,
+   "name": "Flashfrozen Ember",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137347,
+   "name": "Fragment of Loathing",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137326,
+   "name": "Fragmented Meteorite Whetstone",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137466,
+   "name": "Frostwyrm Heart",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151291,
+   "name": "Frozen Void Shard",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144460,
+   "name": "Fury of the Scorned",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137366,
+   "name": "Gift of the Ocean Empress",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144466,
+   "name": "Gore-Flecked Feaster Fang",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133768,
+   "name": "Harbaron's Tether",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137358,
+   "name": "Hate-Sculpted Magma",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137370,
+   "name": "Heart of the Sea",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137270,
+   "name": "Howling Echoes",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137399,
+   "name": "Ivanyr's Hunger",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133763,
+   "name": "Key to the Halls",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144459,
+   "name": "Knot of Fel",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137474,
+   "name": "Loyalty to the Matriarch",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136718,
+   "name": "Mark of Varo'then",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144464,
+   "name": "Mephistroth's Nail",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137542,
+   "name": "Metamorphosis Spark",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137302,
+   "name": "Misshapen Abomination Heart",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136721,
+   "name": "Mo'arg Eyepatch",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137546,
+   "name": "Molten Giant's Eye",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137350,
+   "name": "Monstrous Gluttony",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137550,
+   "name": "Moonglaive Dervish",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137346,
+   "name": "Murmuring Idol",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137411,
+   "name": "Nal'tira's Venom Gland",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133682,
+   "name": "Northern Gale",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137351,
+   "name": "Noxious Entrails",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133685,
+   "name": "Odyn's Boon",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151293,
+   "name": "Orb of the Abandoned Magi",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137381,
+   "name": "Pact of Vengeful Service",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137359,
+   "name": "Pebble of Ages",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137473,
+   "name": "Phase Spider Mandible",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137544,
+   "name": "Prisoner's Wail",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137547,
+   "name": "Pulsing Prism",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137403,
+   "name": "Quarantine Catalyst",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137339,
+   "name": "Quivering Blightshard Husk",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137380,
+   "name": "Rage of the Tides",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133764,
+   "name": "Ragnarok Ember",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136769,
+   "name": "Ravencrest's Wrath",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137478,
+   "name": "Reflection of Sorrow",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137327,
+   "name": "Relinquishing Grip of Helheim",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137470,
+   "name": "Rocket Chicken Rocket Fuel",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137313,
+   "name": "Roiling Fog",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151292,
+   "name": "Sanctified Eredar Lock",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133684,
+   "name": "Screams of the Unworthy",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133683,
+   "name": "Seacursed Mist",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137407,
+   "name": "Sealed Fel Fissure",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137490,
+   "name": "Self-Forging Credentials",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137377,
+   "name": "Serpentrix's Guile",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137549,
+   "name": "Shade of the Vault",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144463,
+   "name": "Shard of Kaldorei Stained Glass",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136778,
+   "name": "Skovald's Resolve",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 136720,
+   "name": "Snapped Emerald Pendant",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137543,
+   "name": "Soulsap Shackles",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137420,
+   "name": "Split Second",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 133686,
+   "name": "Stormforged Inferno",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137379,
+   "name": "Tempestbinder's Crystal",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137464,
+   "name": "Tendril of Darkness",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137469,
+   "name": "Thorium-Plated Egg",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144461,
+   "name": "Thrashbite's Spite",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137316,
+   "name": "Torch of Shaladrassil",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137303,
+   "name": "Touch of Nightfall",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137371,
+   "name": "Tumultuous Aftershock",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 144467,
+   "name": "Vial of Eternal Moon",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 151288,
+   "name": "Void-Resistant Seedpod",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137408,
+   "name": "Xakal's Determination",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 137317,
+   "name": "Xavius' Mad Whispers",
+   "ilevel": 820,
+   "reqLevel": 101
+  },
+  {
+   "id": 143695,
+   "name": "Ambition of the Forlorn",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143701,
+   "name": "Ancient Flamewaking",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140042,
+   "name": "Ancient Sacred Candle",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143694,
+   "name": "Aristocratic Menace",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141267,
+   "name": "Aspect of Disregard",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141264,
+   "name": "Bitestone Fury",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141277,
+   "name": "Bloodtotem Brand",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143691,
+   "name": "Bloody Kvaldir Pennant",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143705,
+   "name": "Conquered Summit",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141289,
+   "name": "Corruption of the Bloodtotem",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141292,
+   "name": "Crystallizing Mana",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143693,
+   "name": "Darkened Brulstone",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141280,
+   "name": "Demonic Shackles",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141290,
+   "name": "Dreamgrove Sproutling",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143692,
+   "name": "Earthshaper's Mantra",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141273,
+   "name": "Echo of Eons",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143698,
+   "name": "Effervescent Leyblossom",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143702,
+   "name": "Eternity of Wisdom",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141288,
+   "name": "Ettin Bone Fragment",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140088,
+   "name": "Everblooming Sunflower",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140080,
+   "name": "Everchill Pearl",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140045,
+   "name": "Fel-Cleansed Leystone Key",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140044,
+   "name": "Felbat Heart",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141283,
+   "name": "Felbat Razorfang",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143687,
+   "name": "Felskorn Mania",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141275,
+   "name": "Fertile Soil",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141261,
+   "name": "Fires of Heaven",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141274,
+   "name": "Frozen Ley Scar",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141265,
+   "name": "Gift of Flame",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141278,
+   "name": "Glaivemaster's Whetstone",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143704,
+   "name": "Harpybane Fetish",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143686,
+   "name": "Hatecoil Badge of Glory",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141271,
+   "name": "Hope of the Forest",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140086,
+   "name": "Intact Infernal Palm",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141287,
+   "name": "Law of Strength",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141281,
+   "name": "Legion Portalstone",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141272,
+   "name": "Mana-Saber Eye",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141266,
+   "name": "Manawracked Charm",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141255,
+   "name": "Mockery of Life",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141254,
+   "name": "Mote of Fear",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141285,
+   "name": "Nar'thalas Writ",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141282,
+   "name": "Netherwhisper Arcanum",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141284,
+   "name": "Nor'danil Ampoule",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143696,
+   "name": "Perilous Bargain",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141279,
+   "name": "Prison Guard's Torchflame",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141256,
+   "name": "Promise of Rebirth",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143683,
+   "name": "Rampant Wildfire",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141270,
+   "name": "Restless Dreams",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141286,
+   "name": "Rite of the Val'kyr",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141257,
+   "name": "Roar of the Ocean",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141262,
+   "name": "Rune-Etched Quill",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141259,
+   "name": "Seawitch's Foci",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140041,
+   "name": "Shadow Dew",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141291,
+   "name": "Shala'nir Sproutling",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141260,
+   "name": "Shieldmaiden's Prayer",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143684,
+   "name": "Slavemaster's Malevolence",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143703,
+   "name": "Snowmane Totem",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140043,
+   "name": "Soul Forge Ember",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143690,
+   "name": "Specter of Helheim",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141293,
+   "name": "Spellfire Oil",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143700,
+   "name": "Stoic Hibernation",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141263,
+   "name": "Stonedark Idol",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140079,
+   "name": "Stormforged Fist",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143688,
+   "name": "Stormwing's Roar",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143685,
+   "name": "Strength of the Nazjatar",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141268,
+   "name": "Swordsinger's Counterweight",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143699,
+   "name": "Temporal Blossoming",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 140047,
+   "name": "Tincture of Arcwine",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141269,
+   "name": "Tranquil Clipping",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143682,
+   "name": "Viscous Terror",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141276,
+   "name": "Vision of An'she",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143697,
+   "name": "Warpblade Flux",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 143689,
+   "name": "Weight of Tradition",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 141258,
+   "name": "Whirlpool Seed",
+   "ilevel": 810,
+   "reqLevel": 101
+  },
+  {
+   "id": 136687,
+   "name": "\"The Felic\"",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136692,
+   "name": "Aqual Mark",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136685,
+   "name": "Consecrated Spike",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136686,
+   "name": "Flamespike",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136684,
+   "name": "Gleaming Iron Spike",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136691,
+   "name": "Immaculate Fibril",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136688,
+   "name": "Shockinator",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136689,
+   "name": "Soul Fibril",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136693,
+   "name": "Straszan Mark",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 136683,
+   "name": "Terrorspike",
+   "ilevel": 805,
+   "reqLevel": 110
+  },
+  {
+   "id": 140418,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143803,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144525,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145367,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150295,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150319,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150344,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151515,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153467,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154073,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154103,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155716,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155746,
+   "name": "\"Borrowed\" Soul Essence",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140428,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143811,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144512,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145354,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150282,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150306,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150331,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151502,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153454,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154060,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154090,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155703,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155733,
+   "name": "Alliance of Convenience",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140420,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143805,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144531,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145373,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150351,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150357,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150363,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151521,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153473,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154079,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154109,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155722,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155752,
+   "name": "Battering Tempest",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140417,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143802,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144522,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145364,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150292,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150316,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150341,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151512,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153464,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154070,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154100,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155713,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155743,
+   "name": "Battle-Tempered Hilt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 135578,
+   "name": "Battle-Touched Banner",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135568,
+   "name": "Battle-Touched Blood of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135574,
+   "name": "Battle-Touched Blossom",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135573,
+   "name": "Battle-Touched Chain Link",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135565,
+   "name": "Battle-Touched Elemental Spark",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135571,
+   "name": "Battle-Touched Ember",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135576,
+   "name": "Battle-Touched Fetish",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135570,
+   "name": "Battle-Touched Helfrost",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135569,
+   "name": "Battle-Touched Infernal Shard",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 135572,
+   "name": "Battle-Touched Martyr Stone",
+   "ilevel": 680,
+   "reqLevel": 1
+  },
+  {
+   "id": 140415,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143800,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144513,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145355,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150283,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150307,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150332,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151503,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153455,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154061,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154091,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155704,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155734,
+   "name": "Blaze of Glory",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140419,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143804,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144528,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145370,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150348,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150354,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150360,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151518,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153470,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154076,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154106,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155719,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155749,
+   "name": "Blindside Approach",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140433,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143816,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144520,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145362,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150290,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150314,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150339,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151510,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153462,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154068,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154098,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155711,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155741,
+   "name": "Brilliant Sunstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140411,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143796,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144519,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145361,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150289,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150313,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150338,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151509,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153461,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154067,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154097,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155710,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155740,
+   "name": "Clarity of Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140432,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143815,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144518,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145360,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150288,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150312,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150337,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151508,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153460,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154066,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154096,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155709,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155739,
+   "name": "Cold Sweat",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140416,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143801,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144516,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145358,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150286,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150310,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150335,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151506,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153458,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154064,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154094,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155707,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155737,
+   "name": "Conscience of the Victorious",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140441,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143823,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144530,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145372,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150350,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150356,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150362,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151520,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153472,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154078,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154108,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155721,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155751,
+   "name": "Dead Man's Tale",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140423,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143806,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144505,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145347,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150275,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150299,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150324,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151495,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153447,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154053,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154083,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155696,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155726,
+   "name": "Exhaustive Research",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140414,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143799,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144510,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145352,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150280,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150304,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150329,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151500,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153452,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154058,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154088,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155701,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155731,
+   "name": "Fel-Loaded Dice",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140429,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143812,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144514,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145356,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150284,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150308,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150333,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151504,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153456,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154062,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154092,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155705,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155735,
+   "name": "Flame of the Fallen",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140413,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143798,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144507,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145349,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150277,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150301,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150326,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151497,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153449,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154055,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154085,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155698,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155728,
+   "name": "Grisly Souvenir",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140427,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143810,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144511,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145353,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150281,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150305,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150330,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151501,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153453,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154059,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154089,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155702,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155732,
+   "name": "Performance Enhancing Curio",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140438,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143821,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144527,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145369,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150297,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150321,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150346,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151517,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153469,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154075,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154105,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155718,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155748,
+   "name": "Petrified Ancient's Thumb",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140440,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143822,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144529,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145371,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150349,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150355,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150361,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151519,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153471,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154077,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154107,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155720,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155750,
+   "name": "Polished Shadowstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140434,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143817,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144521,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145363,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150291,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150315,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150340,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151511,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153463,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154069,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154099,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155712,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155742,
+   "name": "Radiance of Dawn",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140412,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143797,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144504,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145346,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150274,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150298,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150323,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151494,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153446,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154052,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154082,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155695,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155725,
+   "name": "Reactive Intuition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140443,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143825,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144533,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145375,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150353,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150359,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150365,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151523,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153475,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154081,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154111,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155724,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155754,
+   "name": "Roar of the Crowd",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140436,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143819,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144524,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145366,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150294,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150318,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150343,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151514,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153466,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154072,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154102,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155715,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155745,
+   "name": "Steadfast Conviction",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140431,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143814,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144517,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145359,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150287,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150311,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150336,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151507,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153459,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154065,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154095,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155708,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155738,
+   "name": "Superiority's Contempt",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140424,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143807,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144506,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145348,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150276,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150300,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150325,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151496,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153448,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154054,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154084,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155697,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155727,
+   "name": "Taboo Knowledge",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140425,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143808,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144508,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145350,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150278,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150302,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150327,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151498,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153450,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154056,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154086,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155699,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155729,
+   "name": "Thirsty Bloodstone",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140426,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143809,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144509,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145351,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150279,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150303,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150328,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151499,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153451,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154057,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154087,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155700,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155730,
+   "name": "Thrill of Battle",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140442,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143824,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144532,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145374,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150352,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150358,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150364,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151522,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153474,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154080,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154110,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155723,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155753,
+   "name": "Thundering Impact",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140437,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143820,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144526,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145368,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150296,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150320,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150345,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151516,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153468,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154074,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154104,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155717,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155747,
+   "name": "Tombweed Bloom",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140430,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143813,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144515,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145357,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150285,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150309,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150334,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151505,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153457,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154063,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154093,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155706,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155736,
+   "name": "Torch of Competition",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 140435,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 143818,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 144523,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 145365,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150293,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150317,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 150342,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 151513,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 153465,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154071,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 154101,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155714,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 155744,
+   "name": "Unflinching Grit",
+   "ilevel": 680,
+   "reqLevel": 0
+  },
+  {
+   "id": 133030,
+   "name": "'Procured' Kirin Tor Wand Tip",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132984,
+   "name": "Abandoned Highborne Mana Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133145,
+   "name": "Anguish of Princes",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151009,
+   "name": "Annihilan Heart",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132337,
+   "name": "Araxxas's Badge",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132781,
+   "name": "Archived Record of Might",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132786,
+   "name": "Archived Record of Valor",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132791,
+   "name": "Archived Record of Will",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151006,
+   "name": "Augari Manuscript",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132806,
+   "name": "Azariah's Last Moments",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133055,
+   "name": "Azshara's Ire",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133056,
+   "name": "Azshara's Tempest",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133018,
+   "name": "Azsuna Package 3 - Holy 1 - Unused",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133051,
+   "name": "Azsuna Package 3 - Holy 2 - Unused",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133010,
+   "name": "Azure Flame",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133008,
+   "name": "Azurewing Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133016,
+   "name": "Azurewing Guile",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133122,
+   "name": "Betrayal of the Bloodtotem",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132334,
+   "name": "Blessed Cup of the Moon",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133006,
+   "name": "Blessed Llothien Stone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132775,
+   "name": "Blessing of the Watchers",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133127,
+   "name": "Blood of Neltharion",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133020,
+   "name": "Blood of the Snake",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132985,
+   "name": "Blood of the Vanquished Highborne",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133116,
+   "name": "Bloodsinger Essence",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133119,
+   "name": "Bloodtotems' Fear",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132311,
+   "name": "Blossom of Promise",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132832,
+   "name": "Bones of Geir",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133039,
+   "name": "Breath of Al'Akir",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132796,
+   "name": "Breath of the Vault",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132808,
+   "name": "Breath of Vethir",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133126,
+   "name": "Captured Time Scar",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132319,
+   "name": "Charred Imp Claw",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133107,
+   "name": "Cinderwitch Flame-Song",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132279,
+   "name": "Cleansed Shrine Relic",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133002,
+   "name": "Coalesced Shadows",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133130,
+   "name": "Coldscale Basilisk Eyes",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133125,
+   "name": "Confluence of the Tribes",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133128,
+   "name": "Corrupted Earthrender Fragment",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133059,
+   "name": "Corrupted Farondis House Insignia",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132318,
+   "name": "Corrupted Grovewalker Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133009,
+   "name": "Corrupted Ley-Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133075,
+   "name": "Crageater Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133093,
+   "name": "Crawliac Charming Draught",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133095,
+   "name": "Crawliac Death Scream",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133100,
+   "name": "Crawliac Hexrune",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133088,
+   "name": "Creel's Sorrow",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133049,
+   "name": "Crystalline Flow",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132811,
+   "name": "Crystallized Tideskorn Cruelty",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133047,
+   "name": "Crystallized Whelp Egg",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132830,
+   "name": "Cursebinder Chains",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133026,
+   "name": "Cursed Dissection Blade",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132996,
+   "name": "Cursed Felstalker Flesh",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132826,
+   "name": "Cursed Kvaldir Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133072,
+   "name": "Dargrul's Arrogance",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133099,
+   "name": "Darkfeather Seedling",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133029,
+   "name": "Dathrohan's Signet",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132339,
+   "name": "Death's Chill Mirror Shard",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132350,
+   "name": "Defiant Frozen Fist",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133118,
+   "name": "Demonkindre Fangs",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133023,
+   "name": "Depths Shard Ice Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132314,
+   "name": "Desiccated Breeze",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151005,
+   "name": "Dram of Light",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132849,
+   "name": "Dravak's Jailing Shard",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132814,
+   "name": "Drekirjar Jarl's Disdain",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132800,
+   "name": "Drekirjar Lifeblood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133084,
+   "name": "Drogbar Kindling",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132783,
+   "name": "Echo of Aggramar",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133132,
+   "name": "Echo of Neltharion",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132305,
+   "name": "Elothir's Sympathy",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132345,
+   "name": "Elune Graced Signet",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132844,
+   "name": "Embrace of the Valkyra",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133070,
+   "name": "Empowered Lifespring Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133025,
+   "name": "Enchanted El'dranil Frond",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132282,
+   "name": "Enchanted Pool Garnet",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132303,
+   "name": "Enchanted Stoneblood Feather",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133104,
+   "name": "Errant Mana",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132810,
+   "name": "Erratic Stormforce",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133057,
+   "name": "Etched Talisman of Nar'thalas",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133022,
+   "name": "Eternal Mage Flame",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151013,
+   "name": "Ethereal Anchor",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132297,
+   "name": "Everblooming Flower",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132987,
+   "name": "Everburning Ruin Ember",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132338,
+   "name": "Everflame Arrowhead",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133007,
+   "name": "Everlasting Construct Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132995,
+   "name": "Faronaar Arcane Power-Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132983,
+   "name": "Faronaar Prayer Beads",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133054,
+   "name": "Fel Flame Burner",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133032,
+   "name": "Fel-Fire Demon Claw",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132990,
+   "name": "Fel-Resistant Clipping",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132854,
+   "name": "Fel-Tainted Haze",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133043,
+   "name": "Fel-Touched Mana Gems",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133083,
+   "name": "Fel-Touched Riverstone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132846,
+   "name": "Felbound Plasma",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132286,
+   "name": "Felshroom",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133139,
+   "name": "Feltotem Sigil",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132287,
+   "name": "Firewater Essence",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132300,
+   "name": "Firewater Infusion",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132848,
+   "name": "Flame of Valhallas",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133141,
+   "name": "Flawless Kun-Lai Blossom",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133106,
+   "name": "Fleshrender Roc Essence",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133046,
+   "name": "Fortified Ancient Dragonscale",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133120,
+   "name": "Frag's Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133108,
+   "name": "Frosted Great Eagle Egg",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132290,
+   "name": "Frozen Moss of the Den",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151014,
+   "name": "Fulminating Arcstone",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 133028,
+   "name": "Gale of Azshara",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133050,
+   "name": "Gale of the Blues",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132827,
+   "name": "Gaze of Helya",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133086,
+   "name": "Gelmogg's Fractured Skull",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133082,
+   "name": "Gelmogg's Petrified Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133136,
+   "name": "Glory of Highmountain",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132780,
+   "name": "Grasp of the God-King",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132344,
+   "name": "Guile of the Hold's Sky Terrors",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132348,
+   "name": "Gul'dan's Commission",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133097,
+   "name": "Haglands Ice Shard",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133101,
+   "name": "Haglands Snowmelt",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132795,
+   "name": "Havi's Special Chowder",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133094,
+   "name": "Heart of the Witchqueen",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132824,
+   "name": "Helheim Waylight",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132828,
+   "name": "Helhound Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133061,
+   "name": "Heron's Grace",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133110,
+   "name": "Hex-Cleansed Charm",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132354,
+   "name": "Hold Surgeon's Tonic",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133092,
+   "name": "Honor of the Skyhorn",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132852,
+   "name": "Horn of Helheim",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132802,
+   "name": "Hrydshal Forgeflame",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132816,
+   "name": "Hrydshal Weald",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132349,
+   "name": "Inquisitor's Fire-Brand Tip",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133121,
+   "name": "Instincts of the Elderhorn",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133052,
+   "name": "Instructor's Crystal Head",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133021,
+   "name": "Intro to Fel Magic - Pocket Edition",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133124,
+   "name": "Ironbull's Last Words",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133073,
+   "name": "Jale's Fury",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133078,
+   "name": "Jale's Pride",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133079,
+   "name": "Jale's Relief",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133019,
+   "name": "Jewel of Nar'thalas",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133102,
+   "name": "Julan's Suppressing Wind",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133109,
+   "name": "Lasan's Determination",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133103,
+   "name": "Lasan's Hope",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132343,
+   "name": "Last Drops of Uncorrupted Water",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132997,
+   "name": "Legion Camp Reactor Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132989,
+   "name": "Legion Iron Nugget",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133042,
+   "name": "Ley-Infused Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133015,
+   "name": "Ley-Pool Essence",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133011,
+   "name": "Leyhollow Frost",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133058,
+   "name": "Life-Giving Pearl",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132322,
+   "name": "Lifelink to Elothir",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133076,
+   "name": "Lifespring Mushroom",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132994,
+   "name": "Lost Grace of the Nightborne",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132280,
+   "name": "Lost Priestess' Loop",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132281,
+   "name": "Lunarwing Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132316,
+   "name": "Mana-Fused Seedling",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133081,
+   "name": "Manathirster Focus",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151012,
+   "name": "Marsuul Egg",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 133144,
+   "name": "Memory of Neltharion",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132313,
+   "name": "Moonrest Dewdrop",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132991,
+   "name": "Mortiferous' Corruption",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133035,
+   "name": "Myzrael Shard",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151010,
+   "name": "Narouan Fin",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 133060,
+   "name": "Neptulon Waters",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132993,
+   "name": "Nethrandamus' Zephyr",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132298,
+   "name": "Nightmare Cave Moss",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132325,
+   "name": "Nightmare Zephyr",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132341,
+   "name": "Nourishmoss",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133131,
+   "name": "Obsidian Reclaimer Scale",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132845,
+   "name": "Odyn's Veil",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132777,
+   "name": "Offering of Spilled Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133024,
+   "name": "Oracle's Sharpening Stone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132353,
+   "name": "Patch of Risen Saber Pelt",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132295,
+   "name": "Petrified Ancient Bark",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132321,
+   "name": "Petrified Ancient Branch",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133027,
+   "name": "Petrified Starfish",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132779,
+   "name": "Pillaged Honor",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132284,
+   "name": "Preserved Blood-Stained Claw",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132999,
+   "name": "Preserved Highborne Warrior's Fist",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133135,
+   "name": "Pride of Highmountain",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132986,
+   "name": "Pulsing Infernal Shard",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132324,
+   "name": "Purged Decanter",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133041,
+   "name": "Radiating Ley Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133031,
+   "name": "Rare White Tiger Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133036,
+   "name": "Ravenous Seed",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133013,
+   "name": "Reinvigorating Crystal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133053,
+   "name": "Resilient Skrog Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132352,
+   "name": "Revitalizing Incense",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132309,
+   "name": "Rimed Worldtree Blossom",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132812,
+   "name": "Ritual Binding Stone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133071,
+   "name": "Rivermanes' Sacrifice",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133098,
+   "name": "Rockcrawler Jaw",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132340,
+   "name": "Rook Fired Ore",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132790,
+   "name": "Rumblehoof's Flameheart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132794,
+   "name": "Runetwister Talisman",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132302,
+   "name": "Rustling of the Forest",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132317,
+   "name": "Sap of the Worldtree",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132299,
+   "name": "Satyr's Nightmare Fetish",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133096,
+   "name": "Scorched Skyhorn Shawl",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133045,
+   "name": "Senegos' Breath",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133014,
+   "name": "Senegos' Despair",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133012,
+   "name": "Senegos' Resolve",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133133,
+   "name": "Sha Splinters",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132817,
+   "name": "Shade of Thorim's Peak",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132308,
+   "name": "Shaladrassil's Anger",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132804,
+   "name": "Sigil of Hrydshal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132778,
+   "name": "Skovald's Betrayal",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133113,
+   "name": "Skyhorn Eagle Feather",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133105,
+   "name": "Skyhorn Survivalist's Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132829,
+   "name": "Sliver of Helfrost",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132346,
+   "name": "Small Highborne Figurine",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132285,
+   "name": "Small Nightmare Totem",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133129,
+   "name": "Smoldering Crux",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133074,
+   "name": "Snow of the Earthmother",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133033,
+   "name": "Sorceror's Ember",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132784,
+   "name": "Sorrow of Thwarted Champions",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133001,
+   "name": "Soul Fragment of a Faronaar Innocent",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132801,
+   "name": "Soul of Azariah",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133143,
+   "name": "Spark of Khaz'goroth",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132793,
+   "name": "Spark of Will",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132851,
+   "name": "Sprig of Valhallas",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133000,
+   "name": "Stalwart Faronaar Keystone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133044,
+   "name": "Stellagosa's Rage",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132294,
+   "name": "Stone of the Dream Den",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133142,
+   "name": "Stonedark Brul Brand",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133115,
+   "name": "Stonedark Focus",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132815,
+   "name": "Storm-Charged Lodestone",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132805,
+   "name": "Stormborn Courage",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132850,
+   "name": "Stormforged Horn",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151011,
+   "name": "Stygian Munition Casing",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 133004,
+   "name": "Swirling Demonic Whispers",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133040,
+   "name": "Teardrop of Elune",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133112,
+   "name": "Tears of the Skyhorn",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132988,
+   "name": "The Dreadlord's Chill Eye",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132351,
+   "name": "The Forgemaster's Hammer Head",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133146,
+   "name": "The Four Winds",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132347,
+   "name": "The Interrogator's Vial",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132336,
+   "name": "The Jailer's Cat Tail",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132998,
+   "name": "The Sufferer's Fury",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132819,
+   "name": "Thorignir Slipstream",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132803,
+   "name": "Thorim's Peak Snowcap",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132813,
+   "name": "Thrymjaris' Fury",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132799,
+   "name": "Thrymjaris' Grace",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132792,
+   "name": "Tideskorn War Brand",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133138,
+   "name": "Time-Lost Dragon Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133140,
+   "name": "Time-Lost Dragonfire",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133134,
+   "name": "Time-Lost Eddy",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133117,
+   "name": "Torok's Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132335,
+   "name": "Tower Magi's Eye",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132288,
+   "name": "Trickster's Everburning Flames",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132307,
+   "name": "Twisted Branch of Shaladrassil",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132312,
+   "name": "Twisted Nightmare Totem",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132789,
+   "name": "Twisted Tideskorn Rune",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132310,
+   "name": "Uncorrupted Soil",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132283,
+   "name": "Uncorrupted Val Blood",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151007,
+   "name": "Ur'zul Ichor",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132825,
+   "name": "Val'kyra Boon",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132296,
+   "name": "Val'sharah Seed Pods",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132289,
+   "name": "Vale Shadow Frost",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132847,
+   "name": "Valgrinn's Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133114,
+   "name": "Valor of the Stonedark",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132306,
+   "name": "Varethos' Fortitude",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132320,
+   "name": "Varethos' Frozen Heart",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132323,
+   "name": "Varethos' Last Breath",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132787,
+   "name": "Vault Guardian Core",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133111,
+   "name": "Vengeful Skyhorn Spirit",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133077,
+   "name": "Vestiges of Gelmogg",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132342,
+   "name": "Vial of Dormant Shadowswarm",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132301,
+   "name": "Vial of Pure Vale Water",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 151008,
+   "name": "Vilefiend Fang",
+   "ilevel": 650,
+   "reqLevel": 101
+  },
+  {
+   "id": 132834,
+   "name": "Wailing Winds",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133034,
+   "name": "Were-Yeti Paw",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132785,
+   "name": "Whispers of the Thorignir",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133090,
+   "name": "Whitewater Breeze",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133087,
+   "name": "Whitewater Carp Eggs",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133089,
+   "name": "Whitewater Froth",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133085,
+   "name": "Whitewater Lake Ice",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132355,
+   "name": "Wind-Whipped Hold Banner Strip",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133137,
+   "name": "Wisps of Illusion",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132831,
+   "name": "Worthy Soul",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133048,
+   "name": "Wretched Draining Essence",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132782,
+   "name": "Yotnar's Gratitude",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132776,
+   "name": "Yotnar's Pride",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 132788,
+   "name": "Yotnar's Turmoil",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 133037,
+   "name": "Zandalari Voodoo Totem",
+   "ilevel": 650,
+   "reqLevel": 1
+  },
+  {
+   "id": 89873,
+   "name": "Crystallized Dread",
+   "ilevel": 513,
+   "reqLevel": 0
+  },
+  {
+   "id": 89882,
+   "name": "Crystallized Horror",
+   "ilevel": 513,
+   "reqLevel": 0
+  },
+  {
+   "id": 89881,
+   "name": "Crystallized Terror",
+   "ilevel": 513,
+   "reqLevel": 0
+  },
+  {
+   "id": 151580,
+   "name": "Deadly Deep Chemirine",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130219,
+   "name": "Deadly Eye of Prophecy",
+   "ilevel": 110,
+   "reqLevel": 1
+  },
+  {
+   "id": 151584,
+   "name": "Masterful Argulite",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130222,
+   "name": "Masterful Shadowruby",
+   "ilevel": 110,
+   "reqLevel": 1
+  },
+  {
+   "id": 130220,
+   "name": "Quick Dawnlight",
+   "ilevel": 110,
+   "reqLevel": 1
+  },
+  {
+   "id": 151583,
+   "name": "Quick Lightsphene",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130247,
+   "name": "Saber's Eye of Agility",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130248,
+   "name": "Saber's Eye of Intellect",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130246,
+   "name": "Saber's Eye of Strength",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130162,
+   "name": "Val-Sharah Artifact Gem #1 [Holy]",
+   "ilevel": 110,
+   "reqLevel": 1
+  },
+  {
+   "id": 151585,
+   "name": "Versatile Labradorite",
+   "ilevel": 110,
+   "reqLevel": 0
+  },
+  {
+   "id": 130221,
+   "name": "Versatile Maelstrom Sapphire",
+   "ilevel": 110,
+   "reqLevel": 1
+  },
+  {
+   "id": 130215,
+   "name": "Deadly Deep Amber",
+   "ilevel": 101,
+   "reqLevel": 1
+  },
+  {
+   "id": 130218,
+   "name": "Masterful Queen's Opal",
+   "ilevel": 101,
+   "reqLevel": 1
+  },
+  {
+   "id": 130216,
+   "name": "Quick Azsunite",
+   "ilevel": 101,
+   "reqLevel": 1
+  },
+  {
+   "id": 130217,
+   "name": "Versatile Skystone",
+   "ilevel": 101,
+   "reqLevel": 1
+  },
+  {
+   "id": 115803,
+   "name": "Critical Strike Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127415,
+   "name": "Eye of Anzu",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127414,
+   "name": "Eye of Rukhmar",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127416,
+   "name": "Eye of Sethe",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115809,
+   "name": "Greater Critical Strike Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115813,
+   "name": "Greater Haste Taladene",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115811,
+   "name": "Greater Haste Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115812,
+   "name": "Greater Mastery Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115815,
+   "name": "Greater Stamina Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115814,
+   "name": "Greater Versatility Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115806,
+   "name": "Haste Taladene",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115804,
+   "name": "Haste Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127760,
+   "name": "Immaculate Critical Strike Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127763,
+   "name": "Immaculate Haste Taladene",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127761,
+   "name": "Immaculate Haste Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127762,
+   "name": "Immaculate Mastery Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127765,
+   "name": "Immaculate Stamina Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 127764,
+   "name": "Immaculate Versatility Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115805,
+   "name": "Mastery Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115808,
+   "name": "Stamina Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  },
+  {
+   "id": 115807,
+   "name": "Versatility Taladite",
+   "ilevel": 100,
+   "reqLevel": 1
+  }
+ ],
+ "enchants": [
+  {
+   "id": 3368,
+   "name": "Rune of the Fallen Crusader",
+   "token": "rune_of_the_fallen_crusader"
+  },
+  {
+   "id": 3370,
+   "name": "Rune of Razorice",
+   "token": "rune_of_razorice"
+  },
+  {
+   "id": 5423,
+   "name": "Word of Critical Strike",
+   "token": "word_of_critical_strike"
+  },
+  {
+   "id": 5424,
+   "name": "Word of Haste",
+   "token": "word_of_haste"
+  },
+  {
+   "id": 5425,
+   "name": "Word of Mastery",
+   "token": "word_of_mastery"
+  },
+  {
+   "id": 5426,
+   "name": "Word of Versatility",
+   "token": "word_of_versatility"
+  },
+  {
+   "id": 5427,
+   "name": "Binding of Critical Strike",
+   "token": "binding_of_critical_strike"
+  },
+  {
+   "id": 5428,
+   "name": "Binding of Haste",
+   "token": "binding_of_haste"
+  },
+  {
+   "id": 5429,
+   "name": "Binding of Mastery",
+   "token": "binding_of_mastery"
+  },
+  {
+   "id": 5430,
+   "name": "Binding of Versatility",
+   "token": "binding_of_versatility"
+  },
+  {
+   "id": 5431,
+   "name": "Word of Strength",
+   "token": "word_of_strength"
+  },
+  {
+   "id": 5432,
+   "name": "Word of Agility",
+   "token": "word_of_agility"
+  },
+  {
+   "id": 5433,
+   "name": "Word of Intellect",
+   "token": "word_of_intellect"
+  },
+  {
+   "id": 5434,
+   "name": "Binding of Strength",
+   "token": "binding_of_strength"
+  },
+  {
+   "id": 5435,
+   "name": "Binding of Agility",
+   "token": "binding_of_agility"
+  },
+  {
+   "id": 5436,
+   "name": "Binding of Intellect",
+   "token": "binding_of_intellect"
+  },
+  {
+   "id": 5437,
+   "name": "Mark of the Claw",
+   "token": "mark_of_the_claw"
+  },
+  {
+   "id": 5438,
+   "name": "Mark of the Distant Army",
+   "token": "mark_of_the_distant_army"
+  },
+  {
+   "id": 5439,
+   "name": "Mark of the Hidden Satyr",
+   "token": "mark_of_the_hidden_satyr"
+  },
+  {
+   "id": 5459,
+   "name": "+$k1 Critical Strike",
+   "token": "k1_critical_strike"
+  },
+  {
+   "id": 5460,
+   "name": "+$k1 Haste",
+   "token": "k1_haste"
+  },
+  {
+   "id": 5461,
+   "name": "+$k1 Mastery",
+   "token": "k1_mastery"
+  },
+  {
+   "id": 5462,
+   "name": "+$k1 Versatility",
+   "token": "k1_versatility"
+  },
+  {
+   "id": 5463,
+   "name": "+$k1 Critical Strike",
+   "token": "k1_critical_strike"
+  },
+  {
+   "id": 5464,
+   "name": "+$k1 Haste",
+   "token": "k1_haste"
+  },
+  {
+   "id": 5465,
+   "name": "+$k1 Mastery",
+   "token": "k1_mastery"
+  },
+  {
+   "id": 5466,
+   "name": "+$k1 Versatility",
+   "token": "k1_versatility"
+  },
+  {
+   "id": 5467,
+   "name": "+$k1 Strength",
+   "token": "k1_strength"
+  },
+  {
+   "id": 5468,
+   "name": "+$k1 Agility",
+   "token": "k1_agility"
+  },
+  {
+   "id": 5469,
+   "name": "+$k1 Intellect",
+   "token": "k1_intellect"
+  },
+  {
+   "id": 5817,
+   "name": "+$k1 Leech",
+   "token": "k1_leech"
+  },
+  {
+   "id": 5834,
+   "name": "+$k1 Critical Strike",
+   "token": "k1_critical_strike"
+  },
+  {
+   "id": 5835,
+   "name": "+$k1 Versatility",
+   "token": "k1_versatility"
+  },
+  {
+   "id": 5836,
+   "name": "+$k1 Haste",
+   "token": "k1_haste"
+  },
+  {
+   "id": 5837,
+   "name": "+$k1 Mastery",
+   "token": "k1_mastery"
+  },
+  {
+   "id": 5838,
+   "name": "+$k1 Critical Strike",
+   "token": "k1_critical_strike"
+  },
+  {
+   "id": 5839,
+   "name": "+$k1 Versatility",
+   "token": "k1_versatility"
+  },
+  {
+   "id": 5840,
+   "name": "+$k1 Haste",
+   "token": "k1_haste"
+  },
+  {
+   "id": 5841,
+   "name": "+$k1 Mastery",
+   "token": "k1_mastery"
+  },
+  {
+   "id": 5860,
+   "name": "Test Transmog Enchant",
+   "token": "test_transmog_enchant"
+  },
+  {
+   "id": 5889,
+   "name": "Mark of the Heavy Hide",
+   "token": "mark_of_the_heavy_hide"
+  },
+  {
+   "id": 5890,
+   "name": "Mark of the Trained Soldier",
+   "token": "mark_of_the_trained_soldier"
+  },
+  {
+   "id": 5891,
+   "name": "Mark of the Ancient Priestess",
+   "token": "mark_of_the_ancient_priestess"
+  },
+  {
+   "id": 5895,
+   "name": "Mark of the Master",
+   "token": "mark_of_the_master"
+  },
+  {
+   "id": 5896,
+   "name": "Mark of the Versatile",
+   "token": "mark_of_the_versatile"
+  },
+  {
+   "id": 5897,
+   "name": "Mark of the Quick",
+   "token": "mark_of_the_quick"
+  },
+  {
+   "id": 5898,
+   "name": "Mark of the Deadly",
+   "token": "mark_of_the_deadly"
+  },
+  {
+   "id": 5925,
+   "name": "+$k1 Critical Strike",
+   "token": "k1_critical_strike"
+  },
+  {
+   "id": 5926,
+   "name": "+$k1 Haste",
+   "token": "k1_haste"
+  },
+  {
+   "id": 5927,
+   "name": "+$k1 Mastery",
+   "token": "k1_mastery"
+  },
+  {
+   "id": 5928,
+   "name": "+$k1 Versatility",
+   "token": "k1_versatility"
+  }
+ ],
+ "bySlot": {
+  "neck": {
+   "enchants": [
+    5437,
+    5438,
+    5439,
+    5889,
+    5890
+   ],
+   "gems": []
+  },
+  "back": {
+   "enchants": [
+    5434,
+    5435,
+    5436
+   ],
+   "gems": []
+  },
+  "finger1": {
+   "enchants": [
+    5427,
+    5428,
+    5429,
+    5430
+   ],
+   "gems": [
+    130247,
+    151580,
+    151583,
+    151584,
+    151585
+   ]
+  },
+  "finger2": {
+   "enchants": [
+    5427,
+    5428,
+    5429,
+    5430
+   ],
+   "gems": [
+    130220,
+    130222,
+    130247,
+    151580,
+    151583,
+    151584,
+    151585
+   ]
+  },
+  "main_hand": {
+   "enchants": [
+    3368,
+    3370
+   ],
+   "gems": []
+  },
+  "off_hand": {
+   "enchants": [
+    3368
+   ],
+   "gems": []
+  }
+ }
+}

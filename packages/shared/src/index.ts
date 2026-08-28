@@ -188,7 +188,9 @@ export type SimType =
   | 'topgear'
   | 'talents'
   | 'consumables'
-  | 'relics';
+  | 'relics'
+  | 'enchants'
+  | 'gems';
 
 export interface QuickSimConfig {
   type: 'quick';
@@ -282,13 +284,44 @@ export interface RelicsConfig {
   relicIlevels: number[];
 }
 
+/**
+ * Comparador de encantamientos de un slot.
+ *
+ * SimulationCraft ignora en silencio un `enchant_id` que no conoce y devuelve
+ * el DPS sin encantar, así que los ids se validan contra el catálogo antes de
+ * generar nada.
+ */
+export interface EnchantsConfig {
+  type: 'enchants';
+  slot: GearSlot;
+  enchantIds: number[];
+  /** Añade un perfil sin encantar, para ver cuánto vale encantar la pieza. */
+  includeNone: boolean;
+}
+
+/**
+ * Comparador de gemas de un slot.
+ *
+ * Si la pieza no tiene engarce, SimulationCraft ignora la gema (comprobado):
+ * los perfiles saldrían todos iguales. Por eso se avisa cuando la pieza no
+ * lleva ninguna gema ahora mismo.
+ */
+export interface GemsConfig {
+  type: 'gems';
+  slot: GearSlot;
+  gemIds: number[];
+  includeNone: boolean;
+}
+
 export type SimConfig =
   | QuickSimConfig
   | DroptimizerConfig
   | TopGearConfig
   | TalentsConfig
   | ConsumablesConfig
-  | RelicsConfig;
+  | RelicsConfig
+  | EnchantsConfig
+  | GemsConfig;
 
 export interface SimRequest {
   characterId: string;
@@ -428,6 +461,35 @@ export interface ConsumableDb {
   foods: ConsumableRecord[];
   potions: ConsumableRecord[];
   augmentations: ConsumableRecord[];
+}
+
+// ---------------------------------------------------------------------------
+// Gemas y encantamientos
+// ---------------------------------------------------------------------------
+
+export interface EnchantRecord {
+  id: number;
+  name: string;
+  token: string;
+}
+
+export interface GemRecord {
+  id: number;
+  name: string;
+  ilevel: number;
+  reqLevel: number;
+}
+
+/** Lo que se usa de verdad en cada hueco, según los perfiles por tier de simc. */
+export interface SlotEnhancements {
+  enchants: number[];
+  gems: number[];
+}
+
+export interface EnhancementDb {
+  gems: GemRecord[];
+  enchants: EnchantRecord[];
+  bySlot: Partial<Record<GearSlot, SlotEnhancements>>;
 }
 
 export interface ItemSearchQuery {

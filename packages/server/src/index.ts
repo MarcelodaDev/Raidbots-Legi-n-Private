@@ -7,12 +7,14 @@ import { ROOT, config, ensureDirs } from './config.js';
 import { registerRoutes } from './routes.js';
 import { loadItemDb, itemDbStatus } from './data/itemdb.js';
 import { loadPatches, patchDbStatus } from './data/patches.js';
+import { enhancementsStatus, loadEnhancements } from './data/enhancements.js';
 import { getSimcStatus } from './simc/binary.js';
 
 async function main(): Promise<void> {
   ensureDirs();
   loadItemDb();
   loadPatches();
+  loadEnhancements();
 
   const app = Fastify({
     logger: { level: process.env.LOG_LEVEL ?? 'info' },
@@ -50,6 +52,13 @@ async function main(): Promise<void> {
     items.available
       ? `Base de ítems: ${items.items} ítems, ${items.consumables} consumibles`
       : 'Base de ítems no generada. Ejecuta `npm run build:itemdb`.',
+  );
+
+  const enhancements = enhancementsStatus();
+  app.log.info(
+    enhancements.available
+      ? `Mejoras: ${enhancements.gems} gemas, ${enhancements.enchants} encantamientos`
+      : 'Gemas y encantamientos no generados. Ejecuta `npm run build:enhancements`.',
   );
 
   const patches = patchDbStatus();

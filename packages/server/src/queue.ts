@@ -26,6 +26,8 @@ const SIM_LABELS: Record<string, string> = {
   talents: 'Talentos',
   consumables: 'Consumibles',
   relics: 'Reliquias',
+  enchants: 'Encantamientos',
+  gems: 'Gemas',
 };
 
 class SimQueue extends EventEmitter {

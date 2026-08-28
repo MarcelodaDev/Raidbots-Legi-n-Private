@@ -26,6 +26,7 @@ import {
   loadPatches,
   patchDbStatus,
 } from './data/patches.js';
+import { getEnhancements, loadEnhancements } from './data/enhancements.js';
 import { planSim, queue } from './queue.js';
 import {
   deleteCharacter,
@@ -59,6 +60,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     invalidateSimcCache();
     loadItemDb();
     loadPatches();
+    loadEnhancements();
     return {
       simc: await getSimcStatus(true),
       itemDb: itemDbStatus(),
@@ -100,6 +102,8 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/api/consumables', async () => getConsumables());
+
+  app.get('/api/enhancements', async () => getEnhancements());
 
   // -------------------------------------------------------------------------
   // Personajes

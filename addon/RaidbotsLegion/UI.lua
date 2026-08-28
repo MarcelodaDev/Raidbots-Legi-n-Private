@@ -106,7 +106,11 @@ end
 SLASH_RAIDBOTSLEGION1 = '/rbl'
 SLASH_RAIDBOTSLEGION2 = '/raidbots'
 SlashCmdList['RAIDBOTSLEGION'] = function(msg)
-  local arg = string.lower(string.trim(msg or ''))
+  -- `strtrim` es el global que expone WoW; `string.trim` no siempre existe.
+  local trim = _G.strtrim or function(value)
+    return (string.gsub(value, '^%s*(.-)%s*$', '%1'))
+  end
+  local arg = string.lower(trim(msg or ''))
   if arg == 'help' or arg == 'ayuda' then
     print('|cff33bbffRaidbots Legion|r')
     print('  /rbl        genera el perfil y lo abre para copiar')

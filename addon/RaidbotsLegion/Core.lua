@@ -70,6 +70,22 @@ local BANK_CONTAINERS = { -1, 5, 6, 7, 8, 9, 10, 11 }
 -- Utilidades
 -- ---------------------------------------------------------------------------
 
+--- Normaliza el resultado de una API que puede devolver tabla o varargs.
+--
+-- `C_ArtifactUI.GetPowers()` devuelve una tabla, mientras que
+-- `GetPowersAffectedByRelic()` devuelve varargs. Envolver la primera en `{}`
+-- daba una tabla dentro de otra y acababa pasándole la tabla entera a
+-- `GetPowerInfo`, que fallaba con "Usage: C_ArtifactUI.GetPowerInfo(powerID)".
+local function toList(first, ...)
+  if type(first) == 'table' then
+    return first
+  end
+  if first == nil then
+    return {}
+  end
+  return { first, ... }
+end
+
 --- Pasa un nombre a la forma que usa simc: minúsculas y guiones bajos.
 function RBL.Tokenize(str)
   if not str then
@@ -187,8 +203,8 @@ local function artifactString()
   end
 
   local ranks = {}
-  for _, powerId in ipairs({ C_ArtifactUI.GetPowers() }) do
-    local info = C_ArtifactUI.GetPowerInfo(powerId)
+  for _, powerId in ipairs(toList(C_ArtifactUI.GetPowers())) do
+    local info = powerId and C_ArtifactUI.GetPowerInfo(powerId)
     if info then
       -- `bonusRanks` son los que aportan las reliquias: simc los saca del
       -- propio arma, así que aquí solo van los comprados.
@@ -239,8 +255,8 @@ local function crucibleString()
       -- escribir un 0 que el simulador se creería.
       local baseLink = parts and select(2, GetItemInfo(parts[1]))
       if baseLink then
-        local base = { C_ArtifactUI.GetPowersAffectedByRelicItemLink(baseLink) }
-        local current = { C_ArtifactUI.GetPowersAffectedByRelic(index) }
+        local base = toList(C_ArtifactUI.GetPowersAffectedByRelicItemLink(baseLink))
+        local current = toList(C_ArtifactUI.GetPowersAffectedByRelic(index))
 
         for _, power in ipairs(current) do
           local found = false

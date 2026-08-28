@@ -7,6 +7,8 @@ import {
   type DroptimizerConfig,
   type GearItem,
   type GearSlot,
+  type EnchantsConfig,
+  type GemsConfig,
   type RelicsConfig,
   type SimRequest,
   type TalentsConfig,
@@ -22,6 +24,7 @@ import {
 } from '../simc/profile.js';
 import { gearItemToLine } from '../simc/import.js';
 import { canClassEquip, getItem, getItemQuality } from '../data/itemdb.js';
+import { getEnchant, getGem } from '../data/enhancements.js';
 import { config } from '../config.js';
 
 export interface BuiltSim {
@@ -571,6 +574,129 @@ function buildRelics(
 }
 
 // ---------------------------------------------------------------------------
+// Encantamientos y gemas
+// ---------------------------------------------------------------------------
+
+/** La pieza que ocupa el slot, o un error explicando que está vacío. */
+function requireEquipped(character: Character, slot: GearSlot): GearItem {
+  const item = character.gear[slot];
+  if (!item) {
+    throw new Error(
+      `No llevas nada en ${slot}, así que no hay nada que encantar ni engarzar ahí.`,
+    );
+  }
+  return item;
+}
+
+/**
+ * Compara encantamientos de un slot.
+ *
+ * Cada perfil reescribe la pieza entera cambiando solo el `enchant_id`. Los ids
+ * se validan contra el catálogo porque SimulationCraft ignora en silencio uno
+ * que no conoce: el perfil saldría con el DPS sin encantar y parecería bueno.
+ */
+function buildEnchants(
+  character: Character,
+  cfg: EnchantsConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+  const equipped = requireEquipped(character, cfg.slot);
+  const specs: ProfilesetSpec[] = [];
+
+  if (cfg.includeNone) {
+    specs.push({
+      name: `${cfg.slot}: sin encantar`,
+      options: [
+        gearItemToLine(
+          { ...equipped, enchantId: undefined, enchantName: undefined },
+          cfg.slot,
+        ),
+      ],
+      meta: { kind: 'enchant', slot: cfg.slot, enchantId: 0, name: 'Sin encantar' },
+    });
+  }
+
+  for (const enchantId of cfg.enchantIds) {
+    const enchant = getEnchant(enchantId);
+    if (!enchant) {
+      throw new Error(
+        `El encantamiento ${enchantId} no está en el catálogo. SimulationCraft lo ` +
+          'ignoraría en silencio y el resultado saldría igual que sin encantar.',
+      );
+    }
+
+    specs.push({
+      name: enchant.name,
+      options: [
+        gearItemToLine({ ...equipped, enchantId, enchantName: undefined }, cfg.slot),
+      ],
+      meta: { kind: 'enchant', slot: cfg.slot, enchantId, name: enchant.name },
+    });
+  }
+
+  if (!specs.length) {
+    throw new Error('Selecciona al menos un encantamiento que comparar.');
+  }
+
+  return { specs, warnings };
+}
+
+/**
+ * Compara gemas de un slot.
+ *
+ * Si la pieza no tiene engarce, SimulationCraft ignora la gema y todos los
+ * perfiles salen iguales. No se puede saber con certeza si lo tiene (en Legion
+ * el engarce lo da un bonus_id), pero si ahora mismo no lleva ninguna gema es
+ * el caso probable, así que se avisa.
+ */
+function buildGems(
+  character: Character,
+  cfg: GemsConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+  const equipped = requireEquipped(character, cfg.slot);
+  const specs: ProfilesetSpec[] = [];
+
+  if (!equipped.gemIds.length) {
+    warnings.push(
+      `La pieza de ${cfg.slot} no lleva ninguna gema ahora mismo. Si no tiene ` +
+        'engarce, SimulationCraft ignorará las gemas y todos los perfiles ' +
+        'saldrán con el mismo DPS.',
+    );
+  }
+
+  if (cfg.includeNone) {
+    specs.push({
+      name: `${cfg.slot}: sin gema`,
+      options: [gearItemToLine({ ...equipped, gemIds: [] }, cfg.slot)],
+      meta: { kind: 'gem', slot: cfg.slot, gemId: 0, name: 'Sin gema' },
+    });
+  }
+
+  for (const gemId of cfg.gemIds) {
+    const gem = getGem(gemId);
+    if (!gem) {
+      throw new Error(
+        `La gema ${gemId} no está en el catálogo. Comprueba el id: una gema ` +
+          'desconocida no se aplicaría y el perfil saldría como si no la llevaras.',
+      );
+    }
+
+    specs.push({
+      name: gem.name,
+      options: [gearItemToLine({ ...equipped, gemIds: [gemId] }, cfg.slot)],
+      meta: { kind: 'gem', slot: cfg.slot, gemId, name: gem.name },
+    });
+  }
+
+  if (!specs.length) {
+    throw new Error('Selecciona al menos una gema que comparar.');
+  }
+
+  return { specs, warnings };
+}
+
+// ---------------------------------------------------------------------------
 // Entrada principal
 // ---------------------------------------------------------------------------
 
@@ -631,6 +757,18 @@ export function buildSim(character: Character, request: SimRequest): BuiltSim {
     }
     case 'relics': {
       const built = buildRelics(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'enchants': {
+      const built = buildEnchants(character, cfg);
+      specs = built.specs;
+      warnings.push(...built.warnings);
+      break;
+    }
+    case 'gems': {
+      const built = buildGems(character, cfg);
       specs = built.specs;
       warnings.push(...built.warnings);
       break;

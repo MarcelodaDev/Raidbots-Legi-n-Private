@@ -20,7 +20,7 @@ function strsplit(sep, str)
   return table.unpack(out)
 end
 
-function string.trim(s)
+function strtrim(s)
   return (string.gsub(s or '', '^%s*(.-)%s*$', '%1'))
 end
 
@@ -250,10 +250,16 @@ C_ArtifactUI = {
   GetArtifactInfo = function()
     return 128862
   end,
+  -- Devuelve una TABLA, como el cliente de verdad. Antes devolvía varargs y
+  -- eso escondía el fallo: el addon envolvía el resultado en {} y le pasaba la
+  -- tabla entera a GetPowerInfo.
   GetPowers = function()
-    return 783, 784, 786, 1739
+    return { 783, 784, 786, 1739 }
   end,
   GetPowerInfo = function(id)
+    if type(id) ~= 'number' then
+      error('Usage: local powerInfo = C_ArtifactUI.GetPowerInfo(powerID)')
+    end
     return POWERS[id]
   end,
   GetNumRelicSlots = function()
