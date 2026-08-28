@@ -10,6 +10,7 @@ import type {
   ItemRecord,
   Job,
   ServerMeta,
+  SimPlan,
   SimRequest,
   SimResult,
 } from '@rbl/shared';
@@ -86,7 +87,7 @@ export const api = {
   },
 
   planSim: (body: SimRequest) =>
-    request<{ profilesetCount: number; warnings: string[] }>('/api/sims/plan', {
+    request<SimPlan>('/api/sims/plan', {
       method: 'POST',
       body: JSON.stringify(body),
     }),

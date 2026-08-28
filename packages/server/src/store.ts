@@ -114,3 +114,28 @@ export function stateSize(): number {
 }
 
 export { config };
+
+/**
+ * Cuánto tarda una variante en este ordenador, en segundos.
+ *
+ * Se saca de lo que ya se ha simulado aquí en vez de usar una constante: el
+ * ritmo depende del procesador, de los hilos y de la precisión pedida, así que
+ * cualquier número fijo mentiría en la mitad de las máquinas. Sin historial
+ * suficiente devuelve `undefined` y quien lo use debe callarse la estimación en
+ * vez de inventarla.
+ */
+export function secondsPerProfile(): number | undefined {
+  let seconds = 0;
+  let profiles = 0;
+
+  for (const job of listJobs()) {
+    if (job.status !== 'done' || !job.profilesetCount) continue;
+    const result = getResult(job.id);
+    if (!result?.elapsedMs) continue;
+    seconds += result.elapsedMs / 1000;
+    profiles += job.profilesetCount;
+  }
+
+  if (profiles < 10) return undefined;
+  return seconds / profiles;
+}

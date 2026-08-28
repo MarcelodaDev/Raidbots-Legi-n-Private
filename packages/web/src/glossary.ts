@@ -148,6 +148,11 @@ export const GLOSSARY = {
     text: 'Cuánto DPS ganas o pierdes con ese cambio, comparado con tu personaje ahora mismo. En verde y con ▲ si mejora, en rojo y con ▼ si empeora.',
   },
 
+  topgearSpace: {
+    title: 'Por qué crece tan rápido',
+    text: 'Se prueban todas las mezclas posibles, así que las opciones de cada hueco se multiplican entre sí, no se suman. Con 2 piezas de repuesto en cada hueco ya salen millones de combinaciones. Por eso funciona bien con los 3 o 4 huecos que dudas, y no con el equipo entero.',
+  },
+
   pawn: {
     title: 'Pawn',
     text: 'Un addon que enseña en el tooltip de cada pieza si es mejor que la que llevas. Para acertar necesita saber cuánto vale para ti cada estadística, y eso es justo lo que acaba de calcular esta simulación: se pega la cadena y ya lo sabe.',

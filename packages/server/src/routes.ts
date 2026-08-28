@@ -38,6 +38,7 @@ import {
   listJobs,
   newId,
   saveCharacter,
+  secondsPerProfile,
 } from './store.js';
 
 export async function registerRoutes(app: FastifyInstance): Promise<void> {
@@ -54,6 +55,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       fightStyles: FIGHT_STYLES,
       defaults: { ...DEFAULT_SIM_OPTIONS, threads: config.cpuCount },
       cpuCount: config.cpuCount,
+      secondsPerProfile: secondsPerProfile(),
     };
   });
 

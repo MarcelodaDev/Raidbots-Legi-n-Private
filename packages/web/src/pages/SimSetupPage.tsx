@@ -13,6 +13,7 @@ import {
   type ServerMeta,
   type SimConfig,
   type SimOptions,
+  type SimPlan,
   type SimType,
 } from '@rbl/shared';
 import { api } from '../api.js';
@@ -20,6 +21,7 @@ import { ItemPicker } from '../components/ItemPicker.js';
 import { EnhancementEditor } from '../components/EnhancementEditor.js';
 import { ItemLabel } from '../components/ItemIcon.js';
 import { FieldLabel, Help } from '../components/Help.js';
+import { TopGearBudget } from '../components/TopGearBudget.js';
 import type { GlossaryKey } from '../glossary.js';
 
 /**
@@ -144,9 +146,7 @@ export function SimSetupPage() {
   const [options, setOptions] = useState<SimOptions>(DEFAULT_SIM_OPTIONS);
   const [consumableDb, setConsumableDb] = useState<ConsumableDb | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [plan, setPlan] = useState<{ profilesetCount: number; warnings: string[] } | null>(
-    null,
-  );
+  const [plan, setPlan] = useState<SimPlan | null>(null);
   const [busy, setBusy] = useState(false);
 
   // Configuración específica de cada pestaña.
@@ -352,6 +352,9 @@ export function SimSetupPage() {
   }
 
   const activeTab = SIM_TYPES.find((entry) => entry.type === tab)!;
+  // Pasado el tope no se puede lanzar: el motor lo rechazaría. El panel de
+  // arriba ya explica de dónde sale el número y qué recortar.
+  const overLimit = Boolean(plan?.space?.overLimit);
 
   return (
     <>
@@ -417,6 +420,30 @@ export function SimSetupPage() {
           </label>
         )}
 
+        {tab === 'topgear' && (
+          <div className="notice" style={{ borderLeftColor: 'var(--series-1)' }}>
+            <strong>Cómo sacarle partido.</strong> Esto prueba todas las mezclas
+            posibles de las piezas que le des, así que el número de pruebas se
+            multiplica por cada pieza que añades y se dispara enseguida. Rinde
+            así:
+            <ul>
+              <li>
+                Úsalo con los <strong>3 o 4 huecos que dudas</strong>, no con el
+                equipo entero.
+              </li>
+              <li>
+                Si no sabes cuáles dudar, lanza antes{' '}
+                <strong>Probar piezas</strong>: te dice cuáles valen la pena una
+                a una, y aquí traes solo esas.
+              </li>
+              <li>
+                Sirve justo para lo que las pruebas sueltas no ven: dos piezas
+                que por separado son peores pero juntas te suben.
+              </li>
+            </ul>
+          </div>
+        )}
+
         {(tab === 'droptimizer' || tab === 'topgear') && (
           <CandidatesEditor
             characterClass={character.class}
@@ -433,6 +460,13 @@ export function SimSetupPage() {
             setMaxLegendaries={setMaxLegendaries}
             maxCombinations={maxCombinations}
             setMaxCombinations={setMaxCombinations}
+          />
+        )}
+
+        {tab === 'topgear' && (
+          <TopGearBudget
+            space={plan?.space}
+            secondsPerProfile={meta?.secondsPerProfile}
           />
         )}
 
@@ -542,7 +576,11 @@ export function SimSetupPage() {
           </div>
           <button
             onClick={launch}
-            disabled={busy || (tab !== 'quick' && !plan?.profilesetCount)}
+            disabled={
+              busy ||
+              overLimit ||
+              (tab !== 'quick' && !plan?.profilesetCount)
+            }
           >
             {busy ? 'Lanzando…' : 'Calcular'}
           </button>
@@ -552,6 +590,13 @@ export function SimSetupPage() {
           <p className="hint" style={{ margin: '12px 0 0' }}>
             Todavía no has elegido nada que comparar, así que no hay nada que
             calcular.
+          </p>
+        )}
+
+        {overLimit && (
+          <p className="hint" style={{ margin: '12px 0 0' }}>
+            Son demasiadas combinaciones para calcularlas. Arriba tienes de dónde
+            sale el número y qué conviene quitar.
           </p>
         )}
       </div>
@@ -803,7 +848,16 @@ function CandidatesEditor({
       <ItemPicker
         characterClass={characterClass}
         patchId={patchId}
-        onPick={(item, ilevel) =>
+        onPick={(item, ilevel) => {
+          // La misma pieza al mismo ilvl dos veces no compara nada: el motor la
+          // descarta igualmente y aquí solo ensuciaría la lista, haciendo creer
+          // que se están probando más cosas de las que se prueban. Al mismo ítem
+          // con otro ilvl sí se le deja sitio: comparar 930 contra 940 es válido.
+          const repetida = candidates.some(
+            (entry) => entry.itemId === item.id && entry.ilevel === ilevel,
+          );
+          if (repetida) return;
+
           setCandidates([
             ...candidates,
             {
@@ -813,8 +867,8 @@ function CandidatesEditor({
               ilevel,
               quality: item.quality,
             },
-          ])
-        }
+          ]);
+        }}
       />
     </>
   );

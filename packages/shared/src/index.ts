@@ -664,6 +664,11 @@ export interface ServerMeta {
   fightStyles: readonly string[];
   defaults: SimOptions;
   cpuCount: number;
+  /**
+   * Segundos que tarda una variante en este ordenador, sacado de las
+   * simulaciones que ya se han hecho aquí. Sin historial no viene.
+   */
+  secondsPerProfile?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -725,3 +730,32 @@ export function slotFamily(slot: GearSlot): string {
 }
 
 export { buildPawnScale, type PawnScale } from './pawn.js';
+
+/** Una familia de slots y cuántas configuraciones admite. */
+export interface TopGearAxisInfo {
+  /** `head`, `finger`, `trinket`… */
+  family: string;
+  options: number;
+}
+
+/**
+ * El tamaño del espacio de búsqueda de «Mejor combinación».
+ *
+ * El total es el producto de los ejes, no la suma: cada pieza que se añade
+ * multiplica todo lo demás. Se enseña mientras se eligen piezas para que el
+ * jugador vea crecer el número y sepa qué recortar.
+ */
+export interface TopGearSpace {
+  /** De mayor a menor: el primero es el que más recorta si se toca. */
+  axes: TopGearAxisInfo[];
+  total: number;
+  limit: number;
+  overLimit: boolean;
+}
+
+export interface SimPlan {
+  profilesetCount: number;
+  warnings: string[];
+  /** Solo en «Mejor combinación». */
+  space?: TopGearSpace;
+}

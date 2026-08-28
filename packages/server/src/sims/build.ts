@@ -13,6 +13,7 @@ import {
   type SimRequest,
   type TalentsConfig,
   type TopGearConfig,
+  type TopGearSpace,
 } from '@rbl/shared';
 import {
   buildCharacterProfile,
@@ -175,12 +176,21 @@ function pairCombinations(options: SlotOption[], slots: GearSlot[]): Placement[]
   return result;
 }
 
-function buildTopGear(
-  character: Character,
-  cfg: TopGearConfig,
-): { specs: ProfilesetSpec[]; warnings: string[] } {
-  const warnings: string[] = [];
+/** Una familia de slots y las configuraciones que admite. */
+interface TopGearAxis {
+  family: string;
+  choices: Placement[][];
+}
 
+/**
+ * Los ejes de la búsqueda: una familia de slots por eje.
+ *
+ * Se separa de `buildTopGear` porque hace falta contar las combinaciones sin
+ * llegar a construirlas. El número crece multiplicándose y se dispara enseguida,
+ * así que la app lo enseña mientras el jugador elige piezas en vez de dejarle
+ * llegar hasta el final y darle un error.
+ */
+function topGearAxes(character: Character, cfg: TopGearConfig): TopGearAxis[] {
   // 1. Agrupamos candidatos por familia de slot.
   const families = new Map<string, GearSlot[]>();
   const wantedSlots = cfg.slots.length ? cfg.slots : undefined;
@@ -198,7 +208,7 @@ function buildTopGear(
   }
 
   // 2. Para cada familia, las configuraciones posibles de sus slots.
-  const axes: { family: string; choices: Placement[][] }[] = [];
+  const axes: TopGearAxis[] = [];
 
   for (const [family, slots] of families) {
     const candidates = candidatesByFamily.get(family) ?? [];
@@ -229,6 +239,43 @@ function buildTopGear(
       if (choices.length > 1) axes.push({ family, choices });
     }
   }
+
+  return axes;
+}
+
+/**
+ * Cuántas combinaciones salen y de dónde vienen, sin construirlas.
+ *
+ * El total es el producto de los ejes, así que una pieza más no suma unas
+ * cuantas variantes: multiplica todo lo demás. Devolver el desglose por familia
+ * permite enseñar dónde está el problema («los anillos multiplican por 10») en
+ * vez de un número enorme y ya.
+ */
+export function describeTopGearSpace(
+  character: Character,
+  cfg: TopGearConfig,
+): TopGearSpace {
+  const axes = topGearAxes(character, cfg);
+  const limit = Math.min(cfg.maxCombinations, config.maxProfilesets);
+  const total = axes.reduce((acc, axis) => acc * axis.choices.length, 1);
+
+  return {
+    axes: axes
+      .map((axis) => ({ family: axis.family, options: axis.choices.length }))
+      // De mayor a menor: el primero es el que más recorta si se toca.
+      .sort((a, b) => b.options - a.options),
+    total: axes.length ? total : 0,
+    limit,
+    overLimit: axes.length > 0 && total > limit,
+  };
+}
+
+function buildTopGear(
+  character: Character,
+  cfg: TopGearConfig,
+): { specs: ProfilesetSpec[]; warnings: string[] } {
+  const warnings: string[] = [];
+  const axes = topGearAxes(character, cfg);
 
   if (!axes.length) {
     throw new Error(

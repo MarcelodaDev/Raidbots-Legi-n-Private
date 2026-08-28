@@ -285,6 +285,46 @@ Hay dos matices que conviene tener claros:
 Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
 nada más.
 
+## El límite de «Mejor combinación» (Top Gear)
+
+Top Gear prueba **todas** las mezclas de las piezas que le des, así que el número
+de variantes es el **producto** de las opciones de cada hueco, no la suma. Un
+hueco suelto aporta `1 + n` opciones (lo equipado más los candidatos); anillos y
+abalorios comparten pool y aportan `C(n+2, 2)` parejas.
+
+Con 12 huecos sueltos más anillos y abalorios:
+
+| Candidatos por hueco | Combinaciones |
+|---|---|
+| 1 | 36.864 |
+| 2 | 19.131.876 |
+| 3 | 1.677.721.600 |
+
+Lo que importa no es el tamaño sino cómo crece: partiendo de 2 candidatos por
+hueco, **una** pieza más en un hueco suelto multiplica por 1,33, y un anillo más
+por 1,67. Por eso se pasa de «va bien» a «millones» de golpe.
+
+Esto no se arregla subiendo el tope: es la naturaleza del producto cartesiano.
+Lo que hace la app es **enseñarlo mientras eliges**, en vez de dejarte llegar al
+final y darte un error:
+
+- El panel dice cuántas combinaciones llevas y de dónde salen, hueco por hueco,
+  ordenados de mayor a menor.
+- Estima el tiempo con el ritmo real de *este* ordenador, sacado de las
+  simulaciones que ya se han hecho aquí (`secondsPerProfile()` en `store.ts`).
+  Sin historial suficiente no estima, en vez de inventar una constante.
+- Al pasarse del tope dice por dónde recortar y cuánto bajaría: «empieza por
+  Anillos: con una pieza menos te quedarías en 8.064».
+
+El código está en `describeTopGearSpace()` (`packages/server/src/sims/build.ts`),
+que cuenta el espacio sin construirlo, y en `TopGearBudget.tsx`.
+
+Si algún día hiciera falta abarcar el equipo entero, la salida no es un tope más
+alto sino dejar de probar todas las combinaciones: una búsqueda por eliminación
+(ir hueco por hueco arrastrando solo los N mejores conjuntos parciales) baja el
+coste de exponencial a lineal — 13 huecos × 5 candidatos con haz de 20 son ~1.300
+simulaciones en vez de 10¹². No está implementado.
+
 ## Cadena para Pawn
 
 Cuando la simulación calcula el valor de cada estadística (la casilla

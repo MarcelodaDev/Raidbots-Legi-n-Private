@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
-import type { Job, SimRequest, SimResult } from '@rbl/shared';
+import type { Job, SimPlan, SimRequest, SimResult } from '@rbl/shared';
 import { config } from './config.js';
-import { buildSim } from './sims/build.js';
+import { buildSim, describeTopGearSpace } from './sims/build.js';
 import { runSimc } from './simc/runner.js';
 import { extractWarnings, parseSimcJson } from './simc/parse.js';
 import {
@@ -204,12 +204,27 @@ class SimQueue extends EventEmitter {
 export const queue = new SimQueue();
 
 /** Calcula cuántos perfiles generaría una petición, sin ejecutarla. */
-export function planSim(request: SimRequest): {
-  profilesetCount: number;
-  warnings: string[];
-} {
+export function planSim(request: SimRequest): SimPlan {
   const character = getCharacter(request.characterId);
   if (!character) throw new Error('No se encontró el personaje indicado.');
+
+  // En «Mejor combinación» el número de variantes se dispara multiplicándose, y
+  // pasado el tope `buildSim` lanza un error. Aquí eso no vale: el jugador está
+  // eligiendo piezas y lo que necesita es ver cuánto lleva y qué recortar, no un
+  // callejón sin salida. Así que se cuenta el espacio antes de construirlo.
+  if (request.config.type === 'topgear') {
+    const space = describeTopGearSpace(character, request.config);
+    if (space.overLimit) {
+      return { profilesetCount: space.total, warnings: [], space };
+    }
+    const built = buildSim(character, request);
+    return {
+      profilesetCount: built.profilesetCount,
+      warnings: built.warnings,
+      space,
+    };
+  }
+
   const built = buildSim(character, request);
   return { profilesetCount: built.profilesetCount, warnings: built.warnings };
 }
