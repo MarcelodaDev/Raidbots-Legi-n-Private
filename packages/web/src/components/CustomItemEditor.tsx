@@ -33,7 +33,7 @@ export function CustomItemEditor({
   const [name, setName] = useState(initial?.name ?? '');
   const [slot, setSlot] = useState<GearSlot>(initial?.slot ?? 'trinket1');
   const [ilevel, setIlevel] = useState(initial?.ilevel ? String(initial.ilevel) : '');
-  const [stats, setStats] = useState(initial?.custom?.stats ?? '');
+  const [stats, setStats] = useState(initial?.custom?.stats ?? initial?.scannedStats ?? '');
   const [use, setUse] = useState(initial?.custom?.use ?? '');
   const [equip, setEquip] = useState(initial?.custom?.equip ?? '');
   const [errors, setErrors] = useState<string[]>([]);
@@ -71,8 +71,24 @@ export function CustomItemEditor({
       <p className="hint">
         Para el equipo que tu servidor ha traído de parches posteriores. El
         simulador no lo conoce, pero si le dices qué estadísticas da, lo simula
-        igual. Cópialas del tooltip del juego.
+        igual.
+        {initial?.scannedStats
+          ? ' Las estadísticas ya vienen puestas: las leyó el addon del propio juego.'
+          : ' Cópialas del tooltip del juego.'}
       </p>
+
+      {initial?.scannedEffect && (
+        <div className="notice" style={{ marginBottom: 12 }}>
+          <strong>Lo que dice el juego de esta pieza:</strong>
+          <div style={{ marginTop: 4 }}>{initial.scannedEffect}</div>
+          <div className="hint" style={{ marginTop: 6 }}>
+            El addon copia este texto tal cual y no lo traduce solo: convertirlo
+            en la fórmula de abajo es interpretarlo, y una interpretación mal
+            hecha da un número creíble y falso. Tradúcelo tú con la ayuda de los
+            campos de efecto.
+          </div>
+        </div>
+      )}
 
       <div className="row">
         <label style={{ flex: 2 }}>

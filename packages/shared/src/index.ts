@@ -74,6 +74,15 @@ export interface GearItem {
    * esa forma y el id deja de usarse.
    */
   custom?: CustomItem;
+  /**
+   * Estadísticas que el cliente enseña de esta pieza, leídas por el addon y ya
+   * en el formato de simc. Son un dato, no una decisión: las piezas que el
+   * motor sí conoce se siguen simulando por su id, que es más fiable. Solo se
+   * usan para rellenar el formulario de las que no conoce.
+   */
+  scannedStats?: string;
+  /** Texto literal de los efectos de «Uso»/«Equipar», tal cual lo enseña el juego. */
+  scannedEffect?: string;
 }
 
 /**
@@ -109,6 +118,37 @@ export const CUSTOM_STAT_KEYS = [
   'leech',
   'speed',
 ] as const;
+
+/**
+ * Razas que SimulationCraft 7.3.5 sabe simular.
+ *
+ * Es lista blanca y no una comprobación de formato: el valor acaba escrito como
+ * `race=<valor>` en un perfil que se ejecuta como proceso.
+ */
+export const SIMC_RACES = [
+  'blood_elf',
+  'draenei',
+  'dwarf',
+  'gnome',
+  'goblin',
+  'highmountain_tauren',
+  'human',
+  'lightforged_draenei',
+  'nightborne',
+  'night_elf',
+  'orc',
+  'pandaren',
+  'tauren',
+  'troll',
+  'undead',
+  'void_elf',
+  'worgen',
+] as const;
+
+/** ¿Es una raza que el motor acepta? La cadena vacía significa «no tocar». */
+export function isSimcRace(value: string): boolean {
+  return value === '' || (SIMC_RACES as readonly string[]).includes(value);
+}
 
 /**
  * Identificador que simc acepta para un ítem escrito a mano.
@@ -188,6 +228,13 @@ export interface ArtifactTrait {
   relicRank: number;
 }
 
+/** Una habilidad de la pestaña «General» del libro de hechizos. */
+export interface RacialSpell {
+  id: number;
+  name: string;
+  description: string;
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -222,6 +269,14 @@ export interface Character {
   bag: GearItem[];
   /** Fase de contenido del servidor donde juega este personaje. */
   patchId?: string;
+  /**
+   * Raza estándar con la que se simula cuando la del personaje es propia del
+   * servidor. SimulationCraft no admite raciales inventados, así que lo más
+   * cerca que se puede estar es elegir la raza oficial con el mismo efecto.
+   */
+  raceOverride?: string;
+  /** Habilidades generales leídas del juego, raciales incluidos. Informativo. */
+  racials?: RacialSpell[];
   /** Perfil .simc original, saneado. Es la base de todas las simulaciones. */
   profile: string;
   createdAt: string;

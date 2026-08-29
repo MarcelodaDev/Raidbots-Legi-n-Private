@@ -95,6 +95,56 @@ test('avisa de las piezas que el simulador no conoce, con su nombre', built, () 
   );
 });
 
+test('las estadísticas leídas del cliente llegan a su pieza', () => {
+  const { gear, bag } = parse([
+    '# Destrero Ceann-Ar (940, bolsas)',
+    '#head=,id=137088,bonus_id=3459/3530',
+    '',
+    '### Item Stats',
+    '# stats:138357=1200str_700crit',
+    '# stats:137088=1500str_900haste',
+    '# effect:137088=Equipar: Tus ataques tienen la probabilidad de algo.',
+  ]);
+  assert.equal(gear.head.scannedStats, '1200str_700crit');
+  assert.equal(bag[0].scannedStats, '1500str_900haste');
+  assert.equal(bag[0].scannedEffect, 'Equipar: Tus ataques tienen la probabilidad de algo.');
+});
+
+test('lo leído del cliente es un dato, no convierte la pieza en una a mano', () => {
+  // Si `custom` se rellenara solo, todas las piezas se simularían con una copia
+  // aproximada en vez de con sus datos reales, que traen escalado y efectos.
+  const { gear } = parse(['### Item Stats', '# stats:138357=1200str_700crit']);
+  assert.equal(gear.head.custom, undefined);
+});
+
+test('los raciales entran con su descripción', () => {
+  const { racials } = parse([
+    '### Racials',
+    '# racial:999001=Sangre de la montaña',
+    '#   Aumenta el daño de golpe crítico un 3%.',
+    '# racial:999002=Paso del bosque',
+    '#   Aumenta la velocidad de movimiento un 4%.',
+  ]);
+  assert.equal(racials.length, 2);
+  assert.deepEqual(racials[0], {
+    id: 999001,
+    name: 'Sangre de la montaña',
+    description: 'Aumenta el daño de golpe crítico un 3%.',
+  });
+  assert.equal(racials[1].name, 'Paso del bosque');
+});
+
+test('un bloque de stats no bautiza a la pieza de bolsa siguiente', () => {
+  // Las líneas de stats no son rótulos; si se trataran como tales, la siguiente
+  // pieza heredaría un nombre inventado.
+  const { bag } = parse([
+    '### Item Stats',
+    '# stats:137088=1500str',
+    '#back=,id=137053,bonus_id=3530',
+  ]);
+  assert.equal(bag[0].name, undefined);
+});
+
 test('el equipo puesto no se confunde con el de la bolsa', () => {
   const { gear, bag } = parse([
     '# Destrero Ceann-Ar (940, bolsas)',

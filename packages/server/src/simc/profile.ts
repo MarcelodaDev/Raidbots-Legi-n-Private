@@ -50,7 +50,11 @@ export function buildCharacterProfile(
   options: SimOptions,
 ): string {
   const consumables = buildConsumableOptions(options);
-  return [character.profile, ...consumables].join('\n');
+  // Raza de sustitución. Va después del perfil a propósito: en simc gana la
+  // última asignación, así que esto pisa el `race=` que trae el import sin
+  // tener que reescribirlo.
+  const race = character.raceOverride ? [`race=${character.raceOverride}`] : [];
+  return [character.profile, ...race, ...consumables].join('\n');
 }
 
 /**

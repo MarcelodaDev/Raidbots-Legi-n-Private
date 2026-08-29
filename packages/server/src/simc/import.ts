@@ -2,6 +2,7 @@ import {
   GEAR_SLOTS,
   customItemToken,
   type Character,
+  type RacialSpell,
   type GearItem,
   type GearSlot,
 } from '@rbl/shared';
@@ -73,6 +74,8 @@ export interface ParsedProfile {
   crucible?: string;
   gear: Partial<Record<GearSlot, GearItem>>;
   bag: GearItem[];
+  /** Habilidades generales leídas del juego, raciales incluidos. */
+  racials?: RacialSpell[];
   /** Perfil saneado listo para pasarle a simc. */
   profile: string;
   warnings: string[];
@@ -245,6 +248,13 @@ export function parseSimcProfile(input: string): ParsedProfile {
   const BAG_LABEL = /^(.+?)\s+\((\d+),\s*([^)]+)\)$/;
   let pendingLabel: { name: string; ilevel: number } | null = null;
 
+  // Bloques que el addon escribe al final: lo que el cliente sabe y el motor
+  // no. Se recogen aparte y se reparten cuando ya está todo el equipo leído,
+  // porque van detrás de las piezas a las que se refieren.
+  const scannedStats = new Map<number, string>();
+  const scannedEffects = new Map<number, string>();
+  const racials: RacialSpell[] = [];
+
   for (const rawLine of rawLines) {
     const trimmed = rawLine.trim();
     if (!trimmed) continue;
@@ -259,6 +269,39 @@ export function parseSimcProfile(input: string): ParsedProfile {
           bagItem.ilevel ??= pendingLabel.ilevel;
         }
         result.bag.push(bagItem);
+        pendingLabel = null;
+        continue;
+      }
+
+      const stats = /^stats:(\d+)=(.+)$/.exec(uncommented);
+      if (stats) {
+        scannedStats.set(Number.parseInt(stats[1], 10), stats[2].trim());
+        pendingLabel = null;
+        continue;
+      }
+
+      const effect = /^effect:(\d+)=(.+)$/.exec(uncommented);
+      if (effect) {
+        scannedEffects.set(Number.parseInt(effect[1], 10), effect[2].trim());
+        pendingLabel = null;
+        continue;
+      }
+
+      const racial = /^racial:(\d+)=(.+)$/.exec(uncommented);
+      if (racial) {
+        racials.push({
+          id: Number.parseInt(racial[1], 10),
+          name: racial[2].trim(),
+          description: '',
+        });
+        pendingLabel = null;
+        continue;
+      }
+
+      // La descripción del racial va en la línea de debajo, sangrada.
+      if (racials.length > 0 && /^\s/.test(trimmed.replace(/^#+/, ''))) {
+        const last = racials[racials.length - 1];
+        if (!last.description) last.description = uncommented;
         pendingLabel = null;
         continue;
       }
@@ -360,6 +403,18 @@ export function parseSimcProfile(input: string): ParsedProfile {
     );
   }
 
+  // Repartir lo que leyó el addon del cliente entre las piezas a las que
+  // pertenece. Se guarda como dato, no como decisión: las piezas que el motor
+  // conoce se siguen simulando por su id, que trae escalado, bonus y efectos
+  // de verdad, no una copia aproximada.
+  for (const item of [...Object.values(result.gear), ...result.bag]) {
+    const stats = scannedStats.get(item.itemId);
+    if (stats) item.scannedStats = stats;
+    const effect = scannedEffects.get(item.itemId);
+    if (effect) item.scannedEffect = effect;
+  }
+  if (racials.length > 0) result.racials = racials;
+
   // Avisar cuanto antes de las piezas que simc no va a saber construir: si una
   // llega a una simulación, cancela el lote entero y no queda claro por qué.
   const unknown = [
@@ -423,6 +478,7 @@ export function toCharacter(parsed: ParsedProfile, id: string): Character {
     crucible: parsed.crucible,
     gear: parsed.gear,
     bag: parsed.bag,
+    racials: parsed.racials,
     profile: parsed.profile,
     createdAt: now,
     updatedAt: now,

@@ -151,3 +151,67 @@ function RBL.ItemToSimc(simcSlot, itemLink)
 
   return simcSlot .. '=' .. table.concat(options, ',')
 end
+
+-- ---------------------------------------------------------------------------
+-- Estadísticas leídas del cliente
+-- ---------------------------------------------------------------------------
+
+-- Claves de GetItemStats -> abreviatura del formato `stats=` de SimulationCraft.
+--
+-- Las claves son nombres de variables globales del cliente, no texto: el mismo
+-- addon funciona en un cliente en español o en inglés. Ojo con ITEM_MOD_VERSATILITY,
+-- que es la única que no lleva el sufijo _SHORT.
+local STAT_KEYS = {
+  { key = 'ITEM_MOD_STRENGTH_SHORT', simc = 'str' },
+  { key = 'ITEM_MOD_AGILITY_SHORT', simc = 'agi' },
+  { key = 'ITEM_MOD_INTELLECT_SHORT', simc = 'int' },
+  { key = 'ITEM_MOD_STAMINA_SHORT', simc = 'sta' },
+  { key = 'ITEM_MOD_CRIT_RATING_SHORT', simc = 'crit' },
+  { key = 'ITEM_MOD_HASTE_RATING_SHORT', simc = 'haste' },
+  { key = 'ITEM_MOD_MASTERY_RATING_SHORT', simc = 'mastery' },
+  { key = 'ITEM_MOD_VERSATILITY', simc = 'vers' },
+  { key = 'ITEM_MOD_CR_LIFESTEAL_SHORT', simc = 'leech' },
+  { key = 'ITEM_MOD_CR_SPEED_SHORT', simc = 'speed' },
+  { key = 'ITEM_MOD_CR_AVOIDANCE_SHORT', simc = 'avoidance' },
+  { key = 'ITEM_MOD_ATTACK_POWER_SHORT', simc = 'ap' },
+  { key = 'ITEM_MOD_SPELL_POWER_SHORT', simc = 'sp' },
+}
+
+--- Estadísticas de un ítem en el formato `stats=` de simc: `1052str_654crit`.
+--
+-- Sirve para las piezas que SimulationCraft no conoce, que en un servidor
+-- progresivo son las de parches posteriores: el motor no tiene sus datos, pero
+-- el cliente sí, porque las está enseñando en el tooltip.
+--
+-- @return string las estadísticas, o nil si el ítem no tiene ninguna que sume
+function RBL.ItemStatsString(itemLink)
+  if not GetItemStats or not itemLink then
+    return nil
+  end
+
+  local stats = GetItemStats(itemLink)
+  if type(stats) ~= 'table' then
+    return nil
+  end
+
+  local parts = {}
+  for _, entry in ipairs(STAT_KEYS) do
+    -- El nombre de la clave está en una global del cliente; si esa global no
+    -- existe en esta versión, esa estadística simplemente no se lee.
+    local globalKey = _G and _G[entry.key]
+    local value = globalKey and stats[globalKey]
+    -- GetItemStats también acepta la clave literal en algunas versiones.
+    if not value then
+      value = stats[entry.key]
+    end
+    value = tonumber(value)
+    if value and value > 0 then
+      parts[#parts + 1] = math.floor(value) .. entry.simc
+    end
+  end
+
+  if #parts == 0 then
+    return nil
+  end
+  return table.concat(parts, '_')
+end

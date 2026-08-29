@@ -291,6 +291,146 @@ C_ArtifactUI = {
   end,
 }
 
+-- --- estadísticas, efectos y raciales ---------------------------------------
+
+-- GetItemStats devuelve una tabla indexada por el VALOR de las globales
+-- ITEM_MOD_*, no por su nombre. Se replica esa indirección aquí a propósito:
+-- si el stub aceptara el nombre de la global, el addon podría estar
+-- equivocándose y la prueba no lo vería.
+ITEM_MOD_STRENGTH_SHORT = 'Fuerza'
+ITEM_MOD_AGILITY_SHORT = 'Agilidad'
+ITEM_MOD_INTELLECT_SHORT = 'Intelecto'
+ITEM_MOD_STAMINA_SHORT = 'Aguante'
+ITEM_MOD_CRIT_RATING_SHORT = 'Golpe crítico'
+ITEM_MOD_HASTE_RATING_SHORT = 'Celeridad'
+ITEM_MOD_MASTERY_RATING_SHORT = 'Maestría'
+-- La única sin sufijo _SHORT, tal cual la nombra el cliente.
+ITEM_MOD_VERSATILITY = 'Versatilidad'
+ITEM_MOD_CR_LIFESTEAL_SHORT = 'Robo de vida'
+ITEM_MOD_CR_SPEED_SHORT = 'Velocidad'
+ITEM_MOD_CR_AVOIDANCE_SHORT = 'Evitación'
+ITEM_MOD_ATTACK_POWER_SHORT = 'Poder de ataque'
+ITEM_MOD_SPELL_POWER_SHORT = 'Poder con hechizos'
+
+ITEM_SPELL_TRIGGER_ONUSE = 'Uso:'
+ITEM_SPELL_TRIGGER_ONEQUIP = 'Equipar:'
+
+local ITEM_STATS = {
+  [152138] = {
+    [ITEM_MOD_INTELLECT_SHORT] = 1052,
+    [ITEM_MOD_CRIT_RATING_SHORT] = 654,
+    [ITEM_MOD_HASTE_RATING_SHORT] = 436,
+    -- El aguante también viene y a simc le da igual, pero se pasa porque es lo
+    -- que devuelve el cliente: el filtro tiene que estar en el addon.
+    [ITEM_MOD_STAMINA_SHORT] = 2103,
+  },
+  [152147] = {
+    [ITEM_MOD_VERSATILITY] = 1017,
+  },
+  -- Pieza de bolsa, para comprobar que las bolsas también se leen.
+  [151943] = {
+    [ITEM_MOD_INTELLECT_SHORT] = 900,
+    [ITEM_MOD_MASTERY_RATING_SHORT] = 500,
+  },
+  -- Sin ninguna estadística: no debe generar línea.
+  [152140] = {},
+}
+
+function GetItemStats(link)
+  local id = itemIdOf(link)
+  return id and ITEM_STATS[id] or nil
+end
+
+local ITEM_TOOLTIP = {
+  [152147] = {
+    'Meditation Spheres of Chi-Ji',
+    'Objeto nv. 930',
+    'Equipar: Tus hechizos tienen la probabilidad de aumentar tu Intelecto en 4000 durante 15 s.',
+  },
+  [152138] = {
+    'Runebound Collar',
+    'Objeto nv. 960',
+    'Uso: Aumenta tu Intelecto en 4500 durante 20 s. (2 min de reutilización)',
+    'Se vende por 25 de oro',
+  },
+}
+
+M.tooltipLines = nil
+
+-- Tooltip de mentira: guarda las líneas del ítem en globales con el mismo
+-- nombre que genera GameTooltipTemplate, que es de donde las lee el addon.
+function CreateFrame(_, name, _, _)
+  local frame = { lines = {} }
+  function frame:SetOwner() end
+  function frame:ClearLines()
+    self.lines = {}
+  end
+  function frame:SetHyperlink(link)
+    self.lines = ITEM_TOOLTIP[itemIdOf(link)] or {}
+    for i = 1, 20 do
+      local key = name .. 'TextLeft' .. i
+      local text = self.lines[i]
+      _G[key] = text and { GetText = function() return text end } or nil
+    end
+  end
+  function frame:NumLines()
+    return #self.lines
+  end
+  return frame
+end
+
+UIParent = {}
+
+-- Libro de hechizos. La pestaña 1 es «General» y ahí viven los raciales; las
+-- siguientes son las especializaciones y no deben salir en el export.
+local SPELL_TABS = {
+  { 'General', '', 0, 3 },
+  { 'Furia', '', 3, 2 },
+}
+
+local SPELLBOOK = {
+  [1] = { name = 'Sangre de la montaña', id = 999001,
+          desc = 'Aumenta el daño de golpe crítico un 3%. Aumenta la sanación de golpe crítico un 3%.' },
+  [2] = { name = 'Paso del bosque', id = 999002, desc = 'Aumenta la velocidad de movimiento un 4%.' },
+  [3] = { name = 'Montar', id = 33388, desc = '' },
+  [4] = { name = 'Golpe sangriento', id = 23881, desc = 'No debería salir: es de la spec.' },
+  [5] = { name = 'Ira', id = 85288, desc = 'Tampoco.' },
+}
+
+function GetNumSpellTabs()
+  return #SPELL_TABS
+end
+
+function GetSpellTabInfo(tab)
+  local t = SPELL_TABS[tab]
+  if not t then
+    return nil
+  end
+  return t[1], t[2], t[3], t[4]
+end
+
+function GetSpellBookItemName(index)
+  local entry = SPELLBOOK[index]
+  return entry and entry.name or nil
+end
+
+function GetSpellBookItemInfo(index)
+  local entry = SPELLBOOK[index]
+  if not entry then
+    return nil
+  end
+  return 'SPELL', entry.id
+end
+
+function GetSpellDescription(spellId)
+  for _, entry in pairs(SPELLBOOK) do
+    if entry.id == spellId then
+      return entry.desc
+    end
+  end
+  return nil
+end
+
 -- El cliente solo llena los datos del artefacto cuando este addon está cargado.
 function LoadAddOn(name)
   return true, nil

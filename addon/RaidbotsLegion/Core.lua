@@ -351,7 +351,7 @@ local function relicItemIds()
   return found and ids or nil
 end
 
-local function equippedLines()
+local function equippedLines(links)
   local lines = {}
   local relics = relicItemIds()
 
@@ -367,6 +367,9 @@ local function equippedLines()
           line = line .. ',gem_id=' .. table.concat(relics, '/')
         end
         lines[#lines + 1] = line
+        if links then
+          links[#links + 1] = link
+        end
       end
     end
   end
@@ -403,6 +406,7 @@ local function scanContainers(containers, origin, seen, out)
             seen[line] = true
             out[#out + 1] = {
               line = line,
+              link = link,
               name = name or '?',
               ilevel = itemLevel(link),
               origin = origin,
@@ -436,6 +440,117 @@ local function bagItems()
 
   return items
 end
+
+-- ---------------------------------------------------------------------------
+-- Raciales y efectos: lo que el motor no puede saber
+-- ---------------------------------------------------------------------------
+
+--- Tooltip oculto para leer el texto de un ítem.
+--
+-- Los efectos de «Uso» y «Equipar» no están en ninguna API: solo existen como
+-- texto en el tooltip, así que hay que pedirlo y leerlo línea a línea.
+local scanTooltip
+local function scanner()
+  if scanTooltip then
+    return scanTooltip
+  end
+  if not CreateFrame then
+    return nil
+  end
+  scanTooltip = CreateFrame('GameTooltip', 'RBLScanTooltip', nil, 'GameTooltipTemplate')
+  scanTooltip:SetOwner(UIParent, 'ANCHOR_NONE')
+  return scanTooltip
+end
+
+--- Las líneas de «Uso:» y «Equipar:» del tooltip de un ítem, tal cual.
+--
+-- No se intentan traducir al formato de simc: convertir prosa en
+-- `4500str_20dur_120cd` es adivinar, y adivinar mal aquí da un número creíble y
+-- falso, que es justo lo que este proyecto lleva meses evitando. Se copian para
+-- que la app las enseñe y el jugador o quien le ayude las traduzca a mano.
+local function itemEffectText(itemLink)
+  local tip = scanner()
+  if not tip or not itemLink then
+    return nil
+  end
+
+  local okSet = pcall(function()
+    tip:ClearLines()
+    tip:SetHyperlink(itemLink)
+  end)
+  if not okSet then
+    return nil
+  end
+
+  local found = {}
+  for i = 1, (tip:NumLines() or 0) do
+    local fontString = _G and _G['RBLScanTooltipTextLeft' .. i]
+    local text = fontString and fontString.GetText and fontString:GetText()
+    -- ITEM_SPELL_TRIGGER_ONUSE y ONEQUIP son las globales del cliente con
+    -- «Uso:» y «Equipar:», así que esto también funciona en un cliente en
+    -- español sin tener que saber cómo están traducidas.
+    if text and text ~= '' then
+      for _, key in ipairs({ 'ITEM_SPELL_TRIGGER_ONUSE', 'ITEM_SPELL_TRIGGER_ONEQUIP' }) do
+        local prefix = _G and _G[key]
+        if prefix and prefix ~= '' and text:sub(1, #prefix) == prefix then
+          found[#found + 1] = text:gsub('%s+', ' ')
+        end
+      end
+    end
+  end
+
+  if #found == 0 then
+    return nil
+  end
+  return table.concat(found, ' | ')
+end
+
+--- Hechizos de la pestaña «General» del libro de hechizos, con su descripción.
+--
+-- Ahí es donde viven los raciales. No hay forma fiable de distinguirlos del
+-- resto de habilidades generales, así que se vuelca la pestaña entera y ya
+-- decide quien lo lea: son media docena de líneas y es preferible eso a un
+-- filtro que se deje fuera precisamente el racial raro de un servidor privado,
+-- que es el único motivo por el que existe este bloque.
+local function generalSpells()
+  if not GetNumSpellTabs or not GetSpellTabInfo or not GetSpellBookItemName then
+    return {}
+  end
+
+  local out = {}
+  local tabs = GetNumSpellTabs() or 0
+  for tab = 1, tabs do
+    local tabName, _, offset, numSpells = GetSpellTabInfo(tab)
+    -- Solo la primera pestaña: las demás son las especializaciones.
+    if tab == 1 and offset and numSpells then
+      for index = offset + 1, offset + numSpells do
+        local spellName = GetSpellBookItemName(index, 'spell')
+        -- Sin el `if`: `GetSpellBookItemInfo and GetSpellBookItemInfo(...)`
+        -- parece equivalente pero no lo es, porque `and` recorta la respuesta a
+        -- un solo valor y el id se perdería. Es el mismo tipo de fallo que el
+        -- `ipairs` de las reliquias, y lo cazó la misma prueba.
+        local spellId
+        if GetSpellBookItemInfo then
+          local _
+          _, spellId = GetSpellBookItemInfo(index, 'spell')
+        end
+        local description = spellId and GetSpellDescription and GetSpellDescription(spellId)
+        if spellName then
+          out[#out + 1] = {
+            tab = tabName or '?',
+            name = spellName,
+            id = spellId or 0,
+            description = (description or ''):gsub('%s+', ' '),
+          }
+        end
+      end
+    end
+  end
+  return out
+end
+
+RBL.GeneralSpells = generalSpells
+RBL.ItemEffectText = itemEffectText
 
 -- ---------------------------------------------------------------------------
 -- Perfil completo
@@ -512,7 +627,8 @@ function RBL.BuildProfile()
   end
 
   add('')
-  local equipped = equippedLines()
+  local links = {}
+  local equipped = equippedLines(links)
   for _, line in ipairs(equipped) do
     add(line)
   end
@@ -532,6 +648,61 @@ function RBL.BuildProfile()
 
   if not RBL.bankOpen then
     add('# Nota: el banco no estaba abierto, así que no se ha incluido.')
+  end
+
+  -- Estadísticas leídas del cliente. Solo hacen falta para las piezas que
+  -- SimulationCraft no conoce, pero el addon no sabe cuáles son —esa lista la
+  -- tiene la app—, así que se mandan todas y allí se usan las que falten.
+  for _, item in ipairs(bag) do
+    if item.link then
+      links[#links + 1] = item.link
+    end
+  end
+
+  local statLines = {}
+  local seenId = {}
+  for _, link in ipairs(links) do
+    local parts = RBL.SplitItemLink(link)
+    local id = parts and parts[1]
+    if id and id > 0 and not seenId[id] then
+      seenId[id] = true
+      local stats = RBL.ItemStatsString and RBL.ItemStatsString(link)
+      if stats then
+        statLines[#statLines + 1] = '# stats:' .. id .. '=' .. stats
+      end
+      local effect = RBL.ItemEffectText and RBL.ItemEffectText(link)
+      if effect then
+        statLines[#statLines + 1] = '# effect:' .. id .. '=' .. effect
+      end
+    end
+  end
+
+  if #statLines > 0 then
+    add('')
+    add('### Item Stats')
+    add('# Lo que dice el cliente de cada pieza. La app lo usa para poder')
+    add('# simular el equipo que este servidor ha traído de parches posteriores.')
+    for _, line in ipairs(statLines) do
+      add(line)
+    end
+  end
+
+  -- Raciales. SimulationCraft no sabe de razas propias de un servidor, así que
+  -- esto no se simula solo: se manda para poder elegir en la app una raza
+  -- equivalente y saber cuánto se está aproximando.
+  local spells = RBL.GeneralSpells and RBL.GeneralSpells() or {}
+  if #spells > 0 then
+    add('')
+    add('### Racials')
+    add('# Habilidades generales del personaje, raciales incluidos. El motor no')
+    add('# entiende razas propias de un servidor: esto es para elegir a mano la')
+    add('# raza estándar que más se parezca.')
+    for _, spell in ipairs(spells) do
+      add('# racial:' .. spell.id .. '=' .. spell.name)
+      if spell.description ~= '' then
+        add('#   ' .. spell.description)
+      end
+    end
   end
 
   return table.concat(lines, '\n'), #equipped, #bag

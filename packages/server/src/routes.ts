@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import {
   DEFAULT_SIM_OPTIONS,
   FIGHT_STYLES,
+  isSimcRace,
   validateCustomItem,
   type Character,
   type GearItem,
@@ -150,6 +151,15 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       if (!existing) return reply.code(404).send({ error: 'Personaje no encontrado.' });
 
       const patch = req.body ?? {};
+
+      // La raza de sustitución se escribe tal cual en el perfil que se ejecuta,
+      // así que solo se aceptan las que el motor conoce.
+      if (patch.raceOverride !== undefined && !isSimcRace(patch.raceOverride)) {
+        return reply
+          .code(400)
+          .send({ error: `"${patch.raceOverride}" no es una raza que el simulador acepte.` });
+      }
+
       const next: Character = { ...existing, ...patch, id: existing.id };
 
       if (typeof patch.profile === 'string') {

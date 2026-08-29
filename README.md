@@ -535,9 +535,19 @@ Medido con un guerrero Furia real, mismo equipo, `target_error=0.1`:
 
 La app compara ahora la raza declarada con la que devuelve el motor y avisa
 cuando no coinciden (`raceWarning()` en `simc/parse.ts`). Las comparaciones
-entre piezas siguen siendo válidas: a todas les falta lo mismo. Si sabes qué
-raciales copia la raza de tu servidor, poner la raza equivalente en la ficha
-técnica arregla también el DPS absoluto.
+entre piezas siguen siendo válidas: a todas les falta lo mismo.
+
+Para el DPS absoluto, la ficha del personaje tiene un selector de **raza de
+sustitución** (`raceOverride`). No inventa raciales —simc no lo permite— sino
+que simula con la raza oficial cuyo racial más se parezca. Se escribe como una
+línea `race=` **detrás** del perfil importado, porque en simc gana la última
+asignación (comprobado, no supuesto).
+
+Es lista blanca (`SIMC_RACES` en `packages/shared`), no una comprobación de
+formato: el valor acaba escrito tal cual en un perfil que se ejecuta.
+
+Y para saber qué elegir, el addon vuelca los raciales del personaje con su
+descripción, que es lo único que dice qué hacen.
 
 ## Ítems que SimulationCraft no conoce
 
@@ -590,6 +600,28 @@ En la ficha del personaje, las piezas del inventario que el motor no conoce
 salen marcadas «sin datos» y con un botón **Describir** que abre el formulario
 ya relleno con lo que sabemos (nombre, hueco, ilvl) y sustituye esa entrada, en
 vez de añadir una copia.
+
+### El addon lee las estadísticas por ti
+
+El cliente sí sabe lo que da cada pieza: lo está enseñando en el tooltip. El
+addon lo lee con `GetItemStats` y lo escribe en un bloque `### Item Stats`, ya
+en el formato de simc, así que el formulario viene relleno y no hay que copiar
+números a mano.
+
+Un detalle que importa: `GetItemStats` devuelve una tabla indexada por el
+**valor** de las globales `ITEM_MOD_*`, no por su nombre. Indexar por el nombre
+devuelve una tabla vacía sin dar error. Como efecto secundario bueno, hacerlo
+bien significa que el addon funciona igual en un cliente en español o en inglés.
+
+Los efectos de «Uso» y «Equipar» solo existen como texto en el tooltip, así que
+se copian **literales** y no se traducen solos: convertir prosa en
+`4500str_20dur_120cd` es interpretar, y una interpretación mal hecha aquí da un
+número creíble y falso. La app enseña el texto junto al formulario para que lo
+traduzca una persona.
+
+Lo leído se guarda como `scannedStats`/`scannedEffect`, separado de `custom`. Es
+a propósito: una pieza que el motor sí conoce se sigue simulando por su id,
+porque eso trae escalado, bonus y efectos de verdad, no una copia aproximada.
 
 ## Servidores privados
 

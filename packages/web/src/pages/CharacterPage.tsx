@@ -11,6 +11,7 @@ import {
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
 import { CustomItemEditor } from '../components/CustomItemEditor.js';
+import { RaceCard } from '../components/RaceCard.js';
 import { PhaseGearCard } from '../components/PhaseGearCard.js';
 import { ItemIcon, ItemLabel, useItemName } from '../components/ItemIcon.js';
 import { FieldLabel, Help } from '../components/Help.js';
@@ -150,6 +151,8 @@ export function CharacterPage() {
           ))}
         </div>
       </div>
+
+      <RaceCard character={character} onUpdate={setCharacter} />
 
       <ArtifactCard character={character} onUpdate={setCharacter} />
 

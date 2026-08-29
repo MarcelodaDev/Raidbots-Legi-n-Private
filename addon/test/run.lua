@@ -128,6 +128,61 @@ check('el artefacto no se duplica desde la bolsa', not contains(profile, '#main_
 local _, repeticiones = string.gsub(profile, '#finger1=,id=152064', '')
 check('los repetidos salen una sola vez', repeticiones == 1, 'apariciones: ' .. repeticiones)
 
+-- Estadísticas leídas del cliente. Existen para las piezas que este servidor
+-- ha traído de parches posteriores: el motor no las conoce, pero el cliente sí,
+-- porque las está enseñando en el tooltip.
+check('bloque de estadísticas', contains(profile, '### Item Stats'))
+check(
+  'estadísticas en el formato de simc, ordenadas como las escribe el addon',
+  contains(profile, '# stats:152138=1052int_2103sta_654crit_436haste')
+)
+-- GetItemStats indexa por el VALOR de las globales ITEM_MOD_*, no por su
+-- nombre. Si el addon usara el nombre, esto saldría vacío.
+check(
+  'las claves se resuelven por la global del cliente, no por su nombre',
+  not contains(profile, 'ITEM_MOD_')
+)
+-- La versatilidad es la única global sin sufijo _SHORT.
+check('versatilidad, que es la clave rara', contains(profile, '# stats:152147=1017vers'))
+check('las piezas de bolsa también se leen', contains(profile, '# stats:151943=900int_500mastery'))
+check(
+  'una pieza sin estadísticas no genera línea',
+  not contains(profile, '# stats:152140=')
+)
+check('cada pieza sale una sola vez', select(2, string.gsub(profile, '# stats:152138=', '')) == 1)
+
+-- Los efectos se copian tal cual, sin traducirlos al formato de simc:
+-- convertir prosa en `4500int_20dur_120cd` es adivinar, y adivinar aquí da un
+-- número creíble y falso.
+check(
+  'efecto de uso, copiado literal',
+  contains(profile, '# effect:152138=Uso: Aumenta tu Intelecto en 4500 durante 20 s.')
+)
+check(
+  'efecto pasivo, copiado literal',
+  contains(profile, '# effect:152147=Equipar: Tus hechizos tienen la probabilidad')
+)
+check(
+  'del tooltip solo salen las líneas de efecto',
+  not contains(profile, 'Se vende por')
+)
+
+-- Raciales. El motor no entiende razas propias de un servidor, así que esto no
+-- se simula: se manda para poder elegir a mano una raza estándar parecida.
+check('bloque de raciales', contains(profile, '### Racials'))
+check('racial con su id', contains(profile, '# racial:999001=Sangre de la montaña'))
+-- `GetSpellBookItemInfo and GetSpellBookItemInfo(...)` recorta la respuesta a
+-- un valor y el id se pierde. Mismo fallo que el `ipairs` de las reliquias.
+check('el id del hechizo no se pierde por el camino', not contains(profile, '# racial:0='))
+check(
+  'la descripción del racial, que es lo único que dice qué hace',
+  contains(profile, 'Aumenta el daño de golpe crítico un 3%')
+)
+check(
+  'las habilidades de la especialización no entran',
+  not contains(profile, 'Golpe sangriento')
+)
+
 check('avisa de que el banco estaba cerrado', contains(profile, 'banco no estaba abierto'))
 check('sin banco cerrado no aparece su contenido', not contains(profile, '154176'))
 
