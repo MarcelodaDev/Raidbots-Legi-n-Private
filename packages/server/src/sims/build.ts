@@ -34,6 +34,7 @@ import { gearItemToLine } from '../simc/import.js';
 import {
   canClassEquip,
   getItem,
+  getItemName,
   getItemQuality,
   slotCandidates,
 } from '../data/itemdb.js';
@@ -307,7 +308,9 @@ function candidateOption(
 function equippedOption(slot: GearSlot, item: GearItem): SlotOption {
   return {
     itemId: item.itemId,
-    name: item.name ?? `Ítem ${item.itemId}`,
+    // El export del addon no trae nombres de lo equipado, así que se completa
+    // con la base de datos: si no, en los resultados salen «Ítem 140806».
+    name: item.name ?? getItemName(item.itemId) ?? `Ítem ${item.itemId}`,
     ilevel: item.ilevel ?? 0,
     quality: getItemQuality(item.itemId) ?? 4,
     equipped: true,
@@ -520,6 +523,26 @@ function buildTopGear(
             slot: placement.slot,
             ilevel: placement.option.ilevel,
           })),
+          /*
+           * Las piezas del mismo hueco que NO cambian.
+           *
+           * Sin esto la tabla solo nombraba lo que se mueve, y en un hueco
+           * doble eso engaña: al comparar abalorios, una fila que dice «Tiny
+           * Oozeling (Abalorio 1)» lleva además el abalorio que ya tenías en el
+           * otro sitio, pero no había forma de saberlo. Un usuario dio por
+           * hecho que su Convergencia no se había incluido.
+           */
+          kept: current
+            .filter(
+              (placement) =>
+                placement.unchanged && touchedFamilies.has(slotFamily(placement.slot)),
+            )
+            .map((placement) => ({
+              itemId: placement.option.itemId,
+              name: placement.option.name,
+              slot: placement.slot,
+              ilevel: placement.option.ilevel,
+            })),
           legendaries,
         },
       });

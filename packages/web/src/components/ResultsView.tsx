@@ -226,6 +226,18 @@ function ProfilesetTable({
                           </span>
                         </span>
                       ))}
+                      {row.kept?.map((item) => (
+                        <span
+                          key={`kept-${item.itemId}-${item.slot}`}
+                          style={{ opacity: 0.65 }}
+                        >
+                          <ItemLabel id={item.itemId} name={item.name} size="sm" />
+                          <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
+                            {' '}
+                            · {SLOT_LABELS[item.slot as GearSlot] ?? item.slot} (sigue)
+                          </span>
+                        </span>
+                      ))}
                     </div>
                   ) : row.itemId ? (
                     <ItemLabel id={row.itemId} name={row.label} size="sm" />
@@ -310,6 +322,8 @@ interface CollapsedRow {
   itemId?: number;
   /** Si la fila es una combinación de Top Gear, las piezas que cambia. */
   items?: { itemId: number; name: string; slot: string }[];
+  /** Las del mismo hueco que se quedan como están. */
+  kept?: { itemId: number; name: string; slot: string }[];
   slotNote?: string;
   mean: number;
   delta: number;
@@ -333,6 +347,22 @@ function rowItemId(entry: ProfilesetResult): number | undefined {
   return typeof id === 'number' && id > 0 ? id : undefined;
 }
 
+/**
+ * Las piezas del mismo hueco que la combinación NO cambia.
+ *
+ * En un hueco doble hace falta enseñarlas: si solo se nombra lo que se mueve,
+ * una fila de abalorios parece llevar uno solo cuando en realidad lleva dos.
+ */
+function rowKept(
+  entry: ProfilesetResult,
+): { itemId: number; name: string; slot: string }[] | undefined {
+  if (entry.meta?.kind !== 'combination') return undefined;
+  const kept = entry.meta?.kept;
+  return Array.isArray(kept) && kept.length
+    ? (kept as { itemId: number; name: string; slot: string }[])
+    : undefined;
+}
+
 /** Las piezas que cambia una combinación de Top Gear. */
 function rowItems(
   entry: ProfilesetResult,
@@ -354,6 +384,7 @@ function collapseByItem(
       label: String(entry.meta?.itemName ?? entry.name),
       itemId: rowItemId(entry),
       items: rowItems(entry),
+      kept: rowKept(entry),
       mean: entry.mean,
       delta: entry.delta,
       deltaPct: entry.deltaPct,
