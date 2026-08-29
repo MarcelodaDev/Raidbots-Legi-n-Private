@@ -450,6 +450,9 @@ h1, h2, h3{
   gap: 1rem;
   padding: clamp(1.1rem, 2.4vw, 2.2rem);
   overflow: hidden;
+  /* Las tarjetas van de 400 a 1300 px de ancho: la letra se mide contra
+     la suya, no contra la ventana, o en las pequeñas no cabría el texto. */
+  container-type: inline-size;
 }
 /* El mismo grano del fondo, aquí como fibra del papel */
 .face--back::after{
@@ -468,8 +471,8 @@ h1, h2, h3{
   margin: 0;
   font-family: var(--f-hand);
   font-weight: 500;
-  font-size: clamp(1.15rem, 2.1vw, 1.7rem);
-  line-height: 1.45;
+  font-size: clamp(.85rem, 5.2cqi, 1.85rem);
+  line-height: 1.42;
   color: var(--ink);
   max-width: 26ch;
   /* Nadie escribe recto en el reverso de una foto */
@@ -989,7 +992,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/01.jpg" alt="Maddy con una taza de té y Marcelo con gorra, cada uno fotografiando al otro desde un balcón" loading="lazy" decoding="async"><span class="slot">fotos/01.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Recuerdo que aún me daba mucha vergüenza decirte para hacer esta foto pero no me arrepiento de nada</p>
             <span class="stamp"><span>DIC · 24</span><span>01 / 16</span></span>
           </span>
         </span>
@@ -1005,7 +1008,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/02.jpg" alt="Maddy dando un beso en la mejilla a Marcelo, los dos tumbados juntos" loading="lazy" decoding="async"><span class="slot">fotos/02.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Me encanta esta foto recuerdo que comimos demasiado y fue el día de deme uno de todos</p>
             <span class="stamp"><span>FEB · 25</span><span>02 / 16</span></span>
           </span>
         </span>
@@ -1021,7 +1024,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/03.jpg" alt="Marcelo y Maddy juntos, ella apoyada en su hombro" loading="lazy" decoding="async"><span class="slot">fotos/03.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Salimos a probar el restaurante más feo de todo Cuenca</p>
             <span class="stamp"><span>MAR · 25</span><span>03 / 16</span></span>
           </span>
         </span>
@@ -1037,7 +1040,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/04.jpg" alt="Marcelo y Maddy de noche, con guirnaldas de luces detrás" loading="lazy" decoding="async"><span class="slot">fotos/04.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Corpus cansado por el viaje pero un café y moría por estar contigo</p>
             <span class="stamp"><span>JUN · 25</span><span>04 / 16</span></span>
           </span>
         </span>
@@ -1053,7 +1056,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/05.jpg" alt="Marcelo y Maddy delante de una pared de ladrillo" loading="lazy" decoding="async"><span class="slot">fotos/05.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Visitadores de cafeterías</p>
             <span class="stamp"><span>JUL · 25</span><span>05 / 16</span></span>
           </span>
         </span>
@@ -1069,7 +1072,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/06.jpg" alt="Marcelo dormido apoyado en Maddy, casi a oscuras" loading="lazy" decoding="async"><span class="slot">fotos/06.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Salida de Novios y no salía bien en ninguna foto jaja</p>
             <span class="stamp"><span>AGO · 25</span><span>06 / 16</span></span>
           </span>
         </span>
@@ -1085,7 +1088,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/07.jpg" alt="Maddy de espaldas frente al mar, en la orilla" loading="lazy" decoding="async"><span class="slot">fotos/07.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Mi foto favorita, te veías como una princesa hermosa como ninguna y fue nuestro primer viaje</p>
             <span class="stamp"><span>SEP · 25</span><span>07 / 16</span></span>
           </span>
         </span>
@@ -1101,7 +1104,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/08.jpg" alt="Marcelo y Maddy abrazados en un balcón, con la calle iluminada de noche" loading="lazy" decoding="async"><span class="slot">fotos/08.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">La foto más romántica que tenemos después de ir al Teatro León</p>
             <span class="stamp"><span>SEP · 25</span><span>08 / 16</span></span>
           </span>
         </span>
@@ -1117,7 +1120,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/09.jpg" alt="Marcelo y Maddy en una cafetería, con un gato naranja delante" loading="lazy" decoding="async"><span class="slot">fotos/09.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Fuimos a comer en el restaurante nuevo y fue delicioso (nunca más hicieron igual)</p>
             <span class="stamp"><span>OCT · 25</span><span>09 / 16</span></span>
           </span>
         </span>
@@ -1133,7 +1136,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/10.jpg" alt="Marcelo y Maddy reflejados en el espejo de una boda" loading="lazy" decoding="async"><span class="slot">fotos/10.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">La boda de tu amiga y aunque tuvimos problemas fue el punto donde empezamos a entendernos mejor</p>
             <span class="stamp"><span>NOV · 25</span><span>10 / 16</span></span>
           </span>
         </span>
@@ -1149,7 +1152,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/11.jpg" alt="Marcelo y Maddy muy juntos bajo un techo de madera" loading="lazy" decoding="async"><span class="slot">fotos/11.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Primer aniversario, un día increíble y aunque no te acuerdas porque te emborrachaste nos la pasamos genial</p>
             <span class="stamp"><span>NOV · 25</span><span>11 / 16</span></span>
           </span>
         </span>
@@ -1165,7 +1168,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/12.jpg" alt="Marcelo y Maddy reflejados en el espejo de un ascensor" loading="lazy" decoding="async"><span class="slot">fotos/12.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Febrero de Cuenca y el mejor airbnb que he visto</p>
             <span class="stamp"><span>FEB · 26</span><span>12 / 16</span></span>
           </span>
         </span>
@@ -1181,7 +1184,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/13.jpg" alt="Marcelo con una corona y Maddy con flores en el pelo" loading="lazy" decoding="async"><span class="slot">fotos/13.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Mi cumpleaños con tu sola presencia me vuelve a hacer sentir como un niño porque eres el mejor regalo que me pudo dar la vida</p>
             <span class="stamp"><span>MAY · 26</span><span>13 / 16</span></span>
           </span>
         </span>
@@ -1197,7 +1200,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/14.jpg" alt="Marcelo y Maddy en una cafetería junto a un ventanal" loading="lazy" decoding="async"><span class="slot">fotos/14.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Salida a Cuenca por un barrio nuevo y conectar con tus amigos</p>
             <span class="stamp"><span>JUN · 26</span><span>14 / 16</span></span>
           </span>
         </span>
@@ -1213,7 +1216,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/15.jpg" alt="Marcelo y Maddy de pie en un valle, con montañas al fondo" loading="lazy" decoding="async"><span class="slot">fotos/15.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Viaje al Quilotoa con la familia, venías dormida con la boca abierta jajajaja</p>
             <span class="stamp"><span>AGO · 26</span><span>15 / 16</span></span>
           </span>
         </span>
@@ -1229,7 +1232,7 @@ h1, h2, h3{
             <span class="frame"><img src="fotos/16.jpg" alt="Marcelo y Maddy tumbados en el sofá con su perro" loading="lazy" decoding="async"><span class="slot">fotos/16.jpg</span></span>
           </span>
           <span class="face face--back">
-            <p class="note"></p>
+            <p class="note">Foto con el Siri que pasa pegado a nosotros porque a los tres nos gusta dormir</p>
             <span class="stamp"><span>AGO · 26</span><span>16 / 16</span></span>
           </span>
         </span>
