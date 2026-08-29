@@ -128,6 +128,11 @@ const ROW_RE = /^\s*\{\s*(\d+),\s*"((?:[^"\\]|\\.)*)"\s*,([^{]*)\{([^}]*)\}/;
 function parseItems(text, opts) {
   const items = [];
   const consumables = { flasks: [], foods: [], potions: [], augmentations: [] };
+  // Todos los ids que existen en el DBC, sin filtrar por ilvl ni calidad. Es
+  // otra pregunta distinta de "¿sale en el buscador?": aquí solo queremos saber
+  // si SimulationCraft sabe construir el ítem. Si le pasamos uno que no conoce,
+  // cancela el lote entero.
+  const knownIds = [];
 
   let parsed = 0;
   for (const line of text.split('\n')) {
@@ -136,6 +141,7 @@ function parseItems(text, opts) {
     parsed++;
 
     const id = Number(match[1]);
+    if (Number.isFinite(id)) knownIds.push(id);
     const name = match[2].replace(/\\"/g, '"');
     const fields = match[3]
       .split(',')
@@ -201,7 +207,8 @@ function parseItems(text, opts) {
     });
   }
 
-  return { items, consumables, parsed };
+  knownIds.sort((a, b) => a - b);
+  return { items, consumables, parsed, knownIds: [...new Set(knownIds)] };
 }
 
 function tokenize(name) {
@@ -237,7 +244,7 @@ function main() {
 
   console.log(`Leyendo ${file}`);
   const text = fs.readFileSync(file, 'utf8');
-  const { items, consumables, parsed } = parseItems(text, {
+  const { items, consumables, parsed, knownIds } = parseItems(text, {
     minIlvl: args.minIlvl,
     minQuality: args.minQuality,
   });
@@ -252,6 +259,7 @@ function main() {
   const dataDir = path.join(ROOT, 'data');
   fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(path.join(dataDir, 'items.json'), JSON.stringify(items));
+  fs.writeFileSync(path.join(dataDir, 'known-items.json'), JSON.stringify(knownIds));
   fs.writeFileSync(
     path.join(dataDir, 'consumables.json'),
     JSON.stringify(consumables, null, 2),
@@ -259,6 +267,7 @@ function main() {
 
   console.log(`Filas leídas:      ${parsed}`);
   console.log(`Ítems equipables:  ${items.length} (ilvl >= ${args.minIlvl})`);
+  console.log(`Ids conocidos:     ${knownIds.length} (todo el DBC, sin filtrar)`);
   console.log(
     `Consumibles:       ${consumables.flasks.length} frascos, ` +
       `${consumables.foods.length} comidas, ${consumables.potions.length} pociones, ` +

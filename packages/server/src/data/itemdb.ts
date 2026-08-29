@@ -13,6 +13,13 @@ import { getPhase, itemIdsUpTo } from './patches.js';
 
 let items: ItemRecord[] = [];
 let byId = new Map<number, ItemRecord>();
+/**
+ * Todos los ids que SimulationCraft sabe construir, sin filtrar por ilvl ni
+ * calidad. No es lo mismo que `byId`: el buscador solo enseña equipo de Legion
+ * a partir de cierto ilvl, así que ahí no están ni los artefactos (ilvl base
+ * 750) ni el equipo viejo, y aun así simc los conoce perfectamente.
+ */
+let knownIds = new Set<number>();
 let consumables: ConsumableDb = {
   flasks: [],
   foods: [],
@@ -28,6 +35,13 @@ export function loadItemDb(): void {
   } else {
     items = [];
     byId = new Map();
+  }
+
+  const knownPath = paths.knownItemDb();
+  if (fs.existsSync(knownPath)) {
+    knownIds = new Set(JSON.parse(fs.readFileSync(knownPath, 'utf8')) as number[]);
+  } else {
+    knownIds = new Set();
   }
 
   const consumablePath = paths.consumableDb();
@@ -59,6 +73,18 @@ export function getItemQuality(id: number): number | undefined {
 
 export function getItemName(id: number): string | undefined {
   return byId.get(id)?.name;
+}
+
+/**
+ * ¿Existe este id en el DBC de SimulationCraft?
+ *
+ * Si el catálogo no se ha generado devolvemos `true`: sin datos no podemos
+ * acusar a nadie, y es mejor dejar que simc decida que bloquear una simulación
+ * legítima.
+ */
+export function simcKnowsItem(id: number): boolean {
+  if (knownIds.size === 0) return true;
+  return knownIds.has(id);
 }
 
 export function getConsumables(): ConsumableDb {

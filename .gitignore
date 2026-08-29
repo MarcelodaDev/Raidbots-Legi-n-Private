@@ -3,6 +3,7 @@ dist/
 .rbl/
 vendor/
 data/items.json
+data/known-items.json
 *.log
 .DS_Store
 

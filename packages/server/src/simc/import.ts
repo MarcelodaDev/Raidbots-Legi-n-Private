@@ -4,6 +4,7 @@ import {
   type GearItem,
   type GearSlot,
 } from '@rbl/shared';
+import { simcKnowsItem } from '../data/itemdb.js';
 
 const SLOT_SET = new Set<string>(GEAR_SLOTS);
 
@@ -318,6 +319,24 @@ export function parseSimcProfile(input: string): ParsedProfile {
     warnings.push(
       'El perfil no trae ítems de la bolsa. Puedes añadirlos a mano desde la ' +
         'ficha del personaje para usarlos en Top Gear.',
+    );
+  }
+
+  // Avisar cuanto antes de las piezas que simc no va a saber construir: si una
+  // llega a una simulación, cancela el lote entero y no queda claro por qué.
+  const unknown = [
+    ...Object.values(result.gear),
+    ...result.bag,
+  ].filter((item) => !simcKnowsItem(item.itemId));
+  if (unknown.length > 0) {
+    const shown = unknown
+      .slice(0, 5)
+      .map((item) => (item.name ? `${item.name} (id ${item.itemId})` : `id ${item.itemId}`))
+      .join(', ');
+    const rest = unknown.length > 5 ? ` y ${unknown.length - 5} más` : '';
+    warnings.push(
+      `Estas piezas no existen en la versión 7.3.5 del simulador y no se pueden simular: ${shown}${rest}. ` +
+        'Tu servidor las ha traído de un parche posterior. Se pueden guardar, pero quedan fuera de las comparaciones.',
     );
   }
 

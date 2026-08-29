@@ -36,6 +36,7 @@ import {
   getItem,
   getItemName,
   getItemQuality,
+  simcKnowsItem,
   slotCandidates,
 } from '../data/itemdb.js';
 import { ilevelCapOf } from '../data/patches.js';
@@ -975,11 +976,24 @@ function buildGems(
 /**
  * SimulationCraft aborta el lote entero si un ítem no es equipable por la
  * clase, así que lo comprobamos antes de generar nada.
+ *
+ * Lo mismo pasa con un id que su base de datos no conoce: en 7.3.5 no existen
+ * los ítems de expansiones posteriores, y algunos servidores privados los
+ * reparten igualmente. Si le llega uno, simc dice «unable to initialize item»
+ * y cancela todos los perfiles, no solo el que lo lleva.
  */
 function assertEquippable(character: Character, items: CandidateItem[]): void {
   for (const candidate of items) {
+    if (!simcKnowsItem(candidate.itemId)) {
+      throw new Error(
+        `El ítem ${candidate.name ? `"${candidate.name}" (id ${candidate.itemId})` : `id ${candidate.itemId}`} ` +
+          'no existe en la versión 7.3.5 que usa el simulador, así que no se puede simular. ' +
+          'Suele pasar con piezas que tu servidor ha traído de parches posteriores. ' +
+          'Quítalo de la selección: si se le pasa a SimulationCraft, cancela la simulación entera.',
+      );
+    }
     const record = getItem(candidate.itemId);
-    if (!record) continue; // no está en la base: que decida simc
+    if (!record) continue; // conocido por simc pero fuera del buscador: adelante
     if (!canClassEquip(record, character.class)) {
       throw new Error(
         `"${record.name}" (id ${record.id}) no lo puede equipar un ${character.class.replace(/_/g, ' ')}. ` +
