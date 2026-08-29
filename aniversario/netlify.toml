@@ -1,0 +1,35 @@
+# Configuración para publicar la página en Netlify.
+#
+# Si arrastras esta carpeta (o su .zip) a app.netlify.com/drop, no hay que
+# tocar nada. Si conectas el repositorio de GitHub, en Netlify pon:
+#   Base directory:    aniversario
+#   Publish directory: aniversario
+#   Build command:     (vacío, no hay que compilar nada)
+
+[build]
+  publish = "."
+
+# Fuera de buscadores. La página es privada aunque la URL sea pública.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive, noimageindex"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"
+
+# El HTML cambia cada vez que editas un recuerdo: que no se quede en caché.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Las fotos y la canción no cambian: que el navegador las guarde un año.
+[[headers]]
+  for = "/fotos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
