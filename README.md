@@ -623,6 +623,49 @@ salen marcadas «sin datos» y con un botón **Describir** que abre el formulari
 ya relleno con lo que sabemos (nombre, hueco, ilvl) y sustituye esa entrada, en
 vez de añadir una copia.
 
+### El catálogo compartido
+
+Describir una pieza es una sola vez, y para todo el mundo. Hay dos capas:
+
+- `data/custom-items.json` — va **en el repositorio**. Es lo que alguien escaneó
+  una vez para que no tenga que hacerlo nadie más.
+- `.rbl/custom-items.json` — de esta instalación. Manda sobre la anterior, para
+  poder corregir una entrada sin esperar a que se actualice el repositorio.
+
+Se aplica en `buildCharacterProfile()`, que es el único sitio por el que pasan
+todas las simulaciones: así también valen los personajes importados antes de que
+la pieza estuviera descrita.
+
+Y hay que aplicarlo ahí, no solo al objeto: **el equipo puesto va por el texto
+del perfil**, no por `gearItemToLine()`. Resolver la pieza sin reescribir su
+línea deja el `id=` en el perfil y la simulación se cancela igual
+(`rewriteCustomGearLines()`).
+
+### Escanear piezas que no tienes
+
+Las de las mazmorras propias de un servidor no las tiene nadie hasta que caen,
+así que no basta con leer lo que llevas puesto:
+
+    /rbl escanear 150000 160000
+
+Recorre un rango de ids preguntándole al servidor por cada uno. Lo que lo hace
+no trivial: `GetItemInfo(id)` de un ítem que el cliente no tiene en caché
+devuelve **nil** y, de paso, se lo pide al servidor; la respuesta llega más
+tarde. Recorrer el rango de una sentada devolvería casi todo vacío y sin error,
+así que el escaneo va en tandas de 25 ids cada 0,15 s y reintenta los que faltan.
+Se pregunta por el id suelto a propósito: con un enlace ya montado el cliente
+responde como si lo conociera y nunca dispararía la petición.
+
+`/rbl botin` hace lo mismo sin saberse ningún número cuando las mazmorras
+propias están en el Diario de Mazmorras.
+
+El volcado se convierte en catálogo compartido con:
+
+    node scripts/build-custom-items.mjs volcado.txt --merge
+
+`--merge` conserva los efectos que alguien haya traducido a mano: el escáner
+solo lee estadísticas y no debe borrarlos al volver a pasar.
+
 ### El addon lee las estadísticas por ti
 
 El cliente sí sabe lo que da cada pieza: lo está enseñando en el tooltip. El

@@ -43,6 +43,8 @@ export const paths = {
   itemDb: () => path.join(config.dataDir, 'items.json'),
   knownItemDb: () => path.join(config.dataDir, 'known-items.json'),
   consumableDb: () => path.join(config.dataDir, 'consumables.json'),
+  /** Catálogo compartido, versionado en el repositorio. */
+  sharedCustomItems: () => path.join(config.dataDir, 'custom-items.json'),
 };
 
 export function ensureDirs(): void {

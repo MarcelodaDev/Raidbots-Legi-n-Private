@@ -871,6 +871,10 @@ export interface CustomItemsStatus {
   items: number;
   /** Cuántas tienen el efecto ya traducido al formato de simc. */
   withEffect: number;
+  /** Las que vienen en el repositorio, iguales para todo el mundo. */
+  shipped: number;
+  /** Las añadidas en esta instalación, que mandan sobre las compartidas. */
+  local: number;
 }
 
 /**

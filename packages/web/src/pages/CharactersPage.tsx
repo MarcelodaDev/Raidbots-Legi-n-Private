@@ -3,6 +3,7 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import type { Character, LootStatus, ServerMeta } from '@rbl/shared';
 import { api } from '../api.js';
 import { LootTableCard } from '../components/LootTableCard.js';
+import { CustomCatalogueCard } from '../components/CustomCatalogueCard.js';
 
 const PLACEHOLDER = `# Pega aquí la salida del addon SimulationCraft, por ejemplo:
 warlock="Nyxa"
@@ -124,6 +125,8 @@ export function CharactersPage() {
           </button>
         </div>
       </div>
+
+      <CustomCatalogueCard />
 
       <LootTableCard status={loot ?? meta?.loot} onUpdate={setLoot} />
 

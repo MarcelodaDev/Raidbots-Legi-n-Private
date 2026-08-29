@@ -188,6 +188,11 @@ export const GLOSSARY = {
     text: 'Un addon que enseña en el tooltip de cada pieza si es mejor que la que llevas. Para acertar necesita saber cuánto vale para ti cada estadística, y eso es justo lo que acaba de calcular esta simulación: se pega la cadena y ya lo sabe.',
   },
 
+  customCatalogue: {
+    title: 'Catálogo de piezas propias del servidor',
+    text: 'El motor solo conoce el equipo de Legion. Las piezas que tu servidor ha traído de parches posteriores hay que describirlas una vez: qué estadísticas dan. Aquí se guardan para todos los personajes y todas las simulaciones, así que se hace una sola vez. El addon las lee del juego con /rbl escanear, incluso las que no tienes.',
+  },
+
   lootTable: {
     title: 'Tabla de botín',
     text: 'De dónde cae cada pieza. El simulador no lo sabe: su base de datos trae ítems y hechizos, pero no el botín de los jefes. El juego sí lo sabe, porque es lo que enseña el Diario de Mazmorras, así que el addon lo vuelca y se pega aquí. Con eso, el buscador de mejoras deja de decirte solo qué te sube el DPS y te dice también dónde conseguirlo.',

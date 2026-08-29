@@ -82,17 +82,16 @@ test('el rótulo no pisa un nombre que ya venga en la propia línea', () => {
   assert.equal(bag[0].name, 'Nombre de la línea');
 });
 
-test('avisa de las piezas que el simulador no conoce, con su nombre', built, () => {
-  const { warnings } = parse([
+test('el parser no decide si una pieza se puede simular', built, () => {
+  // El aviso lo da quien llama, después de mirar el catálogo. Darlo aquí
+  // señalaría piezas que van a simularse perfectamente porque alguien ya las
+  // describió.
+  const { warnings, bag } = parse([
     '# Placas de esgrima disimuladas (885, bolsas)',
     '#wrist=,id=158311,bonus_id=3535/3528/1537',
   ]);
-  const aviso = warnings.find((w) => w.includes('158311'));
-  assert.ok(aviso, 'debería avisar del id desconocido');
-  assert.ok(
-    aviso.includes('Placas de esgrima disimuladas'),
-    'el aviso debería nombrar la pieza, no solo su id',
-  );
+  assert.equal(bag[0].itemId, 158311);
+  assert.equal(warnings.some((w) => w.includes('158311')), false);
 });
 
 test('las estadísticas leídas del cliente llegan a su pieza', () => {

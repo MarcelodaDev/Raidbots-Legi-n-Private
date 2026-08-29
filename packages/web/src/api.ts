@@ -4,6 +4,8 @@ import type {
   PatchPhase,
   PatchSpecGear,
   ConsumableDb,
+  CustomItemEntry,
+  CustomItemsStatus,
   EnhancementDb,
   GearItem,
   ItemMedia,
@@ -78,6 +80,21 @@ export const api = {
 
   itemMedia: (ids: number[]) =>
     request<Record<number, ItemMedia>>(`/api/items/media?ids=${ids.join(',')}`),
+
+  customItems: () =>
+    request<{ status: CustomItemsStatus; items: CustomItemEntry[] }>('/api/custom-items'),
+  importCustomItems: (text: string) =>
+    request<{ status: CustomItemsStatus; added: number; skipped: number; withoutStats: number }>(
+      '/api/custom-items/import',
+      { method: 'POST', body: JSON.stringify({ text }) },
+    ),
+  saveCustomItem: (entry: CustomItemEntry) =>
+    request<CustomItemEntry>(`/api/custom-items/${entry.itemId}`, {
+      method: 'PUT',
+      body: JSON.stringify(entry),
+    }),
+  deleteCustomItem: (itemId: number) =>
+    request<CustomItemsStatus>(`/api/custom-items/${itemId}`, { method: 'DELETE' }),
 
   importLoot: (text: string) =>
     request<LootStatus>('/api/loot', { method: 'POST', body: JSON.stringify({ text }) }),

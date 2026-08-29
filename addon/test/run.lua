@@ -21,6 +21,7 @@ end
 loadAddonFile('addon/RaidbotsLegion/Data.lua')
 loadAddonFile('addon/RaidbotsLegion/Items.lua')
 loadAddonFile('addon/RaidbotsLegion/Core.lua')
+loadAddonFile('addon/RaidbotsLegion/Scan.lua')
 loadAddonFile('addon/RaidbotsLegion/Loot.lua')
 
 -- --- comprobaciones ---------------------------------------------------------
@@ -238,6 +239,45 @@ local noJournalErr
 RBL.ScanLoot(function(_, _, _, e) noJournalErr = e end)
 check('sin Diario disponible avisa en vez de devolver una tabla vacía', noJournalErr ~= nil)
 EJ_GetNumTiers = savedTiers
+
+-- --- escaneo por rango de ids ----------------------------------------------
+--
+-- Es lo que permite describir las piezas de las mazmorras propias del servidor
+-- sin tenerlas. El detalle que lo complica: `GetItemInfo` de un ítem que el
+-- cliente no tiene en caché devuelve nil y se lo pide al servidor, así que
+-- recorrer el rango de una sentada devolvería casi todo vacío y sin error.
+
+print()
+-- El del medio no está en caché: tiene que aparecer igual, tras reintentar.
+stub.setUncached({ 152140 })
+
+local scanLines, found, looked, scanErr
+RBL.ScanItemRange(152138, 152140, function(l, f, lk, e)
+  scanLines, found, looked, scanErr = l, f, lk, e
+end)
+local scanText = table.concat(scanLines or {}, '\n')
+
+check('no da error con un rango válido', scanErr == nil, tostring(scanErr))
+check('mira todos los ids del rango', looked == 3, 'mirados: ' .. tostring(looked))
+check(
+  'describe la pieza con todo lo que hace falta para simularla',
+  contains(scanText, '# custom:152138|960|4|INVTYPE_HEAD|4:6|1052int_2103sta_654crit_436haste|Runebound Collar')
+)
+check(
+  'un ítem que no estaba en caché acaba entrando',
+  contains(scanText, '# custom:152140|'),
+  'sin reintentos este se perdería en silencio'
+)
+check('el efecto del tooltip se copia literal', contains(scanText, '# effect:152138=Uso:'))
+check('lo que no es equipo se queda fuera', not contains(scanText, '118700'))
+
+-- Rangos que no valen: mejor decirlo que devolver una lista vacía.
+local badErr
+RBL.ScanItemRange(0, 10, function(_, _, _, e) badErr = e end)
+check('un rango inválido se avisa', badErr ~= nil)
+local hugeErr
+RBL.ScanItemRange(1, 999999, function(_, _, _, e) hugeErr = e end)
+check('un rango enorme se rechaza en vez de machacar al servidor', hugeErr ~= nil)
 
 print(string.format('\n%d comprobaciones, %d fallos', checks, failures))
 os.exit(failures == 0 and 0 or 1)

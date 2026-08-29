@@ -6,7 +6,6 @@ import {
   type GearItem,
   type GearSlot,
 } from '@rbl/shared';
-import { simcKnowsItem } from '../data/itemdb.js';
 
 const SLOT_SET = new Set<string>(GEAR_SLOTS);
 
@@ -444,25 +443,9 @@ export function parseSimcProfile(input: string): ParsedProfile {
   }
   if (racials.length > 0) result.racials = racials;
 
-  // Avisar cuanto antes de las piezas que simc no va a saber construir: si una
-  // llega a una simulación, cancela el lote entero y no queda claro por qué.
-  const unknown = [
-    ...Object.values(result.gear),
-    ...result.bag,
-  ].filter((item) => !simcKnowsItem(item.itemId));
-  if (unknown.length > 0) {
-    const shown = unknown
-      .slice(0, 5)
-      .map((item) => (item.name ? `${item.name} (id ${item.itemId})` : `id ${item.itemId}`))
-      .join(', ');
-    const rest = unknown.length > 5 ? ` y ${unknown.length - 5} más` : '';
-    warnings.push(
-      `El simulador no conoce estas piezas: ${shown}${rest}. ` +
-        'Tu servidor las ha traído de un parche posterior a 7.3.5. Para poder compararlas, ' +
-        'descríbelas a mano desde la ficha del personaje: con copiar las estadísticas del ' +
-        'tooltip del juego basta.',
-    );
-  }
+  // El aviso de las piezas que simc no conoce no se da aquí: primero hay que
+  // ver cuáles resuelve el catálogo, y eso lo hace quien llama. Avisar antes
+  // señalaría piezas que se van a simular perfectamente.
 
   result.profile = keptLines.join('\n');
   return result;

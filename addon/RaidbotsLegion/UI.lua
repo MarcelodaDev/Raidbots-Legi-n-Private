@@ -110,6 +110,35 @@ function RBL.Show()
   )
 end
 
+--- Escanea un rango de ids y describe cada pieza que encuentre.
+--
+-- Es para las mazmorras propias del servidor cuando no están en el Diario: sin
+-- Diario no hay forma de saber qué ids usan, así que se barre un rango.
+function RBL.ShowScan(from, to)
+  print('|cff33bbffRaidbots Legion|r escaneando ids ' .. from .. '-' .. to .. '...')
+  print('  Puede tardar: cada ítem que el cliente no tenga en caché hay que pedírselo al servidor.')
+  RBL.ScanItemRange(from, to, function(lines, found, looked, err)
+    if err then
+      print('|cffff5555Raidbots Legion:|r ' .. err)
+      return
+    end
+    local header = RBL.ScanHeader(found, looked)
+    for _, line in ipairs(lines) do
+      header[#header + 1] = line
+    end
+    print('|cff33bbffRaidbots Legion|r listo: ' .. found .. ' piezas de ' .. looked .. ' ids.')
+    showText(
+      'Raidbots Legion · ítems para el catálogo',
+      found .. ' piezas encontradas en ' .. looked .. ' ids. Ctrl+C y mándalo para el catálogo.',
+      table.concat(header, '\n')
+    )
+  end, function(done, total, found)
+    if done % 2000 == 0 then
+      print('|cff33bbffRaidbots Legion|r ' .. done .. '/' .. total .. ' ids, ' .. found .. ' piezas...')
+    end
+  end)
+end
+
 --- Escanea el botín de Legion y lo enseña para copiar.
 --
 -- Tarda: son unos cien jefes y hay que esperar a que llegue el botín de cada
@@ -154,12 +183,23 @@ SlashCmdList['RAIDBOTSLEGION'] = function(msg)
   if arg == 'help' or arg == 'ayuda' then
     print('|cff33bbffRaidbots Legion|r')
     print('  /rbl         genera el perfil y lo abre para copiar')
-    print('  /rbl botin   vuelca qué jefe suelta cada pieza (tarda un minuto)')
+    print('  /rbl botin   vuelca el botín del Diario y describe cada pieza')
+    print('  /rbl escanear <desde> <hasta>   describe los ítems de un rango de ids,')
+    print('               para las mazmorras propias que no salen en el Diario')
     print('  Abre el banco antes si quieres que incluya lo que guardas ahí.')
     return
   end
   if arg == 'botin' or arg == 'loot' or arg == 'botín' then
     RBL.ShowLoot()
+    return
+  end
+  local from, to = string.match(arg, '^escanear%s+(%d+)%s+(%d+)$')
+  if from then
+    RBL.ShowScan(tonumber(from), tonumber(to))
+    return
+  end
+  if string.match(arg, '^escanear') then
+    print('|cffff5555Raidbots Legion:|r hacen falta los dos extremos. Ejemplo: /rbl escanear 150000 160000')
     return
   end
   RBL.Show()

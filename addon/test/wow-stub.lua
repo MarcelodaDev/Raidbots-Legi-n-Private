@@ -117,15 +117,49 @@ local function itemIdOf(link)
   return tonumber(string.match(link or '', 'item:(%d+)'))
 end
 
+-- El cliente no tiene todos los ítems en caché. Al preguntar por uno que no
+-- tiene, devuelve nil y se lo pide al servidor; la respuesta llega más tarde.
+-- Se modela aquí porque es justo lo que hace que un escaneo de ids no pueda ser
+-- un bucle: de una sentada saldría casi todo vacío, y sin ningún error.
+-- Por defecto todo está en caché: lo que llevas puesto o en las bolsas el
+-- cliente ya lo conoce. Los ids que se marquen aquí se comportan como los que
+-- hay que pedirle al servidor.
+M.uncached = {}
+M.cacheDelay = 2
+
+local pendingRequests = {}
+
 function GetItemInfo(linkOrId)
   local id = tonumber(linkOrId) or itemIdOf(linkOrId)
   local info = ITEM_INFO[id]
   if not info then
     return nil
   end
+
+  -- Lo que viene de un enlace ya está resuelto; un id suelto que no esté en
+  -- caché devuelve nil las primeras veces, mientras llega la respuesta.
+  if not itemIdOf(linkOrId) and M.uncached[id] then
+    pendingRequests[id] = (pendingRequests[id] or 0) + 1
+    if pendingRequests[id] <= M.cacheDelay then
+      return nil
+    end
+    M.uncached[id] = nil
+  end
+
   local name, quality, ilevel, equipSlot = info[1], info[2], info[3], info[4]
-  -- name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot
-  return name, 'item:' .. id, quality, ilevel, 110, '', '', 1, equipSlot
+  -- name, link, quality, iLevel, reqLevel, type, subType, maxStack, equipSlot,
+  -- texture, sellPrice, classID, subclassID
+  return name, 'item:' .. id, quality, ilevel, 110, '', '', 1, equipSlot,
+    nil, 0, info[5] or 4, info[6] or 6
+end
+
+--- Marca unos ids como no cacheados, para probar el escaneo por rango.
+function M.setUncached(ids)
+  M.uncached = {}
+  pendingRequests = {}
+  for _, id in ipairs(ids or {}) do
+    M.uncached[id] = true
+  end
 end
 
 function GetDetailedItemLevelInfo(link)

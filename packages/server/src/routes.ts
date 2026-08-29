@@ -37,6 +37,7 @@ import {
   harvestFromGear,
   listCustomItems,
   loadCustomItems,
+  parseScanDump,
   removeCustomItem,
   upsertCustomItem,
   validateEntry,
@@ -165,6 +166,45 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     items: listCustomItems(),
   }));
 
+  /** Importa el volcado del escáner del addon. */
+  app.post<{ Body: { text: string } }>('/api/custom-items/import', async (req, reply) => {
+    const text = req.body?.text;
+    if (typeof text !== 'string' || !text.includes('custom:')) {
+      return reply.code(400).send({
+        error:
+          'Eso no parece el volcado del escáner. En el juego: /rbl escanear <desde> <hasta>, ' +
+          'o /rbl botin si tus mazmorras salen en el Diario.',
+      });
+    }
+
+    const { entries, withoutStats } = parseScanDump(text);
+    if (entries.length === 0) {
+      return reply.code(400).send({
+        error:
+          'El volcado no traía ninguna pieza con estadísticas.' +
+          (withoutStats.length
+            ? ` Se encontraron ${withoutStats.length} sin estadísticas, que no se pueden simular.`
+            : ''),
+      });
+    }
+
+    let added = 0;
+    for (const entry of entries) {
+      const errors = validateEntry(entry);
+      // Una entrada rara no debe tumbar el lote entero: se salta y se cuenta.
+      if (errors.length > 0) continue;
+      upsertCustomItem(entry);
+      added++;
+    }
+
+    return {
+      status: customItemsStatus(),
+      added,
+      skipped: entries.length - added,
+      withoutStats: withoutStats.length,
+    };
+  });
+
   app.put<{ Params: { id: string }; Body: Partial<CustomItemEntry> }>(
     '/api/custom-items/:id',
     async (req, reply) => {
@@ -237,10 +277,13 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
         );
       }
       if (pending.length > 0) {
+        const unique = pending;
         warnings.push(
-          `Estas siguen sin poder simularse porque el addon no leyó sus estadísticas: ` +
-            `${pending.slice(0, 5).join(', ')}${pending.length > 5 ? ` y ${pending.length - 5} más` : ''}. ` +
-            'Descríbelas a mano desde la ficha del personaje.',
+          'El simulador no conoce estas piezas y no están en el catálogo, así que quedan ' +
+            `fuera de las comparaciones: ${unique.slice(0, 5).join(', ')}` +
+            `${unique.length > 5 ? ` y ${unique.length - 5} más` : ''}. ` +
+            'Descríbelas a mano desde la ficha del personaje, o escanéalas en el juego con ' +
+            '/rbl escanear para que entren en el catálogo.',
         );
       }
 

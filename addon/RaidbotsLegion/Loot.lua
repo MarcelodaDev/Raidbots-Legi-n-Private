@@ -151,6 +151,8 @@ function RBL.ScanLoot(onDone, onProgress)
 
   local lines = {}
   local seen = {}
+  local seenItem = {}
+  local itemIds = {}
   local items = 0
   local current = 0
   local retries = 0
@@ -172,6 +174,13 @@ function RBL.ScanLoot(onDone, onProgress)
           items = items + 1
           lines[#lines + 1] = '# drop:' .. id .. '=' .. encounter.instance .. ' / ' .. encounter.boss
         end
+        -- Además de dónde cae, hace falta qué es: para las mazmorras propias
+        -- del servidor el motor no tiene ni idea de la pieza, y esto es lo que
+        -- permite simularla.
+        if not seenItem[id] then
+          seenItem[id] = true
+          itemIds[#itemIds + 1] = id
+        end
       end
     end
 
@@ -181,6 +190,9 @@ function RBL.ScanLoot(onDone, onProgress)
     if current > #encounters then
       if ticker then
         ticker:Cancel()
+      end
+      for _, line in ipairs(RBL.DescribeLootItems and RBL.DescribeLootItems(itemIds) or {}) do
+        lines[#lines + 1] = line
       end
       onDone(lines, #encounters, items)
       return
