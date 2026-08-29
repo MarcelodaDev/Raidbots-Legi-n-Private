@@ -267,14 +267,21 @@ C_ArtifactUI = {
   GetNumRelicSlots = function()
     return 3
   end,
+  -- Forma observada en el cliente real (7.3.5), imprimiendo todos los valores:
+  --   nombre (texto), icono (número), tipo (texto), enlace
+  -- El enlace no es el primer valor ni está en una posición garantizada, así
+  -- que el addon lo busca entre todos en vez de fiarse de un índice.
   GetRelicInfo = function(index)
-    -- Tres reliquias distintas, que es de donde salen los `gem_id` del arma.
-    local links = {
-      'item:141271::::::::110:64:0:0:0',
-      'item:141272::::::::110:64:0:0:0',
-      'item:141273::::::::110:64:0:0:0',
+    local relics = {
+      { 'Fogata en miniatura', 135805, 'Fire', 'item:141271::::::::110:64:0:0:0' },
+      { 'Tempestad de los Cielos', 1350418, 'Wind', 'item:141272::::::::110:64:0:0:0' },
+      { 'Llave de las Cámaras', 348554, 'Iron', 'item:141273::::::::110:64:0:0:0' },
     }
-    return nil, nil, nil, links[index or 1]
+    local r = relics[index or 1]
+    if not r then
+      return nil
+    end
+    return r[1], r[2], r[3], r[4]
   end,
   GetPowersAffectedByRelicItemLink = function()
     return 786

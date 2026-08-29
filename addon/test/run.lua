@@ -98,8 +98,14 @@ check(
 -- encuentra nada, porque se para en el primer nil: hay que usar select. Este
 -- fallo se coló en el propio arreglo de las reliquias y lo cazó esta prueba.
 check(
-  'artefacto: el enlace de la reliquia se encuentra aunque venga tras varios nil',
+  'artefacto: el enlace de la reliquia se encuentra entre nombre, icono y tipo',
   contains(profile, 'gem_id=141271/141272/141273')
+)
+
+-- Un nombre de reliquia nunca debe colarse como si fuera un id.
+check(
+  'artefacto: el nombre de la reliquia no se confunde con un enlace',
+  not contains(profile, 'gem_id=Fogata')
 )
 
 -- Rangos del artefacto: solo los comprados (currentRank - bonusRanks)
