@@ -41,24 +41,28 @@ const PHASES = [
     dir: 'PreRaids',
     label: 'Pre-banda',
     description: 'Mazmorras y mundo, antes de abrir la primera banda.',
+    legendaries: 1,
   },
   {
     id: 't19',
     dir: 'Tier19',
-    label: 'T19 · Sueño Esmeralda → Palacio Nocturno',
+    label: 'T19 · Pesadilla Esmeralda → Bastión Nocturno',
     description: 'Primer tier de banda de Legion.',
+    legendaries: 2,
   },
   {
     id: 't20',
     dir: 'Tier20',
     label: 'T20 · Tumba de Sargeras',
     description: 'Segundo tier de banda.',
+    legendaries: 3,
   },
   {
     id: 't21',
     dir: 'Tier21',
     label: 'T21 · Antorus, el Trono Ardiente',
     description: 'Tier final de Legion, con Crisol de Luznether.',
+    legendaries: 3,
   },
 ];
 
@@ -273,6 +277,7 @@ function main() {
 
       if (legendaries > maxLegendaries) maxLegendaries = legendaries;
 
+
       const key = `${meta.class}_${meta.spec}`;
       const variant = name.replace(/\.simc$/, '');
       const existing = specs[key];
@@ -304,7 +309,14 @@ function main() {
       ilevelCap,
       maxItemId,
       artifactIlevel,
-      maxLegendaries,
+      /*
+       * El tope de legendarias es una regla del juego, no algo que se pueda
+       * deducir de los perfiles: los de T19 no llevan ninguna y salía 0, cuando
+       * en Bastión Nocturno ya se llevaban dos. Se usa el valor histórico y el
+       * deducido queda como suelo, por si un perfil trae más de las esperadas.
+       * En un servidor privado esto cambia a menudo: es editable en la app.
+       */
+      maxLegendaries: Math.max(maxLegendaries, phase.legendaries ?? 0),
       profilesUseCrucible,
       skipped,
       profileCount: loaded,
@@ -317,7 +329,8 @@ function main() {
       `${phase.id.padEnd(8)} ${String(loaded).padStart(3)} perfiles · ` +
         `${String(Object.keys(specs).length).padStart(2)} specs · ` +
         `ilvl equipo ${ilevelCap} · id máx ${maxItemId} · ` +
-        `${maxLegendaries} legendarias` +
+        // El tope final, no el deducido: si no, el mensaje contradice al JSON.
+        `${Math.max(maxLegendaries, phase.legendaries ?? 0)} legendarias` +
         (skipped.length ? ` · ${skipped.length} sin cargar` : ''),
     );
   }

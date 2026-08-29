@@ -531,9 +531,29 @@ function buildTopGear(
 
   walk(0, []);
 
+  // Quedarse sin ninguna combinación no es un resultado: es una configuración
+  // imposible. Antes se dejaba correr y el jugador acababa en una pantalla de
+  // resultados vacía, sin saber qué había pasado.
   if (!specs.length) {
-    warnings.push(
-      'Ninguna combinación cumple las restricciones (revisa el límite de legendarias).',
+    const legendaryCandidates = axes.some((axis) =>
+      axis.choices.some((choice) =>
+        choice.some((placement) => placement.option.quality === 5),
+      ),
+    );
+
+    if (legendaryCandidates && cfg.maxLegendaries > 0) {
+      throw new Error(
+        `Ninguna combinación cabe dentro del límite de ${cfg.maxLegendaries} ` +
+          `legendarias: ya llevas ${equippedLegendaries.outside} puestas en ` +
+          'huecos que no se tocan, así que añadir otra se pasaría. Sube el ' +
+          'límite si tu servidor permite más, o quita las piezas legendarias ' +
+          'de la selección.',
+      );
+    }
+
+    throw new Error(
+      'Ninguna combinación de las piezas elegidas cambia nada respecto a lo que ' +
+        'ya llevas puesto. Añade piezas distintas de las equipadas.',
     );
   }
 

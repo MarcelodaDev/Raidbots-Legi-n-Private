@@ -285,6 +285,12 @@ Hay dos matices que conviene tener claros:
 Las etiquetas de las fases se editan en `scripts/build-patch-db.mjs` sin tocar
 nada más.
 
+**El tope de legendarias no se deduce, se declara.** Se intentó sacarlo contando
+las legendarias de los perfiles BiS de simc, pero los de T19 no llevan ninguna y
+salía 0 — cuando en Bastión Nocturno ya se llevaban dos. Ahora cada fase declara
+el valor histórico (1 · 2 · 3 · 3) y el deducido queda solo como suelo. En un
+servidor privado esto cambia a menudo, así que es editable desde la app.
+
 ## Qué me mejora
 
 Recorre las piezas de tu fase que tu clase puede llevar y te dice cuáles te
