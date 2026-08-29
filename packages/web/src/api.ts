@@ -78,6 +78,10 @@ export const api = {
   itemMedia: (ids: number[]) =>
     request<Record<number, ItemMedia>>(`/api/items/media?ids=${ids.join(',')}`),
 
+  /** De estos ids, cuáles no puede construir el simulador. */
+  unknownItems: (ids: number[]) =>
+    request<{ unknown: number[] }>(`/api/items/unknown?ids=${ids.join(',')}`),
+
   items: (params: Record<string, string | number | undefined>) => {
     const search = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {

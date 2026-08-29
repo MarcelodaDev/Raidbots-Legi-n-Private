@@ -17,18 +17,25 @@ import { Help } from './Help.js';
  * tooltip del juego.
  */
 export function CustomItemEditor({
+  initial,
   onAdd,
   onCancel,
 }: {
+  /**
+   * Pieza de partida, cuando se describe una que ya está en el inventario
+   * porque vino del addon y el simulador no la conoce. Así el jugador no tiene
+   * que reescribir el nombre ni el hueco, que ya sabemos.
+   */
+  initial?: GearItem;
   onAdd: (item: GearItem) => void;
   onCancel: () => void;
 }) {
-  const [name, setName] = useState('');
-  const [slot, setSlot] = useState<GearSlot>('trinket1');
-  const [ilevel, setIlevel] = useState('');
-  const [stats, setStats] = useState('');
-  const [use, setUse] = useState('');
-  const [equip, setEquip] = useState('');
+  const [name, setName] = useState(initial?.name ?? '');
+  const [slot, setSlot] = useState<GearSlot>(initial?.slot ?? 'trinket1');
+  const [ilevel, setIlevel] = useState(initial?.ilevel ? String(initial.ilevel) : '');
+  const [stats, setStats] = useState(initial?.custom?.stats ?? '');
+  const [use, setUse] = useState(initial?.custom?.use ?? '');
+  const [equip, setEquip] = useState(initial?.custom?.equip ?? '');
   const [errors, setErrors] = useState<string[]>([]);
 
   const submit = () => {
@@ -43,14 +50,13 @@ export function CustomItemEditor({
     if (found.length > 0) return;
 
     onAdd({
+      // Se conserva todo lo que ya trae la pieza (id original, encantamiento,
+      // gemas) y solo se pisa lo que describe este formulario. El id sigue
+      // sirviendo para reconocerla; lo que no se usa es para buscarla en la
+      // base del simulador, que es donde no está.
+      ...(initial ?? { itemId: 0, bonusIds: [], gemIds: [], relicIds: [] }),
       slot,
-      // Sin id: la pieza no está en la base del simulador. El 0 solo sirve para
-      // distinguirla de las que sí lo están.
-      itemId: 0,
       name: name.trim(),
-      bonusIds: [],
-      gemIds: [],
-      relicIds: [],
       ilevel: Number.parseInt(ilevel, 10) || undefined,
       custom,
     });
@@ -59,7 +65,7 @@ export function CustomItemEditor({
   return (
     <div className="card" style={{ background: 'var(--surface-2)' }}>
       <h3 style={{ marginTop: 0 }}>
-        Describir una pieza a mano
+        {initial ? `Describir «${initial.name ?? `Ítem ${initial.itemId}`}»` : 'Describir una pieza a mano'}
         <Help term="customItem" />
       </h3>
       <p className="hint">

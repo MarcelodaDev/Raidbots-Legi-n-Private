@@ -25,9 +25,10 @@
     "test:addon": "lua5.4 addon/test/run.lua --check",
     "test:pawn": "node --test --experimental-strip-types scripts/test-pawn.mjs",
     "test:upgrades": "node --test --experimental-strip-types scripts/test-upgrades.mjs",
-    "test": "npm run test:pawn && npm run test:upgrades && npm run test:itemdb && npm run test:custom && npm run test:addon",
+    "test": "npm run test:pawn && npm run test:upgrades && npm run test:itemdb && npm run test:custom && npm run test:import && npm run test:addon",
     "test:itemdb": "tsx --test scripts/test-itemdb.mjs",
-    "test:custom": "tsx --test scripts/test-custom-items.mjs"
+    "test:custom": "tsx --test scripts/test-custom-items.mjs",
+    "test:import": "tsx --test scripts/test-import.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

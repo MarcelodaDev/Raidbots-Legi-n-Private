@@ -18,6 +18,7 @@ import {
   itemDbStatus,
   loadItemDb,
   searchItems,
+  simcKnowsItem,
   slotsForItem,
 } from './data/itemdb.js';
 import {
@@ -258,6 +259,20 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       patchOnly: String(q.patchOnly) === 'true',
       includeLaterTiers: String(q.includeLaterTiers) === 'true',
     });
+  });
+
+  /**
+   * De una lista de ids, cuáles no puede construir SimulationCraft.
+   *
+   * La interfaz lo usa para ofrecer describir esas piezas a mano en vez de
+   * dejarlas ahí como si fueran a simularse.
+   */
+  app.get<{ Querystring: { ids?: string } }>('/api/items/unknown', async (req) => {
+    const ids = (req.query.ids ?? '')
+      .split(',')
+      .map((value) => Number.parseInt(value, 10))
+      .filter((value) => Number.isFinite(value) && value > 0);
+    return { unknown: [...new Set(ids)].filter((id) => !simcKnowsItem(id)) };
   });
 
   app.get<{ Params: { id: string } }>('/api/items/:id/slots', async (req) => ({

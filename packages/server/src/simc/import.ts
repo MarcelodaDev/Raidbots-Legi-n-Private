@@ -238,6 +238,13 @@ export function parseSimcProfile(input: string): ParsedProfile {
   const keptLines: string[] = [];
   const rawLines = input.split(/\r?\n/);
 
+  // El addon escribe cada pieza de la bolsa en dos líneas: primero un rótulo
+  // «# Nombre (ilvl, origen)» y debajo la línea de equipo comentada, que no
+  // lleva nombre. Sin el rótulo las piezas se quedan sin nombre y sin ilvl, y
+  // las que el buscador no conoce salen como «Ítem 158311».
+  const BAG_LABEL = /^(.+?)\s+\((\d+),\s*([^)]+)\)$/;
+  let pendingLabel: { name: string; ilevel: number } | null = null;
+
   for (const rawLine of rawLines) {
     const trimmed = rawLine.trim();
     if (!trimmed) continue;
@@ -246,9 +253,23 @@ export function parseSimcProfile(input: string): ParsedProfile {
     if (trimmed.startsWith('#')) {
       const uncommented = trimmed.replace(/^#+\s*/, '');
       const bagItem = parseGearLine(uncommented);
-      if (bagItem) result.bag.push(bagItem);
+      if (bagItem) {
+        if (pendingLabel) {
+          bagItem.name ??= pendingLabel.name;
+          bagItem.ilevel ??= pendingLabel.ilevel;
+        }
+        result.bag.push(bagItem);
+        pendingLabel = null;
+        continue;
+      }
+
+      const label = BAG_LABEL.exec(uncommented);
+      pendingLabel = label
+        ? { name: label[1].trim(), ilevel: Number.parseInt(label[2], 10) }
+        : null;
       continue;
     }
+    pendingLabel = null;
 
     const kv = splitOption(trimmed);
     if (!kv) {

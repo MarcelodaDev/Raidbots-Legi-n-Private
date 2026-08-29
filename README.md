@@ -586,6 +586,11 @@ perfil que se ejecuta como proceso, así que se validan con lista blanca
 (`validateCustomItem()` en `packages/shared`): sin comas, sin saltos de línea y
 sin `=`, que abrirían una opción o una orden nuevas.
 
+En la ficha del personaje, las piezas del inventario que el motor no conoce
+salen marcadas «sin datos» y con un botón **Describir** que abre el formulario
+ya relleno con lo que sabemos (nombre, hueco, ilvl) y sustituye esa entrada, en
+vez de añadir una copia.
+
 ## Servidores privados
 
 La app simula con los datos oficiales de 7.3.5. Si tu servidor tiene valores

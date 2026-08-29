@@ -23,11 +23,27 @@ export function CharacterPage() {
   const [savingBag, setSavingBag] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
+  /** Índice de la pieza del inventario que se está describiendo, si es una ya guardada. */
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  /** Ids del inventario que el simulador no sabe construir. */
+  const [unknownIds, setUnknownIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (!id) return;
     api.character(id).then(setCharacter).catch((err: Error) => setError(err.message));
   }, [id]);
+
+  // Qué piezas del inventario no puede construir el motor. Se pregunta al
+  // servidor porque el catálogo completo de la DBC son 58.000 ids y no tiene
+  // sentido bajárselo al navegador para esto.
+  const bagIds = character?.bag.map((item) => item.itemId).join(',') ?? '';
+  useEffect(() => {
+    if (!bagIds) return setUnknownIds(new Set());
+    api
+      .unknownItems(bagIds.split(',').map(Number))
+      .then((res) => setUnknownIds(new Set(res.unknown)))
+      .catch(() => setUnknownIds(new Set()));
+  }, [bagIds]);
 
   if (error) return <div className="notice error">{error}</div>;
   if (!character) return <div className="empty">Cargando…</div>;
@@ -168,7 +184,7 @@ export function CharacterPage() {
                 <tr key={`${item.itemId}-${index}`}>
                   <td>
                     <ItemLabel id={item.itemId} name={item.name} size="sm" />
-                    {item.custom && (
+                    {item.custom ? (
                       <span
                         className="badge warn"
                         style={{ marginLeft: 8 }}
@@ -176,11 +192,34 @@ export function CharacterPage() {
                       >
                         a mano
                       </span>
+                    ) : (
+                      unknownIds.has(item.itemId) && (
+                        <span
+                          className="badge error"
+                          style={{ marginLeft: 8 }}
+                          title="Es de un parche posterior a 7.3.5, así que el simulador no tiene sus datos."
+                        >
+                          sin datos
+                        </span>
+                      )
                     )}
                   </td>
                   <td style={{ color: 'var(--ink-2)' }}>{SLOT_LABELS[item.slot]}</td>
                   <td className="num">{item.ilevel ?? '—'}</td>
                   <td className="num">
+                    {(item.custom || unknownIds.has(item.itemId)) && (
+                      <button
+                        className="small secondary"
+                        style={{ marginRight: 6 }}
+                        onClick={() => {
+                          setEditingIndex(index);
+                          setShowCustom(true);
+                        }}
+                        disabled={savingBag}
+                      >
+                        Describir
+                      </button>
+                    )}
                     <button
                       className="small danger"
                       onClick={() => removeFromBag(index)}
@@ -212,18 +251,33 @@ export function CharacterPage() {
           </>
         ) : showCustom ? (
           <CustomItemEditor
+            initial={editingIndex === null ? undefined : character.bag[editingIndex]}
             onAdd={(item) => {
-              void saveBag([...character.bag, item]);
+              void saveBag(
+                editingIndex === null
+                  ? [...character.bag, item]
+                  : character.bag.map((old, i) => (i === editingIndex ? item : old)),
+              );
               setShowCustom(false);
+              setEditingIndex(null);
             }}
-            onCancel={() => setShowCustom(false)}
+            onCancel={() => {
+              setShowCustom(false);
+              setEditingIndex(null);
+            }}
           />
         ) : (
           <div className="row">
             <button className="secondary" onClick={() => setShowPicker(true)}>
               Buscar una pieza y guardarla
             </button>
-            <button className="secondary" onClick={() => setShowCustom(true)}>
+            <button
+              className="secondary"
+              onClick={() => {
+                setEditingIndex(null);
+                setShowCustom(true);
+              }}
+            >
               Describir una a mano
             </button>
           </div>
