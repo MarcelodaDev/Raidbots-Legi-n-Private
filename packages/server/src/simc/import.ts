@@ -193,6 +193,35 @@ export function gearItemToLine(item: GearItem, slot?: GearSlot): string {
   return parts.join(',');
 }
 
+/**
+ * Reescribe en el perfil las líneas de las piezas descritas a mano.
+ *
+ * El perfil se guarda tal y como lo escribió el addon, con `id=`. Para una
+ * pieza que el motor no conoce eso no es un detalle: al leerla cancela la
+ * simulación entera. Y como el equipo puesto va por el texto del perfil y no
+ * por `gearItemToLine`, no basta con haber resuelto el objeto: hay que cambiar
+ * la línea.
+ */
+export function rewriteCustomGearLines(
+  profile: string,
+  gear: Partial<Record<GearSlot, GearItem>>,
+): string {
+  const custom = new Map<string, GearItem>();
+  for (const item of Object.values(gear)) {
+    if (item?.custom) custom.set(item.slot, item);
+  }
+  if (custom.size === 0) return profile;
+
+  return profile
+    .split(/\r?\n/)
+    .map((line) => {
+      const kv = splitOption(line.trim());
+      const item = kv && custom.get(kv[0].toLowerCase());
+      return item ? gearItemToLine(item) : line;
+    })
+    .join('\n');
+}
+
 const CLASS_KEYS = new Set([
   'deathknight',
   'death_knight',

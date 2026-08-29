@@ -865,10 +865,39 @@ export interface LootStatus {
   importedAt?: string;
 }
 
+/** Estado del catálogo de piezas que el motor no conoce. */
+export interface CustomItemsStatus {
+  available: boolean;
+  items: number;
+  /** Cuántas tienen el efecto ya traducido al formato de simc. */
+  withEffect: number;
+}
+
+/**
+ * Una pieza del catálogo: lo que el motor no sabe de ella y el cliente sí.
+ *
+ * Vive fuera de los personajes a propósito. Describirla es una sola vez y sirve
+ * para todos: las estadísticas de un ítem no cambian según quién lo lleve.
+ */
+export interface CustomItemEntry {
+  itemId: number;
+  name: string;
+  slot?: GearSlot;
+  ilevel?: number;
+  stats: string;
+  /** Texto literal del efecto, tal cual lo enseña el juego. Sin traducir. */
+  effectText?: string;
+  use?: string;
+  equip?: string;
+  addedAt: string;
+  seenOn?: string;
+}
+
 export interface ServerMeta {
   simc: SimcStatus;
   itemDb: { available: boolean; items: number; consumables: number };
   loot: LootStatus;
+  customItems: CustomItemsStatus;
   patches: PatchPhase[];
   fightStyles: readonly string[];
   defaults: SimOptions;

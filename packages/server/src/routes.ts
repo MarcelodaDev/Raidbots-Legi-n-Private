@@ -31,6 +31,17 @@ import {
 } from './data/patches.js';
 import { getEnhancements, loadEnhancements } from './data/enhancements.js';
 import { clearLoot, loadLoot, lootStatus, parseLootDump, saveLoot } from './data/loot.js';
+import {
+  applyCatalogue,
+  customItemsStatus,
+  harvestFromGear,
+  listCustomItems,
+  loadCustomItems,
+  removeCustomItem,
+  upsertCustomItem,
+  validateEntry,
+  type CustomItemEntry,
+} from './data/customitems.js';
 import { clearMedia, getItemMedia, loadMedia, mediaStatus } from './data/media.js';
 import { planSim, queue } from './queue.js';
 import {
@@ -56,6 +67,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       simc,
       itemDb: itemDbStatus(),
       loot: lootStatus(),
+      customItems: customItemsStatus(),
       patches: listPhases(),
       fightStyles: FIGHT_STYLES,
       defaults: { ...DEFAULT_SIM_OPTIONS, threads: config.cpuCount },
@@ -71,6 +83,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     loadEnhancements();
     loadMedia();
     loadLoot();
+    loadCustomItems();
     return {
       simc: await getSimcStatus(true),
       itemDb: itemDbStatus(),
@@ -143,6 +156,43 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     return lootStatus();
   });
 
+  // -------------------------------------------------------------------------
+  // Ítems que el motor no conoce
+  // -------------------------------------------------------------------------
+
+  app.get('/api/custom-items', async () => ({
+    status: customItemsStatus(),
+    items: listCustomItems(),
+  }));
+
+  app.put<{ Params: { id: string }; Body: Partial<CustomItemEntry> }>(
+    '/api/custom-items/:id',
+    async (req, reply) => {
+      const itemId = Number.parseInt(req.params.id, 10);
+      const entry: Partial<CustomItemEntry> = { ...req.body, itemId };
+      const errors = validateEntry(entry);
+      if (errors.length > 0) return reply.code(400).send({ error: errors.join(' ') });
+
+      return upsertCustomItem({
+        itemId,
+        name: entry.name!.trim(),
+        slot: entry.slot,
+        ilevel: entry.ilevel,
+        stats: entry.stats!.trim(),
+        effectText: entry.effectText,
+        use: entry.use?.trim() || undefined,
+        equip: entry.equip?.trim() || undefined,
+        addedAt: new Date().toISOString(),
+      });
+    },
+  );
+
+  app.delete<{ Params: { id: string } }>('/api/custom-items/:id', async (req, reply) => {
+    const removed = removeCustomItem(Number.parseInt(req.params.id, 10));
+    if (!removed) return reply.code(404).send({ error: 'Ese ítem no está en el catálogo.' });
+    return customItemsStatus();
+  });
+
   app.get('/api/enhancements', async () => getEnhancements());
 
   // -------------------------------------------------------------------------
@@ -167,9 +217,34 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
 
     try {
       const parsed = parseSimcProfile(input);
+
+      // Las piezas que el motor no conoce se guardan en el catálogo con las
+      // estadísticas que leyó el addon, y desde ahí se aplican a todo el equipo.
+      // Así describir una pieza es una sola vez: la próxima importación —de
+      // este personaje o de otro— ya la trae resuelta.
+      const allItems = [...Object.values(parsed.gear), ...parsed.bag];
+      const added = harvestFromGear(allItems, parsed.name);
+      const pending = applyCatalogue(allItems);
+
       const character = toCharacter(parsed, newId());
       saveCharacter(character);
-      return { character, warnings: parsed.warnings };
+
+      const warnings = [...parsed.warnings];
+      if (added > 0) {
+        warnings.push(
+          `Se han guardado ${added} pieza(s) que el simulador no conocía, con las ` +
+            'estadísticas que leyó el addon. Ya se simulan, y no habrá que volver a describirlas.',
+        );
+      }
+      if (pending.length > 0) {
+        warnings.push(
+          `Estas siguen sin poder simularse porque el addon no leyó sus estadísticas: ` +
+            `${pending.slice(0, 5).join(', ')}${pending.length > 5 ? ` y ${pending.length - 5} más` : ''}. ` +
+            'Descríbelas a mano desde la ficha del personaje.',
+        );
+      }
+
+      return { character, warnings };
     } catch (err) {
       return reply
         .code(400)
@@ -224,6 +299,10 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
           });
         }
       }
+
+      // Las piezas que el motor no conoce y ya están descritas en el catálogo
+      // se resuelven solas al guardar, sin pedírselo otra vez al usuario.
+      applyCatalogue(bag);
 
       // Rellenamos los slots posibles desde la base de datos de ítems.
       const normalized = bag.map((item) => ({

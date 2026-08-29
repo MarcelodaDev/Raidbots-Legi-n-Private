@@ -1,3 +1,5 @@
+import { applyCatalogue } from '../data/customitems.js';
+import { rewriteCustomGearLines } from './import.js';
 import {
   customItemToken,
   type Character,
@@ -49,12 +51,21 @@ export function buildCharacterProfile(
   character: Character,
   options: SimOptions,
 ): string {
+  // El catálogo se aplica aquí y no al guardar el personaje porque este es el
+  // único sitio por el que pasan todas las simulaciones: así también valen los
+  // personajes importados antes de que la pieza estuviera descrita.
+  const gear = Object.fromEntries(
+    Object.entries(character.gear).map(([slot, item]) => [slot, { ...item }]),
+  ) as Partial<Record<GearSlot, GearItem>>;
+  applyCatalogue(Object.values(gear).filter((item): item is GearItem => Boolean(item)));
+  const profile = rewriteCustomGearLines(character.profile, gear);
+
   const consumables = buildConsumableOptions(options);
   // Raza de sustitución. Va después del perfil a propósito: en simc gana la
   // última asignación, así que esto pisa el `race=` que trae el import sin
   // tener que reescribirlo.
   const race = character.raceOverride ? [`race=${character.raceOverride}`] : [];
-  return [character.profile, ...race, ...consumables].join('\n');
+  return [profile, ...race, ...consumables].join('\n');
 }
 
 /**

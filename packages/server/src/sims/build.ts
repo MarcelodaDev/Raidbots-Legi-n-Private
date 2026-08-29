@@ -41,6 +41,7 @@ import {
 } from '../data/itemdb.js';
 import { ilevelCapOf } from '../data/patches.js';
 import { lootSources } from '../data/loot.js';
+import { customItemFor } from '../data/customitems.js';
 import { latestScaleFactors } from '../store.js';
 import { getEnchant, getGem } from '../data/enhancements.js';
 import { config } from '../config.js';
@@ -998,6 +999,11 @@ function buildGems(
  */
 function assertEquippable(character: Character, items: CandidateItem[]): void {
   for (const candidate of items) {
+    // Si la pieza está en el catálogo, se resuelve aquí: da igual que la
+    // interfaz la mandara sin describir, o que se guardara antes de que
+    // alguien escribiera sus estadísticas.
+    candidate.custom ??= customItemFor(candidate.itemId);
+
     if (!candidate.custom && !simcKnowsItem(candidate.itemId)) {
       throw new Error(
         `El ítem ${candidate.name ? `"${candidate.name}" (id ${candidate.itemId})` : `id ${candidate.itemId}`} ` +

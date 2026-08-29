@@ -8,6 +8,7 @@ import { registerRoutes } from './routes.js';
 import { loadItemDb, itemDbStatus } from './data/itemdb.js';
 import { loadPatches, patchDbStatus } from './data/patches.js';
 import { enhancementsStatus, loadEnhancements } from './data/enhancements.js';
+import { customItemsStatus, loadCustomItems } from './data/customitems.js';
 import { loadLoot, lootStatus } from './data/loot.js';
 import { loadMedia, mediaStatus } from './data/media.js';
 import { getSimcStatus } from './simc/binary.js';
@@ -18,6 +19,7 @@ async function main(): Promise<void> {
   loadPatches();
   loadEnhancements();
   loadLoot();
+  loadCustomItems();
   loadMedia();
 
   const app = Fastify({
@@ -76,6 +78,13 @@ async function main(): Promise<void> {
       ? `Fases de contenido: ${patches.phases}`
       : 'Fases no generadas. Ejecuta `npm run build:patchdb`.',
   );
+
+  const custom = customItemsStatus();
+  if (custom.available) {
+    app.log.info(
+      `Ítems que simc no conoce, descritos: ${custom.items} (${custom.withEffect} con efecto traducido)`,
+    );
+  }
 
   const loot = lootStatus();
   app.log.info(
