@@ -520,18 +520,71 @@ Los servidores privados añaden razas propias. SimulationCraft acepta la cadena
 sin protestar, la deja en `none` y simula **sin ningún bonus racial**: el DPS
 sale creíble pero por debajo del real.
 
-Medido con un guerrero Furia real, mismo equipo y 3.000 iteraciones:
+Medido con un guerrero Furia real, mismo equipo, `target_error=0.1`:
 
 | Raza | DPS | Diferencia |
 |---|---|---|
-| `harronir` (desconocida → `none`) | 534.220 | — |
-| `orc` | 540.269 | +1,13% |
-| `human` | 540.974 | +1,26% |
-| `troll` | 544.582 | +1,94% |
+| `harronir` (desconocida → `none`) | 844.845 | — |
+| `night_elf` | 850.138 | +0,63% |
+| `orc` | 852.900 | +0,95% |
+| `human` | 853.687 | +1,05% |
+| `dwarf` | 857.169 | +1,46% |
+| `tauren` | 857.491 | +1,50% |
+| `troll` | 862.036 | +2,04% |
+| `gnome` | 864.409 | +2,32% |
 
 La app compara ahora la raza declarada con la que devuelve el motor y avisa
 cuando no coinciden (`raceWarning()` en `simc/parse.ts`). Las comparaciones
-entre piezas siguen siendo válidas: a todas les falta lo mismo.
+entre piezas siguen siendo válidas: a todas les falta lo mismo. Si sabes qué
+raciales copia la raza de tu servidor, poner la raza equivalente en la ficha
+técnica arregla también el DPS absoluto.
+
+## Ítems que SimulationCraft no conoce
+
+El mismo problema con el equipo, pero peor: una raza desconocida se degrada en
+silencio, y un **id desconocido cancela el lote entero**.
+
+    BCP API: Player 'X' unable to download item id '158311' at slot wrists.
+    Unable to initialize item 'inactive' base data on player 'X'
+    Simulation has been canceled during player setup!
+
+No se pierde esa variante: se pierden todas las del lote. Pasó con un export
+real en el que una sola pieza de un parche posterior tumbó 62 profilesets.
+
+Hay dos catálogos, y usar el equivocado es el error fácil:
+
+- `data/items.json` — lo que sale en el buscador. Filtra por ilvl 800 y calidad,
+  así que **los artefactos no están** (ilvl base 750).
+- `data/known-items.json` — todos los ids del DBC, sin filtrar. Solo responde
+  «¿esto lo sabe construir simc?», que es la pregunta del guardia.
+
+Comprobar con el primero rechazaría el arma de todo el mundo. El guardia
+(`assertEquippable()` en `sims/build.ts`) usa el segundo.
+
+### Describir una pieza a mano
+
+simc sí acepta un ítem declarado a pelo, sin id, con sus estadísticas
+explícitas. La ficha del personaje tiene un formulario para ello y genera:
+
+    wrist=placas_de_esgrima,ilevel=885,stats=1052str_654crit_436haste
+    trinket1=abalorio,ilevel=910,stats=1200crit,use=4500str_20dur_120cd
+    trinket2=otro,ilevel=910,stats=1200haste,equip=3000crit_15dur_1.5rppm_procby/attack_procon/hit
+
+Detalles que costaron un rato averiguar:
+
+- El nombre va **delante de la primera coma**. No existe la opción `name=`.
+- **Nada de `id=`**, ni siquiera `id=0`: simc lo buscaría en su DBC y cancelaría.
+- `quality=` y `type=` hacen fallar la inicialización. Se omiten.
+- Los disparadores del proc se escriben `procby/attack` y `procon/hit`, con
+  barra: `parse_proc_flags()` parte por `/` y compara el nombre exacto.
+- `enchant_id` y `gem_id` sí funcionan sobre un ítem a mano.
+- Las estadísticas son literales, así que **no escalan con el ilvl**. Al usar
+  «igualar el ilvl» en el droptimizer, la app avisa.
+
+Las tres cadenas las escribe el jugador y acaban dentro de una línea de un
+perfil que se ejecuta como proceso, así que se validan con lista blanca
+(`validateCustomItem()` en `packages/shared`): sin comas, sin saltos de línea y
+sin `=`, que abrirían una opción o una orden nuevas.
 
 ## Servidores privados
 

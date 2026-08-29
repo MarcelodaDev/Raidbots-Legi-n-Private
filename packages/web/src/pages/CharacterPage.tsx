@@ -10,6 +10,7 @@ import {
 } from '@rbl/shared';
 import { api } from '../api.js';
 import { ItemPicker } from '../components/ItemPicker.js';
+import { CustomItemEditor } from '../components/CustomItemEditor.js';
 import { PhaseGearCard } from '../components/PhaseGearCard.js';
 import { ItemIcon, ItemLabel, useItemName } from '../components/ItemIcon.js';
 import { FieldLabel, Help } from '../components/Help.js';
@@ -21,6 +22,7 @@ export function CharacterPage() {
   const [error, setError] = useState<string | null>(null);
   const [savingBag, setSavingBag] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const [showCustom, setShowCustom] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -166,6 +168,15 @@ export function CharacterPage() {
                 <tr key={`${item.itemId}-${index}`}>
                   <td>
                     <ItemLabel id={item.itemId} name={item.name} size="sm" />
+                    {item.custom && (
+                      <span
+                        className="badge warn"
+                        style={{ marginLeft: 8 }}
+                        title={`stats=${item.custom.stats}`}
+                      >
+                        a mano
+                      </span>
+                    )}
                   </td>
                   <td style={{ color: 'var(--ink-2)' }}>{SLOT_LABELS[item.slot]}</td>
                   <td className="num">{item.ilevel ?? '—'}</td>
@@ -199,10 +210,23 @@ export function CharacterPage() {
               </button>
             </div>
           </>
+        ) : showCustom ? (
+          <CustomItemEditor
+            onAdd={(item) => {
+              void saveBag([...character.bag, item]);
+              setShowCustom(false);
+            }}
+            onCancel={() => setShowCustom(false)}
+          />
         ) : (
-          <button className="secondary" onClick={() => setShowPicker(true)}>
-            Buscar una pieza y guardarla
-          </button>
+          <div className="row">
+            <button className="secondary" onClick={() => setShowPicker(true)}>
+              Buscar una pieza y guardarla
+            </button>
+            <button className="secondary" onClick={() => setShowCustom(true)}>
+              Describir una a mano
+            </button>
+          </div>
         )}
       </div>
 

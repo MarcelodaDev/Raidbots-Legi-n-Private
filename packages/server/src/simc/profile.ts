@@ -1,4 +1,11 @@
-import type { Character, GearItem, GearSlot, SimOptions } from '@rbl/shared';
+import {
+  customItemToken,
+  type Character,
+  type CustomItem,
+  type GearItem,
+  type GearSlot,
+  type SimOptions,
+} from '@rbl/shared';
 
 /** Opciones globales de la simulación, en formato .simc. */
 export function buildSimOptions(options: SimOptions): string[] {
@@ -126,13 +133,33 @@ export function renderProfileset(spec: ProfilesetSpec): string[] {
  */
 export function gearOverrideLine(
   slot: GearSlot,
-  item: { itemId: number; bonusIds?: number[]; ilevel?: number; gemIds?: number[] },
+  item: {
+    itemId: number;
+    name?: string;
+    bonusIds?: number[];
+    ilevel?: number;
+    gemIds?: number[];
+    custom?: CustomItem;
+  },
   equipped: GearItem | undefined,
   keepEnchants: boolean,
 ): string {
-  const parts = [`${slot}=,id=${item.itemId}`];
-  if (item.bonusIds?.length) parts.push(`bonus_id=${item.bonusIds.join('/')}`);
-  if (item.ilevel) parts.push(`ilevel=${item.ilevel}`);
+  // Los ítems descritos a mano se escriben con el nombre delante y sin id: no
+  // están en la DBC, así que no hay nada que buscar por id.
+  const parts = item.custom
+    ? [
+        `${slot}=${customItemToken(item.name, item.itemId)}`,
+        ...(item.ilevel ? [`ilevel=${item.ilevel}`] : []),
+        `stats=${item.custom.stats}`,
+        ...(item.custom.use ? [`use=${item.custom.use}`] : []),
+        ...(item.custom.equip ? [`equip=${item.custom.equip}`] : []),
+      ]
+    : [`${slot}=,id=${item.itemId}`];
+
+  if (!item.custom) {
+    if (item.bonusIds?.length) parts.push(`bonus_id=${item.bonusIds.join('/')}`);
+    if (item.ilevel) parts.push(`ilevel=${item.ilevel}`);
+  }
 
   if (keepEnchants && equipped) {
     if (equipped.enchantId) parts.push(`enchant_id=${equipped.enchantId}`);

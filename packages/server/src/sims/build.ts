@@ -71,6 +71,16 @@ function buildDroptimizer(
       continue;
     }
 
+    // Un ítem descrito a mano lleva las estadísticas escritas a pelo, así que
+    // subirle el ilvl no las cambia. Mejor decirlo que dejar que el jugador
+    // interprete un resultado plano como que la pieza no escala.
+    if (item.custom && cfg.targetIlevel > 0) {
+      warnings.push(
+        `"${item.name}" está descrito a mano: sus estadísticas son fijas y no cambian ` +
+          `al igualar el ilvl a ${cfg.targetIlevel}.`,
+      );
+    }
+
     for (const slot of slots) {
       const equipped = character.gear[slot];
       const ilevel = cfg.targetIlevel > 0 ? cfg.targetIlevel : item.ilevel;
@@ -984,14 +994,18 @@ function buildGems(
  */
 function assertEquippable(character: Character, items: CandidateItem[]): void {
   for (const candidate of items) {
-    if (!simcKnowsItem(candidate.itemId)) {
+    if (!candidate.custom && !simcKnowsItem(candidate.itemId)) {
       throw new Error(
         `El ítem ${candidate.name ? `"${candidate.name}" (id ${candidate.itemId})` : `id ${candidate.itemId}`} ` +
-          'no existe en la versión 7.3.5 que usa el simulador, así que no se puede simular. ' +
-          'Suele pasar con piezas que tu servidor ha traído de parches posteriores. ' +
-          'Quítalo de la selección: si se le pasa a SimulationCraft, cancela la simulación entera.',
+          'no existe en la versión 7.3.5 que usa el simulador. Suele pasar con piezas que tu servidor ' +
+          'ha traído de parches posteriores. Puedes describirlo a mano desde la ficha del personaje ' +
+          '(sus estadísticas y su efecto) y entonces sí se simula; si no, quítalo de la selección, ' +
+          'porque tal cual SimulationCraft cancela la simulación entera.',
       );
     }
+    // Un ítem descrito a mano no tiene datos en la DBC que consultar: se
+    // simula con lo que ha escrito el usuario y no hay nada más que validar.
+    if (candidate.custom) continue;
     const record = getItem(candidate.itemId);
     if (!record) continue; // conocido por simc pero fuera del buscador: adelante
     if (!canClassEquip(record, character.class)) {

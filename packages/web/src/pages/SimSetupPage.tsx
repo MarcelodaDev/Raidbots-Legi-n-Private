@@ -246,6 +246,7 @@ export function SimSetupPage() {
         slots: [item.slot],
         ilevel: item.ilevel ?? 0,
         source: 'inventario',
+        custom: item.custom,
       })),
     );
   }, [tab, character]);

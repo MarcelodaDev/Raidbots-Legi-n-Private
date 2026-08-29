@@ -188,6 +188,26 @@ export const GLOSSARY = {
     text: 'Un addon que enseña en el tooltip de cada pieza si es mejor que la que llevas. Para acertar necesita saber cuánto vale para ti cada estadística, y eso es justo lo que acaba de calcular esta simulación: se pega la cadena y ya lo sabe.',
   },
 
+  customItem: {
+    title: 'Piezas que el simulador no conoce',
+    text: 'El motor es el de la versión 7.3.5, así que solo sabe de equipo de Legion. Si tu servidor reparte piezas de parches posteriores, no tiene sus datos y no puede simularlas… salvo que se las describas tú. Con las estadísticas basta; el efecto es opcional.',
+  },
+
+  customStats: {
+    title: 'Cómo escribir las estadísticas',
+    text: 'Cada estadística es su número pegado a su abreviatura, separadas por guión bajo: 1052str_654crit_436haste. Valen str (fuerza), agi (agilidad), int (intelecto), sta (aguante), crit, haste (celeridad), mastery (maestría), vers (versatilidad), leech y speed. Cópialas del tooltip del juego.',
+  },
+
+  customUse: {
+    title: 'Efecto de «Uso»',
+    text: 'Si la pieza tiene un botón que se activa. Se escribe con lo que da, cuánto dura y cuánto tarda en recargar: 4500str_20dur_120cd son 4.500 de fuerza durante 20 segundos cada 2 minutos.',
+  },
+
+  customEquip: {
+    title: 'Efecto pasivo con proc',
+    text: 'Si la pieza salta sola al pegar. Igual que el de uso pero con la frecuencia en vez de la recarga, y diciendo qué lo dispara: 3000crit_15dur_1.5rppm_procby/attack_procon/hit son 3.000 de crítico durante 15 segundos, 1,5 veces por minuto, al acertar un ataque. Cambia attack por spell si eres de lanzar hechizos.',
+  },
+
   breakdown: {
     title: 'Daño por habilidad',
     text: 'De dónde sale tu daño: qué porcentaje pone cada hechizo o ataque. Sirve para ver si algo importante se está usando menos de lo que debería.',

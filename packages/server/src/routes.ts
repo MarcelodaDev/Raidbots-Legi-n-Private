@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import {
   DEFAULT_SIM_OPTIONS,
   FIGHT_STYLES,
+  validateCustomItem,
   type Character,
   type GearItem,
   type ItemSearchQuery,
@@ -166,12 +167,33 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
       if (!existing) return reply.code(404).send({ error: 'Personaje no encontrado.' });
 
       const bag = Array.isArray(req.body?.bag) ? req.body.bag : [];
+
+      // Las cadenas de un ítem descrito a mano acaban dentro de una línea de un
+      // perfil que se ejecuta, así que se validan aquí y no solo en el
+      // formulario: el endpoint es público dentro de la máquina.
+      for (const item of bag) {
+        if (!item.custom) continue;
+        const errors = validateCustomItem(item.custom);
+        if (errors.length > 0) {
+          return reply.code(400).send({
+            error: `"${item.name ?? `Ítem ${item.itemId}`}": ${errors.join(' ')}`,
+          });
+        }
+      }
+
       // Rellenamos los slots posibles desde la base de datos de ítems.
       const normalized = bag.map((item) => ({
         ...item,
         bonusIds: item.bonusIds ?? [],
         gemIds: item.gemIds ?? [],
         relicIds: item.relicIds ?? [],
+        custom: item.custom
+          ? {
+              stats: item.custom.stats.trim(),
+              use: item.custom.use?.trim() || undefined,
+              equip: item.custom.equip?.trim() || undefined,
+            }
+          : undefined,
       }));
 
       return saveCharacter({ ...existing, bag: normalized });

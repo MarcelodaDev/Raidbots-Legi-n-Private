@@ -1,5 +1,6 @@
 import {
   GEAR_SLOTS,
+  customItemToken,
   type Character,
   type GearItem,
   type GearSlot,
@@ -163,6 +164,22 @@ export function parseGearLine(line: string): GearItem | null {
 /** Vuelve a construir la línea .simc de un ítem. */
 export function gearItemToLine(item: GearItem, slot?: GearSlot): string {
   const target = slot ?? item.slot;
+
+  // Un ítem que simc no conoce se declara a pelo: el nombre delante, las
+  // estadísticas explícitas y ni rastro del id. Pasarle el id haría que
+  // intentara buscarlo en su DBC y cancelara la simulación al no encontrarlo.
+  if (item.custom) {
+    const custom = [`${target}=${customItemToken(item.name, item.itemId)}`];
+    if (item.ilevel) custom.push(`ilevel=${item.ilevel}`);
+    custom.push(`stats=${item.custom.stats}`);
+    if (item.custom.use) custom.push(`use=${item.custom.use}`);
+    if (item.custom.equip) custom.push(`equip=${item.custom.equip}`);
+    if (item.enchantId) custom.push(`enchant_id=${item.enchantId}`);
+    else if (item.enchantName) custom.push(`enchant=${item.enchantName}`);
+    if (item.gemIds.length) custom.push(`gem_id=${item.gemIds.join('/')}`);
+    return custom.join(',');
+  }
+
   const parts = [`${target}=,id=${item.itemId}`];
   if (item.bonusIds.length) parts.push(`bonus_id=${item.bonusIds.join('/')}`);
   if (item.enchantId) parts.push(`enchant_id=${item.enchantId}`);
@@ -335,8 +352,10 @@ export function parseSimcProfile(input: string): ParsedProfile {
       .join(', ');
     const rest = unknown.length > 5 ? ` y ${unknown.length - 5} más` : '';
     warnings.push(
-      `Estas piezas no existen en la versión 7.3.5 del simulador y no se pueden simular: ${shown}${rest}. ` +
-        'Tu servidor las ha traído de un parche posterior. Se pueden guardar, pero quedan fuera de las comparaciones.',
+      `El simulador no conoce estas piezas: ${shown}${rest}. ` +
+        'Tu servidor las ha traído de un parche posterior a 7.3.5. Para poder compararlas, ' +
+        'descríbelas a mano desde la ficha del personaje: con copiar las estadísticas del ' +
+        'tooltip del juego basta.',
     );
   }
 

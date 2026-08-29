@@ -64,6 +64,108 @@ export interface GearItem {
   ilevel?: number;
   /** Línea original del perfil .simc, por si hay opciones que no parseamos. */
   raw?: string;
+  /**
+   * Ítem que SimulationCraft no conoce, descrito a mano.
+   *
+   * Los servidores privados progresivos reparten piezas de parches posteriores
+   * a 7.3.5. El motor no tiene sus datos y cancela el lote entero si se las
+   * pasas por id, pero sí acepta un ítem declarado a pelo con sus
+   * estadísticas. Cuando esto está presente, la línea del perfil se escribe en
+   * esa forma y el id deja de usarse.
+   */
+  custom?: CustomItem;
+}
+
+/**
+ * Un ítem descrito a mano para simc.
+ *
+ * Los tres campos van tal cual al perfil que se ejecuta, así que se validan con
+ * lista blanca antes de guardarse (ver `validateCustomItem`).
+ */
+export interface CustomItem {
+  /** Estadísticas, en el formato de simc: `1052str_654crit_436haste`. */
+  stats: string;
+  /** Efecto de "Uso": `4500str_20dur_120cd`. */
+  use?: string;
+  /** Efecto pasivo con proc: `3000crit_15dur_1.5rppm_procby/attack_procon/hit`. */
+  equip?: string;
+}
+
+/** Estadísticas que entiende el formato `stats=` de simc. */
+export const CUSTOM_STAT_KEYS = [
+  'str',
+  'agi',
+  'int',
+  'sta',
+  'spi',
+  'crit',
+  'haste',
+  'mastery',
+  'vers',
+  'ap',
+  'sp',
+  'armor',
+  'avoidance',
+  'leech',
+  'speed',
+] as const;
+
+/**
+ * Identificador que simc acepta para un ítem escrito a mano.
+ *
+ * Va delante de la primera coma de la línea, donde normalmente iría el nombre,
+ * así que no admite espacios, acentos ni comas.
+ */
+export function customItemToken(name: string | undefined, itemId: number): string {
+  const token = (name ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return token || `item_${itemId}`;
+}
+
+/**
+ * Comprueba que las tres cadenas de un ítem a mano son inofensivas.
+ *
+ * Van dentro de una línea de un perfil que se ejecuta, así que aquí no vale
+ * "parece razonable": solo se acepta el alfabeto exacto del formato de simc.
+ * En particular no pueden llevar coma (cerraría la opción y abriría otra),
+ * salto de línea (abriría una orden nueva) ni `=`.
+ */
+export function validateCustomItem(custom: CustomItem): string[] {
+  const errors: string[] = [];
+  const statKeys = new Set<string>(CUSTOM_STAT_KEYS);
+
+  // Un token es un número seguido de un nombre: `1052str`, `1.5rppm`, `20dur`.
+  // Los de proc llevan una barra: `procby/attack`.
+  const TOKEN = /^(\d+(?:\.\d+)?)?([a-z]+(?:\/[a-z]+)?|%)$/;
+
+  const checkTokens = (value: string, field: string, allowEffects: boolean): void => {
+    if (!/^[a-z0-9._/%]+$/.test(value)) {
+      errors.push(`${field}: solo se admiten letras minúsculas, números, "_", "/", "." y "%".`);
+      return;
+    }
+    for (const token of value.split('_')) {
+      if (!TOKEN.test(token)) {
+        errors.push(`${field}: no se entiende "${token}".`);
+        continue;
+      }
+      const name = token.replace(/^\d+(\.\d+)?/, '');
+      if (!allowEffects && !statKeys.has(name)) {
+        errors.push(`${field}: "${name}" no es una estadística que simc acepte.`);
+      }
+    }
+  };
+
+  if (!custom.stats?.trim()) errors.push('Hacen falta las estadísticas de la pieza.');
+  else checkTokens(custom.stats.trim(), 'Estadísticas', false);
+
+  if (custom.use?.trim()) checkTokens(custom.use.trim(), 'Efecto de uso', true);
+  if (custom.equip?.trim()) checkTokens(custom.equip.trim(), 'Efecto pasivo', true);
+
+  return errors;
 }
 
 /**
@@ -214,6 +316,8 @@ export interface CandidateItem {
   quality?: number;
   /** Etiqueta de origen: jefe, mazmorra, "bolsa"... solo informativa. */
   source?: string;
+  /** Descripción a mano, para las piezas que simc no conoce. */
+  custom?: CustomItem;
 }
 
 export interface DroptimizerConfig {
