@@ -76,13 +76,22 @@ check(
 )
 check('pecho sin encantamiento', contains(profile, 'chest=,id=152140,bonus_id=3612/1502'))
 
--- El artefacto es lo más delicado: gemas por GetItemGem y reliquias al final
+-- El artefacto es lo más delicado, y aquí vive el fallo más caro que ha tenido
+-- este addon: en el cliente real los campos de gema del enlace del arma vienen
+-- a cero, así que las reliquias NO se pueden sacar de ahí. Hay que pedirlas a
+-- la interfaz del artefacto y escribirlas como `gem_id`. Sin eso,
+-- SimulationCraft deja el arma en su nivel base y el DPS sale casi un 50% por
+-- debajo, sin dar ningún error.
 check(
-  'artefacto con gemas y reliquias',
+  'artefacto: reliquias como gem_id, leídas del artefacto y no del enlace',
   contains(
     profile,
-    'main_hand=,id=128862,gem_id=155850/155846/155850,bonus_id=731,relic_id=3612:1512/3612:1512/3612:1512'
+    'main_hand=,id=128862,bonus_id=731,relic_id=3612:1512/3612:1512/3612:1512,gem_id=141271/141272/141273'
   )
+)
+check(
+  'artefacto: no se inventa gemas del enlace (vienen vacías)',
+  not contains(profile, 'gem_id=155850')
 )
 
 -- Rangos del artefacto: solo los comprados (currentRank - bonusRanks)

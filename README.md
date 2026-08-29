@@ -487,6 +487,33 @@ imprime las claves que sí trae: con eso se añade el nombre que use esa fuente 
   Armas y Furia, druida Feral) no se pueden cargar porque usan un ítem que no
   está en la DBC de 7.3.5, así que esas specs no tienen referencia en esa fase.
 
+## Las reliquias del artefacto van en `gem_id`
+
+El fallo más caro que ha tenido este proyecto, y el más silencioso.
+
+En el cliente de 7.3.5 los campos de gema del **enlace** del arma artefacto
+vienen a cero: las reliquias no se pueden leer de ahí, hay que pedirlas a
+`C_ArtifactUI.GetRelicInfo()`. El addon las leía para el Crisol pero no las
+escribía en la línea del arma, así que el perfil salía sin `gem_id=`.
+
+SimulationCraft no protesta: deja el arma en su nivel base (750 en vez de ~900)
+y devuelve un DPS perfectamente creíble. Medido con un guerrero Furia real:
+
+| | ilvl del arma | DPS |
+|---|---|---|
+| Sin `gem_id` (lo que exportaba el addon) | 750 | 534.228 |
+| Con `gem_id` | 933 | 900.476 (**+68,6%**) |
+
+`relic_id=` **no** sirve para esto: son los bonus IDs de cada reliquia y no
+suben el nivel del arma. Se comprobó que quitarlo del perfil no cambia el DPS
+ni un punto.
+
+La prueba del addon no lo detectaba porque el stub tenía el enlace del artefacto
+**con los campos de gema rellenos**, o sea codificando una suposición distinta a
+la del cliente real. Ahora el stub viene vacío como en el juego y hay dos
+comprobaciones: que el `gem_id` sale de la interfaz del artefacto, y que no se
+inventa gemas del enlace.
+
 ## Razas que SimulationCraft no conoce
 
 Los servidores privados añaden razas propias. SimulationCraft acepta la cadena

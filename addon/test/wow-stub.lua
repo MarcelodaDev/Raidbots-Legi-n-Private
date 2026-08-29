@@ -70,7 +70,7 @@ local EQUIPPED = {
   [11] = 'item:152063::::::::110:64:0:0:1:3612|h[Band of the Sargerite Smith]',
   [13] = 'item:151955::::::::110:64:0:0:2:3612:1502|h[Acrid Catalyst Injector]',
   -- Artefacto: flags 0x100, con tres reliquias de dos bonus_id cada una.
-  [16] = 'item:128862:0:155850:155846:155850:0:::110:64:256:0:1:731:0:2:3612:1512:2:3612:1512:2:3612:1512|h[Ebonchill]',
+  [16] = 'item:128862:0:::::::110:64:256:0:1:731:0:2:3612:1512:2:3612:1512:2:3612:1512|h[Ebonchill]',
 }
 
 --- Bolsas: mochila (0) y una bolsa (1). El banco (-1) solo se lee si está
@@ -106,6 +106,8 @@ local ITEM_INFO = {
   [154176] = { "Khaz'goroth's Courage", 4, 940, 'INVTYPE_TRINKET' },
   [118700] = { 'Poción de poder prolongado', 3, 0, '' },
   [141271] = { 'Reliquia de ejemplo', 4, 910, '' },
+  [141272] = { 'Reliquia de ejemplo 2', 4, 910, '' },
+  [141273] = { 'Reliquia de ejemplo 3', 4, 910, '' },
   -- gemas
   [155850] = { 'Masterful Shadowruby', 4, 900, '' },
   [155846] = { 'Quick Shadowruby', 4, 900, '' },
@@ -265,8 +267,14 @@ C_ArtifactUI = {
   GetNumRelicSlots = function()
     return 3
   end,
-  GetRelicInfo = function()
-    return nil, nil, nil, 'item:141271::::::::110:64:0:0:0'
+  GetRelicInfo = function(index)
+    -- Tres reliquias distintas, que es de donde salen los `gem_id` del arma.
+    local links = {
+      'item:141271::::::::110:64:0:0:0',
+      'item:141272::::::::110:64:0:0:0',
+      'item:141273::::::::110:64:0:0:0',
+    }
+    return nil, nil, nil, links[index or 1]
   end,
   GetPowersAffectedByRelicItemLink = function()
     return 786

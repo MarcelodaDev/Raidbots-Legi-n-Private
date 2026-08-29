@@ -295,14 +295,55 @@ end
 -- Equipo y bolsas
 -- ---------------------------------------------------------------------------
 
+--- Ids de ítem de las reliquias que lleva puestas el artefacto.
+--
+-- Hacen falta aparte porque en el enlace del arma los campos de gema vienen a
+-- cero: las reliquias solo se pueden leer por la interfaz del artefacto. Sin
+-- ellas SimulationCraft deja el arma en su nivel base (750) en vez del real, y
+-- para un guerrero eso son casi 50% menos de DPS, sin ningún error de por
+-- medio: el número sale creíble y es falso.
+local function relicItemIds()
+  if not C_ArtifactUI then
+    return nil
+  end
+
+  local wasOpen = openArtifact()
+  if not wasOpen and not (C_ArtifactUI.GetArtifactInfo and C_ArtifactUI.GetArtifactInfo()) then
+    closeArtifact(wasOpen)
+    return nil
+  end
+
+  local ids = {}
+  local found = false
+  for index = 1, (C_ArtifactUI.GetNumRelicSlots() or 0) do
+    local link = select(4, C_ArtifactUI.GetRelicInfo(index))
+    local parts = link and RBL.SplitItemLink(link)
+    local id = parts and parts[1] or 0
+    ids[index] = id
+    if id > 0 then
+      found = true
+    end
+  end
+
+  closeArtifact(wasOpen)
+  return found and ids or nil
+end
+
 local function equippedLines()
   local lines = {}
+  local relics = relicItemIds()
+
   for _, slot in ipairs(EQUIPPED_SLOTS) do
     local slotId = GetInventorySlotInfo(slot.name)
     local link = slotId and GetInventoryItemLink('player', slotId)
     if link then
       local line = RBL.ItemToSimc(slot.simc, link)
       if line then
+        -- El arma artefacto necesita las reliquias como `gem_id=`, que es de
+        -- donde SimulationCraft saca su nivel de objeto real.
+        if slot.simc == 'main_hand' and relics and not line:find('gem_id=') then
+          line = line .. ',gem_id=' .. table.concat(relics, '/')
+        end
         lines[#lines + 1] = line
       end
     end
