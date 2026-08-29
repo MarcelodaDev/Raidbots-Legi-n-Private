@@ -595,6 +595,52 @@ h1, h2, h3{
   max-width: 26ch;
 }
 .closing h2 em{ font-style: italic; color: var(--rose); }
+/* La carta: el mismo papel y la misma tinta que los reversos. La página
+   abre con un sobre cerrado, así que al final aparece lo que traía dentro. */
+.letter{
+  width: min(100%, 620px);
+  margin-block: clamp(1rem, 3vh, 2.5rem);
+  padding: clamp(1.9rem, 4.5vw, 3.4rem) clamp(1.7rem, 4vw, 3rem);
+  border-radius: 2px;
+  background: linear-gradient(160deg, var(--paper-back), #cec1a8 58%, var(--paper-fold));
+  box-shadow:
+    0 45px 80px -45px rgba(0,0,0,.95),
+    0 0 0 1px rgba(74,58,44,.14) inset;
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  display: grid;
+  gap: .85em;
+  text-align: left;
+  /* Nadie escribe una carta perfectamente recta */
+  transform: rotate(-.7deg) translateY(26px);
+  opacity: 0;
+  transition: opacity 1s ease, transform 1.2s cubic-bezier(.16,.84,.32,1);
+}
+.letter.is-open{
+  opacity: 1;
+  transform: rotate(-.7deg) translateY(0);
+}
+/* La misma fibra de papel que los reversos */
+.letter::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23c)' opacity='.5'/></svg>");
+  background-size: 180px 180px;
+}
+.letter p{
+  margin: 0;
+  font-family: var(--f-hand);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 4.4cqi, 1.5rem);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
 .closing .signature{
   font-family: var(--f-mono);
   font-size: var(--step--1);
@@ -925,6 +971,7 @@ h1, h2, h3{
   .face--back{ transform: none; opacity: 0; }
   .shot.is-flipped .face--back{ opacity: 1; }
   .shot.is-flipped .face--front{ opacity: 0; }
+  .letter{ opacity: 1; transform: rotate(-.7deg); transition: none; }
   .enter__envelope, .enter__flap, .enter__seal{ transition: none; }
   .enter__hint{ animation: none; opacity: .8; }
 }
@@ -1241,6 +1288,15 @@ h1, h2, h3{
   <section class="closing">
     <p class="eyebrow">29 · 11 · 2024 — hoy</p>
     <h2>Y todavía nos quedan <em>todos los carretes</em> por revelar.</h2>
+
+    <!-- EDITA: la carta. Los saltos de párrafo son solo para poder leerla;
+         el texto es literal. -->
+    <div class="letter" id="carta">
+      <p>Sé que quiero estar contigo el resto de mi vida incluso si eso significa que no podamos estar siempre juntos porque entiendo que tienes sueños y que aunque me gustaría estar cerca mientras los logras me conformo con saber que estás luchando por ellos</p>
+      <p>y aunque nos volvamos a separar por un añito más, intentaré estar cerca de ti todo lo que pueda para acompañarte sin invadir</p>
+      <p>y aunque muero de miedo por las nuevas experiencias estoy dispuesto a saltar con los ojos vendados si eso significa estar contigo, te amo y cada mes me doy cuenta que soy el hombre más suertudo del planeta porque encontré una mujer como tú</p>
+    </div>
+
     <p class="signature">Feliz aniversario, mi princesa</p>
   </section>
 
@@ -1303,6 +1359,23 @@ h1, h2, h3{
     shots.forEach(function (shot) { observer.observe(shot); });
   } else {
     shots.forEach(function (shot) { shot.classList.add("is-developed"); });
+  }
+
+  /* La carta sube al llegar a ella, con el mismo gesto que las fotos */
+  var letter = document.getElementById("carta");
+  if (letter) {
+    if ("IntersectionObserver" in window) {
+      var watcher = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-open");
+          watcher.unobserve(entry.target);
+        });
+      }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
+      watcher.observe(letter);
+    } else {
+      letter.classList.add("is-open");
+    }
   }
 
   /* --- Enredadera ------------------------------------------
@@ -1485,8 +1558,11 @@ h1, h2, h3{
       /* Mientras baja, el tallo va al ritmo de la lectura */
       drawn = vertLength * (reach / Math.max(1, stemEndY));
     } else {
-      /* Ya tumbado: la guirnalda se abre en el último tramo de scroll */
-      var rest = Math.max(1, bottom - stemEndY);
+      /* Ya tumbada: la guirnalda se abre mientras está en pantalla, no al
+         llegar al final de la página. Si se atara al fondo, con un cierre
+         largo terminaría de florecer cuando ya la has dejado atrás. */
+      var fin = Math.min(bottom, stemEndY + window.innerHeight * 0.5);
+      var rest = Math.max(1, fin - stemEndY);
       drawn = vertLength + (stemLength - vertLength) * Math.min(1, (reach - stemEndY) / rest);
     }
 
