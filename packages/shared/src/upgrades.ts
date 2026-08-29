@@ -133,3 +133,21 @@ export function pickSlotCandidates(
 
   return [...picked.values()];
 }
+
+/**
+ * ¿Es una pieza de PvP?
+ *
+ * En Legion el equipo de PvP se reconoce por el nombre de temporada
+ * (Gladiator, Combatant, Aspirant). Fuera de PvP funciona como cualquier otra
+ * pieza, así que el motor la simula sin problema, pero para alguien que juega
+ * bandas y mazmorras solo es ruido: son 156 de los 280 abalorios candidatos de
+ * un guerrero en T19.
+ *
+ * Se detecta por nombre porque la base de datos no dice de dónde sale cada
+ * pieza: la DBC que genera SimulationCraft no trae tabla de botín.
+ */
+const PVP_NAMES = /\b(gladiator|combatant|aspirant)('s)?\b/i;
+
+export function isPvpItem(name: string): boolean {
+  return PVP_NAMES.test(name);
+}

@@ -183,6 +183,7 @@ export function SimSetupPage() {
   const [maxCombinations, setMaxCombinations] = useState(2000);
   const [perSlot, setPerSlot] = useState(4);
   const [includeNewLegendaries, setIncludeNewLegendaries] = useState(false);
+  const [includePvp, setIncludePvp] = useState(false);
   const [upgradeIlevels, setUpgradeIlevels] = useState<number[]>([]);
   const [talentMode, setTalentMode] = useState<'rows' | 'full'>('rows');
   const [selectedConsumables, setSelectedConsumables] = useState<{
@@ -302,6 +303,7 @@ export function SimSetupPage() {
           slots: [],
           ilevels: upgradeIlevels,
           includeNewLegendaries,
+          includePvp,
           keepEnchants,
         };
       case 'topgear':
@@ -356,6 +358,7 @@ export function SimSetupPage() {
     perSlot,
     upgradeIlevels,
     includeNewLegendaries,
+    includePvp,
     talentMode,
     selectedConsumables,
     selectedTraits,
@@ -499,6 +502,8 @@ export function SimSetupPage() {
             setIlevels={setUpgradeIlevels}
             includeNewLegendaries={includeNewLegendaries}
             setIncludeNewLegendaries={setIncludeNewLegendaries}
+            includePvp={includePvp}
+            setIncludePvp={setIncludePvp}
             keepEnchants={keepEnchants}
             setKeepEnchants={setKeepEnchants}
             maxLegendaries={maxLegendaries}
@@ -1220,6 +1225,8 @@ function UpgradesEditor({
   setIlevels,
   includeNewLegendaries,
   setIncludeNewLegendaries,
+  includePvp,
+  setIncludePvp,
   keepEnchants,
   setKeepEnchants,
   maxLegendaries,
@@ -1234,6 +1241,8 @@ function UpgradesEditor({
   setIlevels: (value: number[]) => void;
   includeNewLegendaries: boolean;
   setIncludeNewLegendaries: (value: boolean) => void;
+  includePvp: boolean;
+  setIncludePvp: (value: boolean) => void;
   keepEnchants: boolean;
   setKeepEnchants: (value: boolean) => void;
   maxLegendaries: number;
@@ -1320,6 +1329,21 @@ function UpgradesEditor({
         <span className="field-label">
           Proponer legendarias en huecos donde no llevo ninguna
           <Help term="legendaryCap" />
+        </span>
+      </label>
+
+      <label
+        style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}
+      >
+        <input
+          type="checkbox"
+          style={{ width: 'auto' }}
+          checked={includePvp}
+          onChange={(event) => setIncludePvp(event.target.checked)}
+        />
+        <span className="field-label">
+          Incluir equipo de PvP
+          <Help term="pvpGear" />
         </span>
       </label>
 

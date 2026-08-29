@@ -260,6 +260,14 @@ export interface UpgradesConfig {
    * ahí el cambio es justo, porque el total de legendarias no varía.
    */
   includeNewLegendaries: boolean;
+  /**
+   * Incluir equipo de PvP.
+   *
+   * Fuera de PvP funciona como cualquier pieza, pero para quien juega bandas y
+   * mazmorras es ruido: más de la mitad de los abalorios candidatos de una fase
+   * son de temporada de PvP.
+   */
+  includePvp: boolean;
   keepEnchants: boolean;
 }
 
@@ -765,6 +773,7 @@ export function slotFamily(slot: GearSlot): string {
 export { buildPawnScale, type PawnScale } from './pawn.js';
 export {
   ITEM_MOD_STATS,
+  isPvpItem,
   pickSlotCandidates,
   statScore,
   weightsByStat,

@@ -153,6 +153,11 @@ export const GLOSSARY = {
     text: 'Repasa todas las piezas de tu fase que tu clase puede llevar, se queda con las más prometedoras de cada hueco y las simula de verdad. Te dice cuáles te suben el DPS y desde qué nivel de objeto empiezan a merecer la pena.',
   },
 
+  pvpGear: {
+    title: 'Equipo de PvP',
+    text: 'Las piezas de temporada (Gladiator, Combatant, Aspirant) funcionan fuera de PvP como cualquier otra, así que el motor las simula igual. Pero si juegas bandas y mazmorras solo estorban: en una fase pueden ser más de la mitad de los abalorios candidatos. Por eso se dejan fuera salvo que las pidas.',
+  },
+
   legendaryCap: {
     title: 'Legendarias y el tope de dos',
     text: 'Una legendaria gana casi siempre por potencia bruta, así que si se proponen en todos los huecos el primer puesto de cada uno sería una legendaria… y en Legion solo puedes llevar dos. Con esto apagado solo se prueban en los huecos donde ya llevas una, que es donde cambiarla no altera el total. Enciéndelo si quieres ver cuál te convendría conseguir.',

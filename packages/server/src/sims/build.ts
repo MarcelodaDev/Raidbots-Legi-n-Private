@@ -1,6 +1,7 @@
 import {
   PAIRED_SLOTS,
   SIMMED_SLOTS,
+  isPvpItem,
   pickSlotCandidates,
   slotFamily,
   weightsByStat,
@@ -180,6 +181,7 @@ export function describeUpgrades(
       (item) => {
         // Lo que ya llevas puesto no se prueba contra sí mismo.
         if (item.id === equipped) return false;
+        if (!cfg.includePvp && isPvpItem(item.name)) return false;
         if (item.quality !== LEGENDARY) return true;
 
         // Una legendaria gana casi siempre por potencia bruta, pero en Legion

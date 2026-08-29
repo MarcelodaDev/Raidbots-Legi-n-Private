@@ -315,6 +315,18 @@ Dos decisiones que conviene conocer:
 equivoca no hay error: la pieza buena simplemente nunca se simula y nadie se
 entera.
 
+### De dónde salen los candidatos
+
+De **todo** lo que quepa en la fase: banda, mazmorras normales y míticas,
+misiones de mundo, artesanía y PvP. No hay filtro por origen porque la DBC de
+SimulationCraft no trae tabla de botín, así que la app no sabe de dónde cae cada
+pieza.
+
+Eso deja mucho ruido en un sitio concreto: para un guerrero en T19 hay 280
+abalorios candidatos y **156 son de temporada de PvP** (Gladiator, Combatant,
+Aspirant). Se detectan por el nombre y se dejan fuera salvo que se pidan con la
+casilla correspondiente.
+
 ### Legendarias y el tope de dos
 
 Una legendaria gana casi siempre por potencia bruta, así que sin filtrar el
