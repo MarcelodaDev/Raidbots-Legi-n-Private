@@ -15,6 +15,26 @@ Mete tus imágenes en `fotos/` con los nombres `01.jpg` … `12.jpg`. Las que
 falten se quedan como huecos de hoja de contactos, así que puedes ir
 subiéndolas de a poco. Los detalles de proporción están en `fotos/LEEME.md`.
 
+## Escribir los recuerdos
+
+Cada foto se gira al tocarla y detrás hay un papel donde escribir a mano lo
+que pasó ese día. El texto va dentro del `<p class="note">` de cada foto, en
+`index.html`:
+
+```html
+<span class="face face--back">
+  <p class="note">Aquí lo que quieras contar de ese día.</p>
+  <span class="stamp"><span>DIC · 24</span><span>01 / 12</span></span>
+</span>
+```
+
+Si lo dejas vacío sale un texto en gris claro invitando a escribir, que
+desaparece en cuanto pongas algo. La letra es Caveat y la tinta es sepia,
+como un bolígrafo sobre papel de foto.
+
+Para ver la foto en grande sin girarla, está el botón redondo de la esquina
+superior derecha, que aparece al pasar por encima.
+
 ## La música
 
 Suena `audio/cancion.mp3` («Lo hago todo solo con los dos en la cabeza», de
@@ -56,6 +76,12 @@ repositorio y entrar a `…/aniversario/`.
 
 ## Detalles de la página
 
+- La página empieza **cerrada, con un sobre lacrado** con el nombre escrito a
+  mano. Abrirlo es lo que arranca todo, música incluida. Si el navegador no
+  ejecutara JavaScript, el sobre no aparece y la página se ve entera, para que
+  nadie se quede fuera.
+- Al llegar al cierre, la enredadera **tuerce y se convierte en una guirnalda**
+  que cruza por encima de la despedida, floreciendo de izquierda a derecha.
 - Una **enredadera** crece por el margen izquierdo a medida que bajas, siempre
   un poco por delante de donde vas leyendo, y las flores se abren justo cuando
   la punta del tallo las alcanza. Va por detrás de las fotos, así que se pierde

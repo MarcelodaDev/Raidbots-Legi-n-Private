@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#100a0c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1&family=Karla:wght@300..600&family=DM+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..600&family=DM+Mono:wght@300;400&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1&family=Karla:wght@300..600&display=swap">
 <style>
 /* ============================================================
    CUARTO OSCURO — Marcelo & Maddy
@@ -42,9 +42,15 @@
   --leaf:        #5c6742;
   --bloom-core:  #f2d3a8;
 
+  /* El papel del reverso de las fotos y la tinta con la que se escribe */
+  --paper-back:  #d5c8b0;
+  --paper-fold:  #b8a88e;
+  --ink:         #4a3a2c;
+
   --f-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --f-body:    "Karla", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-mono:    "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --f-hand:    "Caveat", "Segoe Script", "Bradley Hand", cursive;
 
   --step--1: clamp(.78rem, .74rem + .18vw, .87rem);
   --step-0:  clamp(1rem, .96rem + .22vw, 1.12rem);
@@ -289,6 +295,16 @@ h1, h2, h3{
   text-wrap: balance;
 }
 
+.interlude__hint{
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: var(--step--1);
+  font-weight: 300;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(179,154,146,.6);
+}
+
 /* --- Galería ------------------------------------------------ */
 .gallery{
   width: var(--shell);
@@ -304,19 +320,40 @@ h1, h2, h3{
   margin: 0;
   display: grid;
   gap: .85rem;
+  position: relative;
 }
 
-.shot__btn{
+.shot__flip{
   all: unset;
   display: block;
-  cursor: zoom-in;
-  position: relative;
-  border-radius: 2px;
+  cursor: pointer;
+  perspective: 1500px;
 }
-.shot__btn:focus-visible{
+.shot__flip:focus-visible{
   outline: 2px solid var(--ember);
   outline-offset: 6px;
 }
+
+.flipper{
+  position: relative;
+  display: block;
+  aspect-ratio: var(--ratio, 3 / 2);
+  transform-style: preserve-3d;
+  transition: transform .95s cubic-bezier(.2,.8,.25,1);
+}
+.shot.is-flipped .flipper{ transform: rotateY(180deg); }
+
+/* La cara lleva el 3D y nada más. El filtro del revelado va en el
+   .frame de dentro: un filter sobre la propia cara que gira aplana
+   el contexto 3D en varios navegadores y la foto se ve por detrás. */
+.face{
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 2px;
+}
+.face--back{ transform: rotateY(180deg); }
 
 .frame{
   position: relative;
@@ -328,8 +365,8 @@ h1, h2, h3{
   box-shadow:
     0 1px 0 var(--line-soft) inset,
     0 26px 50px -30px rgba(0,0,0,.9);
-  aspect-ratio: var(--ratio, 3 / 2);
 }
+.face--front .frame{ position: absolute; inset: 0; }
 /* Las manchas de luz varían para que ninguna casilla vacía se repita */
 .frame::before{
   content: "";
@@ -379,7 +416,7 @@ h1, h2, h3{
 .frame:not(.is-empty) .slot{ display: none; }
 
 /* Revelado: la foto entra apagada y gana luz al entrar en cuadro */
-.shot__btn .frame{
+.shot .face--front .frame{
   opacity: 0;
   transform: scale(1.05);
   filter: brightness(.3) contrast(.78) saturate(.25) sepia(.4);
@@ -388,19 +425,102 @@ h1, h2, h3{
     transform 1.5s cubic-bezier(.16,.84,.32,1),
     filter 1.6s cubic-bezier(.4,0,.2,1);
 }
-.shot.is-developed .frame{
+.shot.is-developed .face--front .frame{
   opacity: 1;
   transform: scale(1);
   filter: none;
 }
-.shot__btn:hover .frame,
-.shot__btn:focus-visible .frame{
+.shot__flip:hover .face--front .frame,
+.shot__flip:focus-visible .face--front .frame{
   filter: brightness(1.06) saturate(1.05);
   box-shadow:
     0 1px 0 rgba(233,168,106,.28) inset,
     0 34px 60px -28px rgba(0,0,0,.95),
     0 0 0 1px var(--line);
 }
+
+/* --- El reverso: papel, tinta y sello de laboratorio -------- */
+.face--back{
+  background: linear-gradient(150deg, var(--paper-back), #d3c5ac 55%, var(--paper-fold));
+  box-shadow:
+    0 26px 50px -30px rgba(0,0,0,.9),
+    0 0 0 1px rgba(74,58,44,.14) inset;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2.4vw, 2.2rem);
+  overflow: hidden;
+}
+/* El mismo grano del fondo, aquí como fibra del papel */
+.face--back::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23p)' opacity='.5'/></svg>");
+  background-size: 180px 180px;
+}
+
+.note{
+  align-self: center;
+  margin: 0;
+  font-family: var(--f-hand);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 2.1vw, 1.7rem);
+  line-height: 1.45;
+  color: var(--ink);
+  max-width: 26ch;
+  /* Nadie escribe recto en el reverso de una foto */
+  transform: rotate(-1.2deg);
+}
+.shot:nth-child(3n)   .note{ transform: rotate(.9deg); }
+.shot:nth-child(4n+3) .note{ transform: rotate(-.5deg); }
+.note:empty::before{
+  content: "Escribe aquí lo de este día…";
+  opacity: .38;
+}
+
+.stamp{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--f-mono);
+  font-size: calc(var(--step--1) * .82);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(74,58,44,.42);
+}
+
+/* Ver grande: se aparta hasta que hace falta */
+.shot__zoom{
+  all: unset;
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(14,9,11,.62);
+  backdrop-filter: blur(8px);
+  color: var(--paper);
+  cursor: zoom-in;
+  opacity: 0;
+  transition: opacity .3s ease, color .3s ease, border-color .3s ease;
+}
+.shot:hover .shot__zoom{ opacity: 1; }
+.shot__zoom:hover{ color: var(--ember); border-color: var(--ember); }
+.shot__zoom:focus-visible{ opacity: 1; outline: 2px solid var(--ember); outline-offset: 3px; }
+/* En pantallas táctiles no hay hover que valga */
+@media (hover: none){
+  .shot__zoom{ opacity: .8; }
+}
+.shot.is-flipped .shot__zoom{ opacity: 0; pointer-events: none; }
 
 .shot figcaption{
   display: flex;
@@ -455,7 +575,8 @@ h1, h2, h3{
 .closing{
   width: var(--shell);
   margin-inline: auto;
-  padding-block: clamp(5rem, 14vh, 10rem);
+  /* El hueco de arriba es más ancho a propósito: ahí cuelga la guirnalda */
+  padding-block: clamp(8rem, 22vh, 14rem) clamp(5rem, 14vh, 10rem);
   border-top: 1px solid var(--line-soft);
   display: grid;
   gap: 1.5rem;
@@ -584,6 +705,122 @@ h1, h2, h3{
 .icon-btn:hover{ background: rgba(233,168,106,.14); color: var(--ember); border-color: var(--ember); }
 .icon-btn:focus-visible{ outline: 2px solid var(--ember); outline-offset: 3px; }
 
+/* --- El sobre -----------------------------------------------
+   Se muestra solo si hay JavaScript (lo marca un script diminuto
+   al principio del body): si fallara, la página se ve entera en
+   vez de quedarse detrás de un sobre que no se puede abrir.
+   Abrirlo es además el gesto que el navegador exige para dejar
+   sonar la música, así que el trámite se convierte en el momento. */
+.enter{ display: none; }
+.sealed .enter{
+  display: grid;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(1.8rem, 5vh, 3.2rem);
+  background: radial-gradient(90% 70% at 50% 45%, #170f13, #0b0709 75%);
+  transition: opacity .8s ease, visibility .8s;
+}
+/* En la raíz, no en el body: en el body el scroll se escapa igual */
+.sealed{ overflow: hidden; }
+.enter.is-gone{ opacity: 0; visibility: hidden; }
+
+.enter__envelope{
+  all: unset;
+  cursor: pointer;
+  position: relative;
+  width: clamp(250px, 62vw, 400px);
+  aspect-ratio: 3 / 2;
+  perspective: 1000px;
+  transition: transform .9s cubic-bezier(.2,.8,.25,1), opacity .7s ease;
+}
+.enter__envelope:focus-visible{ outline: 2px solid var(--ember); outline-offset: 12px; }
+.enter__envelope:hover{ transform: translateY(-4px); }
+.enter.is-opening .enter__envelope{ transform: scale(1.12) translateY(-10px); opacity: 0; }
+
+/* Cuerpo del sobre: el nombre va escrito debajo de la solapa,
+   que es donde se escribe en un sobre de verdad. */
+.enter__body{
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(233,168,106,.26);
+  border-radius: 3px;
+  background: linear-gradient(160deg, #2b1d1e, #1d1316 55%, #150e11);
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.95), 0 1px 0 rgba(243,231,222,.06) inset;
+  display: grid;
+  align-content: end;
+  justify-items: center;
+  padding-bottom: 10%;
+  overflow: hidden;
+}
+.enter__to{
+  font-family: var(--f-hand);
+  font-size: clamp(1.9rem, 6vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ember);
+  transform: rotate(-3deg);
+  opacity: .94;
+}
+
+/* La solapa gira sobre su borde superior. La sombra la separa del
+   cuerpo, si no se leen como una sola pieza plana. */
+.enter__flap{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56%;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform .85s cubic-bezier(.5,0,.2,1);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(172deg, #3a2828, #241819);
+  border-top: 1px solid rgba(233,168,106,.3);
+  filter: drop-shadow(0 4px 7px rgba(0,0,0,.55));
+  backface-visibility: hidden;
+}
+.enter.is-opening .enter__flap{ transform: rotateX(-172deg); }
+
+/* Lacre, en la punta de la solapa */
+.enter__seal{
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  width: clamp(38px, 9vw, 52px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(60% 60% at 36% 32%, #b8566a, #8d3245 60%, #6d2436);
+  box-shadow: 0 6px 14px -6px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.25) inset;
+  transition: opacity .35s ease, transform .5s ease;
+}
+.enter__seal::after{
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border: 1px solid rgba(255,220,225,.28);
+  border-radius: 50%;
+}
+.enter.is-opening .enter__seal{ opacity: 0; transform: translate(-50%,-50%) scale(.7); }
+
+.enter__hint{
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: var(--step--1);
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+.enter.is-opening .enter__hint{ opacity: 0; transition: opacity .3s ease; }
+@keyframes breathe{
+  0%, 100%{ opacity: .45; }
+  50%     { opacity: 1; }
+}
+
 /* --- Control de música --------------------------------------
    Los navegadores no dejan sonar nada sin que la persona toque
    la página, así que el botón late suavemente hasta que arranca. */
@@ -684,10 +921,33 @@ h1, h2, h3{
   .sound.is-waiting::after{ animation: none; opacity: .45; }
   /* La enredadera se queda entera y florecida, sin crecer */
   .bloom, .leaf{ opacity: 1; transform: none; transition: none; }
+  /* El reverso se cruza con la cara en vez de girar en 3D */
+  .flipper{ transition: none; }
+  .shot.is-flipped .flipper{ transform: none; }
+  .face{ backface-visibility: visible; transition: opacity .3s ease; }
+  .face--back{ transform: none; opacity: 0; }
+  .shot.is-flipped .face--back{ opacity: 1; }
+  .shot.is-flipped .face--front{ opacity: 0; }
+  .enter__envelope, .enter__flap, .enter__seal{ transition: none; }
+  .enter__hint{ animation: none; opacity: .8; }
 }
 </style>
 </head>
 <body>
+
+<script>document.documentElement.classList.add("sealed");</script>
+
+<!-- ===== El sobre =========================================
+     EDITA: el nombre escrito a mano está en .enter__to
+     ====================================================== -->
+<div class="enter" id="enter">
+  <button class="enter__envelope" type="button" id="enter-open" aria-label="Abrir el sobre y entrar">
+    <span class="enter__body"><span class="enter__to">Maddy</span></span>
+    <span class="enter__flap" aria-hidden="true"></span>
+    <span class="enter__seal" aria-hidden="true"></span>
+  </button>
+  <p class="enter__hint">Ábrelo</p>
+</div>
 
 <div class="atmosphere" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
@@ -711,6 +971,7 @@ h1, h2, h3{
   <section class="interlude">
     <p class="eyebrow">El revelado</p>
     <p class="interlude__line">Todo lo que la luz alcanzó a guardar.</p>
+    <p class="interlude__hint">Toca una foto para leer lo que hay detrás</p>
   </section>
 
   <!-- ===== Galería ==========================================
@@ -722,87 +983,195 @@ h1, h2, h3{
   <section class="gallery" id="galeria" aria-label="Nuestras fotos">
 
     <figure class="shot c7" style="--ratio: 3 / 2">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/01.jpg" alt="Marcelo y Maddy, diciembre de 2024" loading="lazy" decoding="async"><span class="slot">fotos/01.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de diciembre de 2024">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/01.jpg" alt="Marcelo y Maddy, diciembre de 2024" loading="lazy" decoding="async"><span class="slot">fotos/01.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>DIC · 24</span><span>01 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Diciembre 2024</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de diciembre de 2024"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Diciembre 2024</b></figcaption>
     </figure>
 
     <figure class="shot c5 drop" style="--ratio: 4 / 5">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/02.jpg" alt="Marcelo y Maddy, enero de 2025" loading="lazy" decoding="async"><span class="slot">fotos/02.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de enero de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/02.jpg" alt="Marcelo y Maddy, enero de 2025" loading="lazy" decoding="async"><span class="slot">fotos/02.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>ENE · 25</span><span>02 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Enero 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de enero de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Enero 2025</b></figcaption>
     </figure>
 
     <figure class="shot c4" style="--ratio: 4 / 5">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/03.jpg" alt="Marcelo y Maddy, marzo de 2025" loading="lazy" decoding="async"><span class="slot">fotos/03.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de marzo de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/03.jpg" alt="Marcelo y Maddy, marzo de 2025" loading="lazy" decoding="async"><span class="slot">fotos/03.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>MAR · 25</span><span>03 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Marzo 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de marzo de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Marzo 2025</b></figcaption>
     </figure>
 
     <figure class="shot c8 drop" style="--ratio: 16 / 10">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/04.jpg" alt="Marcelo y Maddy, abril de 2025" loading="lazy" decoding="async"><span class="slot">fotos/04.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de abril de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/04.jpg" alt="Marcelo y Maddy, abril de 2025" loading="lazy" decoding="async"><span class="slot">fotos/04.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>ABR · 25</span><span>04 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Abril 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de abril de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Abril 2025</b></figcaption>
     </figure>
 
     <figure class="shot c6" style="--ratio: 1 / 1">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/05.jpg" alt="Marcelo y Maddy, junio de 2025" loading="lazy" decoding="async"><span class="slot">fotos/05.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de junio de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/05.jpg" alt="Marcelo y Maddy, junio de 2025" loading="lazy" decoding="async"><span class="slot">fotos/05.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>JUN · 25</span><span>05 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Junio 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de junio de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Junio 2025</b></figcaption>
     </figure>
 
     <figure class="shot c6 drop" style="--ratio: 1 / 1">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/06.jpg" alt="Marcelo y Maddy, julio de 2025" loading="lazy" decoding="async"><span class="slot">fotos/06.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de julio de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/06.jpg" alt="Marcelo y Maddy, julio de 2025" loading="lazy" decoding="async"><span class="slot">fotos/06.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>JUL · 25</span><span>06 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Julio 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de julio de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Julio 2025</b></figcaption>
     </figure>
 
     <figure class="shot c12" style="--ratio: 21 / 9">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/07.jpg" alt="Marcelo y Maddy, septiembre de 2025" loading="lazy" decoding="async"><span class="slot">fotos/07.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de septiembre de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/07.jpg" alt="Marcelo y Maddy, septiembre de 2025" loading="lazy" decoding="async"><span class="slot">fotos/07.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>SEP · 25</span><span>07 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Septiembre 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de septiembre de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Septiembre 2025</b></figcaption>
     </figure>
 
     <figure class="shot c5" style="--ratio: 4 / 5">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/08.jpg" alt="Marcelo y Maddy, noviembre de 2025" loading="lazy" decoding="async"><span class="slot">fotos/08.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de noviembre de 2025">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/08.jpg" alt="Marcelo y Maddy, noviembre de 2025" loading="lazy" decoding="async"><span class="slot">fotos/08.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>NOV · 25</span><span>08 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Noviembre 2025</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de noviembre de 2025"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Noviembre 2025</b></figcaption>
     </figure>
 
     <figure class="shot c7 drop" style="--ratio: 3 / 2">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/09.jpg" alt="Marcelo y Maddy, enero de 2026" loading="lazy" decoding="async"><span class="slot">fotos/09.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de enero de 2026">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/09.jpg" alt="Marcelo y Maddy, enero de 2026" loading="lazy" decoding="async"><span class="slot">fotos/09.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>ENE · 26</span><span>09 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Enero 2026</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de enero de 2026"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Enero 2026</b></figcaption>
     </figure>
 
     <figure class="shot c8" style="--ratio: 16 / 10">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/10.jpg" alt="Marcelo y Maddy, marzo de 2026" loading="lazy" decoding="async"><span class="slot">fotos/10.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de marzo de 2026">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/10.jpg" alt="Marcelo y Maddy, marzo de 2026" loading="lazy" decoding="async"><span class="slot">fotos/10.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>MAR · 26</span><span>10 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Marzo 2026</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de marzo de 2026"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Marzo 2026</b></figcaption>
     </figure>
 
     <figure class="shot c4 drop" style="--ratio: 4 / 5">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/11.jpg" alt="Marcelo y Maddy, junio de 2026" loading="lazy" decoding="async"><span class="slot">fotos/11.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de junio de 2026">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/11.jpg" alt="Marcelo y Maddy, junio de 2026" loading="lazy" decoding="async"><span class="slot">fotos/11.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>JUN · 26</span><span>11 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Junio 2026</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de junio de 2026"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Junio 2026</b></figcaption>
     </figure>
 
     <figure class="shot c12" style="--ratio: 2 / 1">
-      <button class="shot__btn" type="button">
-        <span class="frame"><img src="fotos/12.jpg" alt="Marcelo y Maddy, agosto de 2026" loading="lazy" decoding="async"><span class="slot">fotos/12.jpg</span></span>
+      <button class="shot__flip" type="button" aria-pressed="false" aria-label="Ver el reverso de la foto de agosto de 2026">
+        <span class="flipper">
+          <span class="face face--front">
+            <span class="frame"><img src="fotos/12.jpg" alt="Marcelo y Maddy, agosto de 2026" loading="lazy" decoding="async"><span class="slot">fotos/12.jpg</span></span>
+          </span>
+          <span class="face face--back">
+            <p class="note"></p>
+            <span class="stamp"><span>AGO · 26</span><span>12 / 12</span></span>
+          </span>
+        </span>
       </button>
-      <figcaption><b>Agosto 2026</b><span class="note"></span></figcaption>
+      <button class="shot__zoom" type="button" aria-label="Ver grande la foto de agosto de 2026"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 20h5v-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <figcaption><b>Agosto 2026</b></figcaption>
     </figure>
 
   </section>
@@ -890,6 +1259,10 @@ h1, h2, h3{
   var EMBER = palette.getPropertyValue("--ember").trim() || "#e9a86a";
 
   var stem = null, glow = null, stemLength = 0, sprouts = [];
+  /* El tallo baja hasta el cierre y ahí tuerce en guirnalda. Guardamos
+     dónde acaba el tramo vertical para que cada parte se dibuje a su
+     ritmo: la que baja sigue la lectura, la guirnalda el último tramo. */
+  var vertLength = 0, stemEndY = 0;
 
   /* Azar reproducible: la enredadera es distinta pero siempre la misma */
   function seeded(i) {
@@ -963,12 +1336,22 @@ h1, h2, h3{
     vine.setAttribute("height", height);
     vine.setAttribute("viewBox", "0 0 " + band + " " + height);
 
+    /* El tramo que baja acaba al empezar el cierre; de ahí en adelante
+       la enredadera se tumba y recorre la despedida por detrás. */
+    var closing = document.querySelector(".closing");
+    stemEndY = closing
+      ? closing.getBoundingClientRect().top + window.pageYOffset + 55
+      : height;
+    /* En una página muy corta el cierre podría quedar por debajo de donde
+       llega el scroll, y entonces el tallo no acabaría nunca */
+    stemEndY = Math.max(240, Math.min(stemEndY, height - window.innerHeight * 0.18));
+
     /* Onda: cada tramo cruza de un lado al otro */
     var span = 300;
     var d = "M " + cx + " 0";
     var y = 0, side = 1;
-    while (y < height) {
-      var next = Math.min(y + span, height);
+    while (y < stemEndY) {
+      var next = Math.min(y + span, stemEndY);
       var bend = (next - y) * 0.55;
       d += " C " + (cx + side * amp) + " " + (y + bend) +
            ", " + (cx + side * amp) + " " + (next - bend) +
@@ -981,30 +1364,73 @@ h1, h2, h3{
     stem = svg("path", { d: d, "class": "vine__stem" });
     vine.appendChild(glow);
     vine.appendChild(stem);
+
+    /* Medimos el tramo vertical antes de añadirle la guirnalda */
+    vertLength = stem.getTotalLength();
+
+    /* Arco poco profundo: tiene que caber en el hueco sobre el cierre
+       sin pisar el texto */
+    var run = Math.min(window.innerWidth * 0.86, 1050);
+    var dip = 55;
+    d += " C " + (cx + run * 0.22) + " " + (stemEndY + dip * 0.9) +
+         ", " + (cx + run * 0.6) + " " + (stemEndY + dip * 1.3) +
+         ", " + (cx + run) + " " + (stemEndY + dip * 0.35);
+    glow.setAttribute("d", d);
+    stem.setAttribute("d", d);
     stemLength = stem.getTotalLength();
 
-    var count = Math.max(6, Math.round(height / 240));
+    /* Brotes del tramo que baja */
+    var count = Math.max(6, Math.round(stemEndY / 240));
     for (var i = 1; i < count; i++) {
-      var at = (i / count) * stemLength;
+      var at = (i / count) * vertLength;
       var point = stem.getPointAtLength(at);
       var sprout = (i % 2 === 1)
         ? makeBloom(i, scale)
         : makeLeaf(i, point.x < cx ? -1 : 1, scale);
-      var anchor = svg("g", { transform: "translate(" + point.x + "," + point.y + ")" });
-      anchor.appendChild(sprout);
-      vine.appendChild(anchor);
-      sprouts.push({ node: sprout, at: at / stemLength });
+      plant(sprout, point, at);
+    }
+
+    /* La guirnalda: más flores, más grandes y más juntas. Es el premio
+       por haber bajado hasta el final. */
+    for (var g = 1; g <= 12; g++) {
+      var gat = vertLength + (g / 12.5) * (stemLength - vertLength);
+      var gpoint = stem.getPointAtLength(gat);
+      var gsprout = (g % 4 === 0)
+        ? makeLeaf(g + 40, 1, scale)
+        : makeBloom(g + 40, scale * (1.15 + seeded(g + 70) * 0.5));
+      plant(gsprout, gpoint, gat);
     }
 
     drawVine();
+  }
+
+  function plant(sprout, point, at) {
+    var anchor = svg("g", { transform: "translate(" + point.x + "," + point.y + ")" });
+    anchor.appendChild(sprout);
+    vine.appendChild(anchor);
+    sprouts.push({ node: sprout, at: at / stemLength });
   }
 
   function drawVine() {
     if (!stem) return;
     var tall = document.documentElement.scrollHeight;
     var reach = window.pageYOffset + window.innerHeight * 0.82;
-    var frac = quiet ? 1 : reach / Math.max(1, tall - window.innerHeight * 0.18);
-    frac = Math.max(0, Math.min(1, frac));
+    /* El valor más alto que puede tomar reach, ya con la página al fondo */
+    var bottom = tall - window.innerHeight * 0.18;
+    var drawn;
+
+    if (quiet) {
+      drawn = stemLength;
+    } else if (reach <= stemEndY) {
+      /* Mientras baja, el tallo va al ritmo de la lectura */
+      drawn = vertLength * (reach / Math.max(1, stemEndY));
+    } else {
+      /* Ya tumbado: la guirnalda se abre en el último tramo de scroll */
+      var rest = Math.max(1, bottom - stemEndY);
+      drawn = vertLength + (stemLength - vertLength) * Math.min(1, (reach - stemEndY) / rest);
+    }
+
+    var frac = Math.max(0, Math.min(1, drawn / stemLength));
 
     stem.style.strokeDasharray  = stemLength;
     stem.style.strokeDashoffset = stemLength * (1 - frac);
@@ -1069,7 +1495,7 @@ h1, h2, h3{
     stage.appendChild(frame);
 
     var label = shot.querySelector("figcaption b");
-    var note  = shot.querySelector("figcaption .note");
+    var note  = shot.querySelector(".note");
     var text  = label ? label.textContent : "";
     if (note && note.textContent.trim()) text += " · " + note.textContent.trim();
     caption.textContent = text;
@@ -1096,11 +1522,30 @@ h1, h2, h3{
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
+  /* Dos gestos por foto: tocarla la gira, y el botón de la esquina
+     la abre grande. El de girar es el fácil porque es el importante. */
   shots.forEach(function (shot, index) {
-    var button = shot.querySelector(".shot__btn");
-    if (!button) return;
-    button.setAttribute("aria-describedby", "lb-hint");
-    button.addEventListener("click", function () { open(index); });
+    var zoom = shot.querySelector(".shot__zoom");
+    if (zoom) {
+      zoom.setAttribute("aria-describedby", "lb-hint");
+      zoom.addEventListener("click", function (event) {
+        event.stopPropagation();
+        open(index);
+      });
+    }
+
+    var flip = shot.querySelector(".shot__flip");
+    if (flip) {
+      var label = shot.querySelector("figcaption b");
+      var mes = (label ? label.textContent : "").toLowerCase();
+      flip.addEventListener("click", function () {
+        var back = !shot.classList.contains("is-flipped");
+        shot.classList.toggle("is-flipped", back);
+        flip.setAttribute("aria-pressed", back ? "true" : "false");
+        flip.setAttribute("aria-label",
+          (back ? "Volver a la foto de " : "Ver el reverso de la foto de ") + mes);
+      });
+    }
   });
 
   document.getElementById("lb-close").addEventListener("click", close);
@@ -1219,6 +1664,30 @@ h1, h2, h3{
   armed.forEach(function (type) {
     document.addEventListener(type, firstGesture, { once: true, passive: true });
   });
+
+  /* --- El sobre --------------------------------------------
+     Abrirlo es el gesto que el navegador exige para dejar sonar
+     el audio, así que el trámite se convierte en el momento. */
+  var enter = document.getElementById("enter");
+  var envelope = document.getElementById("enter-open");
+
+  if (enter && envelope) {
+    envelope.addEventListener("click", function () {
+      if (enter.classList.contains("is-opening")) return;
+      enter.classList.add("is-opening");
+      if (track.paused) play();
+
+      var flap = quiet ? 0 : 700;
+      window.setTimeout(function () { enter.classList.add("is-gone"); }, flap);
+      window.setTimeout(function () {
+        /* Hasta aquí el scroll estaba bloqueado: al soltarlo cambia
+           la altura de la página y la enredadera hay que rehacerla. */
+        document.documentElement.classList.remove("sealed");
+        if (envelope.blur) envelope.blur();
+        growVine();
+      }, flap + (quiet ? 150 : 820));
+    });
+  }
 })();
 </script>
 
