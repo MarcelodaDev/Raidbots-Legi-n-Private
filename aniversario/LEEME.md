@@ -15,6 +15,30 @@ Mete tus imágenes en `fotos/` con los nombres `01.jpg` … `12.jpg`. Las que
 falten se quedan como huecos de hoja de contactos, así que puedes ir
 subiéndolas de a poco. Los detalles de proporción están en `fotos/LEEME.md`.
 
+## La música
+
+Suena `audio/cancion.mp3` («Lo hago todo solo con los dos en la cabeza», de
+Pedro Guerra, Cruz Cafuné y Hye Ji) **empezando en el 2:45**, que es donde la
+canción se queda en silencio un instante y vuelve a entrar. Al llegar al final
+vuelve a ese mismo punto en vez de al principio.
+
+Ningún navegador deja sonar audio sin que la persona toque la página primero,
+así que la página lo intenta al cargar y, si la bloquean, arranca sola con el
+primer clic, toque o tecla. Mientras tanto el botón de abajo a la derecha late
+para invitar a pulsarlo. Ese botón también sirve para silenciarla.
+
+Para cambiar el punto de arranque, busca esta línea en `index.html`:
+
+```js
+var AUDIO_INICIO  = 165;   // segundos: 165 = 2:45
+var AUDIO_VOLUMEN = 0.55;
+```
+
+Para cambiar de canción, sustituye `audio/cancion.mp3` por otro archivo con el
+mismo nombre. Conviene exportarlo a 128 kbps: el original de 320 kbps pesaba
+9,3 MB y el mismo audio a 128 kbps pesa 3,6 MB, sin diferencia audible por los
+altavoces de un móvil.
+
 ## Qué se puede editar
 
 Todo está dentro de `index.html`, marcado con comentarios `EDITA:`:
