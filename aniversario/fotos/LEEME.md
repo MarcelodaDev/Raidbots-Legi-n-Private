@@ -1,45 +1,47 @@
 # Fotos
 
-Pon aquí tus imágenes con estos nombres exactos:
+Las dieciséis fotos de la galería, en orden. Cada hueco de la página tiene
+**la proporción exacta de su foto**, así que ninguna se recorta.
 
-```
-01.jpg   02.jpg   03.jpg   04.jpg
-05.jpg   06.jpg   07.jpg   08.jpg
-09.jpg   10.jpg   11.jpg   12.jpg
-```
+| Archivo | Mes | Píxeles | Proporción |
+|---|---|---|---|
+| 01.jpg | Diciembre 2024 | 1170×2080 | 9:16 |
+| 02.jpg | Febrero 2025 | 1500×2000 | 3:4 |
+| 03.jpg | Marzo 2025 | 1500×2000 | 3:4 |
+| 04.jpg | Junio 2025 | 2000×1500 | 4:3 |
+| 05.jpg | Julio 2025 | 1500×2000 | 3:4 |
+| 06.jpg | Agosto 2025 | 1500×2000 | 3:4 |
+| 07.jpg | Septiembre 2025 | 1500×2000 | 3:4 |
+| 08.jpg | Septiembre 2025 | 1427×2000 | 1427:2000 |
+| 09.jpg | Octubre 2025 | 1125×2000 | 9:16 |
+| 10.jpg | Noviembre 2025 | 1277×2000 | 1277:2000 |
+| 11.jpg | Noviembre 2025 | 2000×1500 | 4:3 |
+| 12.jpg | Febrero 2026 | 960×1280 | 3:4 |
+| 13.jpg | Mayo 2026 | 1500×2000 | 3:4 |
+| 14.jpg | Junio 2026 | 2000×1500 | 4:3 |
+| 15.jpg | Agosto 2026 | 1500×2000 | 3:4 |
+| 16.jpg | Agosto 2026 | 2000×1500 | 4:3 |
 
-Cada hueco de la galería tiene una proporción pensada, así que la foto se
-verá mejor si se acerca a ella (la página recorta lo que sobre, centrado):
+## Cómo se prepararon
 
-| Archivo | Proporción | Orientación |
-|---|---|---|
-| 01.jpg | 3:2 | horizontal |
-| 02.jpg | 4:5 | vertical |
-| 03.jpg | 4:5 | vertical |
-| 04.jpg | 16:10 | horizontal |
-| 05.jpg | 1:1 | cuadrada |
-| 06.jpg | 1:1 | cuadrada |
-| 07.jpg | 21:9 | panorámica |
-| 08.jpg | 4:5 | vertical |
-| 09.jpg | 3:2 | horizontal |
-| 10.jpg | 16:10 | horizontal |
-| 11.jpg | 4:5 | vertical |
-| 12.jpg | 2:1 | horizontal ancha |
+Ninguna traía fecha en los metadatos: habían pasado por WhatsApp o Instagram,
+que borran el EXIF al comprimir. Las fechas están puestas a mano.
 
-Si falta alguna, esa casilla se queda como hueco de hoja de contactos en vez
-de romper la página, así que puedes ir subiéndolas poco a poco.
+De cada original se hizo lo siguiente:
 
-**Consejo:** exporta cada foto a un ancho máximo de ~2000 px y calidad 80 %.
-La página carga mucho más rápido y no se nota la diferencia en pantalla.
+1. **Aplicar la orientación EXIF al píxel.** Muchas venían con etiquetas de
+   giro (`Rotated 90 CW`, `Mirrored vertical`…). Aplicarlas y borrarlas
+   garantiza que se vean igual en cualquier visor.
+2. **Borrar el resto de metadatos**, para que no viaje información de más si
+   algún día se comparte la página.
+3. **Reescalar** a 2000 px como máximo y recomprimir a calidad 82.
 
-## Cambiar los textos
+## Cambiar o añadir fotos
 
-Los meses y los recuerdos de cada foto están en `../index.html`, en el
-`<figcaption>` de cada una:
+Si sustituyes un archivo por otro de proporción distinta, hay que actualizar
+también el `--ratio` de su `<figure>` en `../index.html`, o la foto se
+recortará. El valor es la proporción en píxeles, por ejemplo
+`style="--ratio: 1427 / 2000"`.
 
-```html
-<figcaption><b>Diciembre 2024</b><span class="note"></span></figcaption>
-```
-
-Escribe el recuerdo dentro del `<span class="note">`. Si lo dejas vacío, no
-se muestra nada y solo se ve la fecha.
+Para añadir una foto nueva hay que insertar su `<figure>` y cuadrar las
+columnas: cada fila de la galería suma 12 (`c4`, `c5`, `c6`, `c7`, `c8`, `c12`).
