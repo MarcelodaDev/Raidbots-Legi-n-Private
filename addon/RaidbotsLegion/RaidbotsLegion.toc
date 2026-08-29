@@ -7,4 +7,5 @@
 Data.lua
 Items.lua
 Core.lua
+Loot.lua
 UI.lua

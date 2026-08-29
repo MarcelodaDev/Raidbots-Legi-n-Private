@@ -356,10 +356,32 @@ código nuevo.
 
 ### De dónde cae cada pieza
 
-Esto **no** lo sabe la app. La DBC que genera SimulationCraft no incluye la tabla
-de botín: `engine/dbc/generated/` solo trae ítems, hechizos, talentos y
-escalados. Cada fila lleva un enlace a la ficha del ítem, donde sí está el jefe
-que lo suelta.
+La DBC que genera SimulationCraft no incluye la tabla de botín:
+`engine/dbc/generated/` solo trae ítems, hechizos, talentos y escalados. El
+cliente sí la tiene, porque es lo que enseña el Diario de Mazmorras, así que la
+vuelca el addon con `/rbl botin` y se pega en la app.
+
+Dos cosas hacen que ese escaneo no sea un bucle y ya:
+
+- **El botín llega de forma asíncrona.** Justo después de `EJ_SelectEncounter`,
+  `EJ_GetNumLoot()` casi siempre devuelve 0 porque los datos aún no han bajado.
+  Por eso el escaneo va por pasos con `C_Timer.NewTicker` y reintenta cada jefe
+  hasta ocho veces en vez de recorrerlo todo de una sentada.
+- **El Diario se carga bajo demanda.** Sin `LoadAddOn('Blizzard_EncounterJournal')`
+  todo devuelve vacío y ninguna llamada da error — el mismo fallo silencioso que
+  ya costó caro con las reliquias del artefacto.
+
+El id de cada pieza se saca buscando el enlace entre *todo* lo que devuelve
+`EJ_GetLootInfoByIndex`, sin fiarse de la posición: el orden de esa respuesta ha
+cambiado entre versiones del cliente.
+
+La tabla se guarda en `.rbl/loot.json`, no por personaje: qué jefe suelta qué
+pieza es igual para todos. El buscador de mejoras la consulta y añade una
+columna «Dónde cae».
+
+**Límite honesto:** sale del Diario del cliente, así que refleja las tablas de
+Blizzard en 7.3.5. Si un servidor privado ha movido el botín de un jefe, la
+pieza aparecerá donde la puso Blizzard.
 
 ## El límite de «Mejor combinación» (Top Gear)
 

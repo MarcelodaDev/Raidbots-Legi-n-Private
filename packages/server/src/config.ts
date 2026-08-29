@@ -38,6 +38,7 @@ export const paths = {
   jobs: () => path.join(config.stateDir, 'jobs.json'),
   resultsDir: () => path.join(config.stateDir, 'results'),
   runsDir: () => path.join(config.stateDir, 'runs'),
+  lootTable: () => path.join(config.stateDir, 'loot.json'),
   itemDb: () => path.join(config.dataDir, 'items.json'),
   knownItemDb: () => path.join(config.dataDir, 'known-items.json'),
   consumableDb: () => path.join(config.dataDir, 'consumables.json'),

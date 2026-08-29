@@ -30,6 +30,7 @@ import {
   patchDbStatus,
 } from './data/patches.js';
 import { getEnhancements, loadEnhancements } from './data/enhancements.js';
+import { clearLoot, loadLoot, lootStatus, parseLootDump, saveLoot } from './data/loot.js';
 import { clearMedia, getItemMedia, loadMedia, mediaStatus } from './data/media.js';
 import { planSim, queue } from './queue.js';
 import {
@@ -54,6 +55,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     return {
       simc,
       itemDb: itemDbStatus(),
+      loot: lootStatus(),
       patches: listPhases(),
       fightStyles: FIGHT_STYLES,
       defaults: { ...DEFAULT_SIM_OPTIONS, threads: config.cpuCount },
@@ -68,6 +70,7 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
     loadPatches();
     loadEnhancements();
     loadMedia();
+    loadLoot();
     return {
       simc: await getSimcStatus(true),
       itemDb: itemDbStatus(),
@@ -109,6 +112,36 @@ export async function registerRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/api/consumables', async () => getConsumables());
+
+  // -------------------------------------------------------------------------
+  // Tabla de botín
+  // -------------------------------------------------------------------------
+
+  app.get('/api/loot', async () => lootStatus());
+
+  app.post<{ Body: { text: string } }>('/api/loot', async (req, reply) => {
+    const text = req.body?.text;
+    if (typeof text !== 'string' || !text.includes('drop:')) {
+      return reply.code(400).send({
+        error:
+          'Eso no parece el volcado del botín. En el juego, escribe /rbl botin, espera a que ' +
+          'termine y pega aquí todo lo que salga.',
+      });
+    }
+    const parsed = parseLootDump(text);
+    if (Object.keys(parsed.sources).length === 0) {
+      return reply
+        .code(400)
+        .send({ error: 'El volcado no traía ninguna línea de botín reconocible.' });
+    }
+    saveLoot(parsed);
+    return lootStatus();
+  });
+
+  app.delete('/api/loot', async () => {
+    clearLoot();
+    return lootStatus();
+  });
 
   app.get('/api/enhancements', async () => getEnhancements());
 

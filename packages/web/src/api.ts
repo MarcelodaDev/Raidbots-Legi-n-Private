@@ -9,6 +9,7 @@ import type {
   ItemMedia,
   ItemRecord,
   Job,
+  LootStatus,
   ServerMeta,
   SimPlan,
   SimRequest,
@@ -77,6 +78,10 @@ export const api = {
 
   itemMedia: (ids: number[]) =>
     request<Record<number, ItemMedia>>(`/api/items/media?ids=${ids.join(',')}`),
+
+  importLoot: (text: string) =>
+    request<LootStatus>('/api/loot', { method: 'POST', body: JSON.stringify({ text }) }),
+  clearLoot: () => request<LootStatus>('/api/loot', { method: 'DELETE' }),
 
   /** De estos ids, cuáles no puede construir el simulador. */
   unknownItems: (ids: number[]) =>

@@ -431,8 +431,123 @@ function GetSpellDescription(spellId)
   return nil
 end
 
+-- --- Diario de Mazmorras -----------------------------------------------------
+
+-- Se modela lo que hace el cliente de verdad y que hace no trivial el escaneo:
+--
+--   * Hasta que no se carga Blizzard_EncounterJournal, todo devuelve vacío y
+--     ninguna llamada da error.
+--   * El botín de un jefe NO está disponible en la misma llamada en que se
+--     selecciona: hace falta al menos un intento más.
+
+M.journalLoaded = false
+
+local TIERS = { 'Clásico', 'The Burning Crusade', 'Legion' }
+
+local INSTANCES = {
+  [false] = { -- mazmorras
+    { id = 777, name = 'Corte de las Estrellas' },
+    { id = 778, name = 'Catedral de la Noche Eterna' },
+  },
+  [true] = { -- bandas
+    { id = 875, name = 'Bastión Nocturno' },
+  },
+}
+
+local ENCOUNTERS = {
+  [777] = { { id = 1, name = 'Patrona Velia' }, { id = 2, name = 'Advisor Melandrus' } },
+  [778] = { { id = 3, name = 'Domatrax' } },
+  [875] = { { id = 4, name = 'Skorpyron' }, { id = 5, name = 'Gul\'dan' } },
+}
+
+-- EJ_GetLootInfoByIndex devuelve varios valores y el orden ha cambiado entre
+-- versiones. Aquí se devuelve con el id en una posición y el enlace en otra, a
+-- propósito, para que el addon no pueda depender de una posición concreta.
+local LOOT = {
+  [1] = { 134542 },
+  [2] = { 134542, 134530 },
+  [3] = { 142124, 141545 },
+  [4] = { 140894, 141481 },
+  [5] = { 137088, 132452 },
+}
+
+-- Jefes cuyo botín ya se ha "descargado": el primer intento siempre falla.
+local lootReady = {}
+local selectedEncounter
+
+function EJ_GetNumTiers()
+  if not M.journalLoaded then return 0 end
+  return #TIERS
+end
+
+function EJ_GetTierInfo(index)
+  if not M.journalLoaded then return nil end
+  return TIERS[index], nil
+end
+
+local selectedTier
+function EJ_SelectTier(index)
+  selectedTier = index
+end
+
+local selectedInstance
+function EJ_GetInstanceByIndex(index, isRaid)
+  if not M.journalLoaded then return nil end
+  local list = INSTANCES[isRaid and true or false]
+  local entry = list and list[index]
+  if not entry then return nil end
+  return entry.id, entry.name
+end
+
+function EJ_SelectInstance(id)
+  selectedInstance = id
+end
+
+function EJ_GetEncounterInfoByIndex(index, instanceId)
+  if not M.journalLoaded then return nil end
+  local list = ENCOUNTERS[instanceId]
+  local entry = list and list[index]
+  if not entry then return nil end
+  -- name, description, journalEncounterID, ...
+  return entry.name, '', entry.id
+end
+
+function EJ_SelectEncounter(encounterId)
+  selectedEncounter = encounterId
+end
+
+function EJ_ResetLootFilter() end
+
+function EJ_GetNumLoot()
+  if not selectedEncounter then return 0 end
+  -- Primera consulta tras seleccionar: todavía no ha llegado nada.
+  if not lootReady[selectedEncounter] then
+    lootReady[selectedEncounter] = true
+    return 0
+  end
+  return #(LOOT[selectedEncounter] or {})
+end
+
+function EJ_GetLootInfoByIndex(index)
+  local list = LOOT[selectedEncounter] or {}
+  local id = list[index]
+  if not id then return nil end
+  -- name, icon, slot, armorType, link: el id solo llega dentro del enlace, y
+  -- va detrás de varios nils, como en las respuestas reales de este cliente.
+  return 'Pieza ' .. id, nil, nil, nil, 'item:' .. id .. '::::::::110:64|h[Pieza]|h'
+end
+
+--- Reinicia el estado entre pruebas.
+function M.resetJournal()
+  lootReady = {}
+  selectedEncounter = nil
+end
+
 -- El cliente solo llena los datos del artefacto cuando este addon está cargado.
 function LoadAddOn(name)
+  if name == 'Blizzard_EncounterJournal' then
+    M.journalLoaded = true
+  end
   return true, nil
 end
 

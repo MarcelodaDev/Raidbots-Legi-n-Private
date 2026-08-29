@@ -188,6 +188,11 @@ export const GLOSSARY = {
     text: 'Un addon que enseña en el tooltip de cada pieza si es mejor que la que llevas. Para acertar necesita saber cuánto vale para ti cada estadística, y eso es justo lo que acaba de calcular esta simulación: se pega la cadena y ya lo sabe.',
   },
 
+  lootTable: {
+    title: 'Tabla de botín',
+    text: 'De dónde cae cada pieza. El simulador no lo sabe: su base de datos trae ítems y hechizos, pero no el botín de los jefes. El juego sí lo sabe, porque es lo que enseña el Diario de Mazmorras, así que el addon lo vuelca y se pega aquí. Con eso, el buscador de mejoras deja de decirte solo qué te sube el DPS y te dice también dónde conseguirlo.',
+  },
+
   raceOverride: {
     title: 'Simular como otra raza',
     text: 'El motor solo conoce las razas oficiales de Legion. Si tu servidor tiene razas propias, la deja en «ninguna» y te simula sin racial, que son entre un 0,5% y un 2% de DPS que no aparecen. Eligiendo la raza oficial con el racial más parecido, el número se acerca. Para comparar piezas da igual: el racial es el mismo en las dos y se cancela.',

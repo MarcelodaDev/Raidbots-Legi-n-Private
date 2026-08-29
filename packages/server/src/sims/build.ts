@@ -40,6 +40,7 @@ import {
   slotCandidates,
 } from '../data/itemdb.js';
 import { ilevelCapOf } from '../data/patches.js';
+import { lootSources } from '../data/loot.js';
 import { latestScaleFactors } from '../store.js';
 import { getEnchant, getGem } from '../data/enhancements.js';
 import { config } from '../config.js';
@@ -270,6 +271,9 @@ function buildUpgrades(
             replacesIlevel: equipped?.ilevel,
             replacesIsLegendary:
               equipped !== undefined && getItemQuality(equipped.itemId) === LEGENDARY,
+            // De dónde cae. Sale del Diario de Mazmorras que vuelca el addon;
+            // sin esa tabla la lista dice qué te mejora pero no dónde buscarlo.
+            dropsFrom: lootSources(item.id),
           },
         });
       }

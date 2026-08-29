@@ -857,9 +857,18 @@ export interface SimcStatus {
   searched?: { path: string; exists: boolean }[];
 }
 
+/** Estado de la tabla de botín volcada desde el juego. */
+export interface LootStatus {
+  available: boolean;
+  items: number;
+  bosses: number;
+  importedAt?: string;
+}
+
 export interface ServerMeta {
   simc: SimcStatus;
   itemDb: { available: boolean; items: number; consumables: number };
+  loot: LootStatus;
   patches: PatchPhase[];
   fightStyles: readonly string[];
   defaults: SimOptions;

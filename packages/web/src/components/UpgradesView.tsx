@@ -31,6 +31,8 @@ interface Candidate {
   /** El nivel más bajo probado en el que ya mejora. */
   fromIlevel?: number;
   reason?: string;
+  /** Instancias y jefes que la sueltan, según el Diario que volcó el addon. */
+  dropsFrom?: string[];
 }
 
 interface SlotGroup {
@@ -76,6 +78,9 @@ function groupBySlot(profilesets: ProfilesetResult[]): SlotGroup[] {
         bestDelta: Number.NEGATIVE_INFINITY,
         bestIlevel: ilevel,
         reason: entry.meta.reason ? String(entry.meta.reason) : undefined,
+        dropsFrom: Array.isArray(entry.meta.dropsFrom)
+          ? (entry.meta.dropsFrom as unknown[]).map(String)
+          : undefined,
       };
       group.candidates.push(candidate);
     }
@@ -173,6 +178,7 @@ export function UpgradesView({ profilesets }: { profilesets: ProfilesetResult[] 
             <thead>
               <tr>
                 <th>Pieza</th>
+                <th>Dónde cae</th>
                 <th className="num">Desde ilvl</th>
                 <th className="num">Ganancia máx.</th>
                 <th>Por nivel</th>
@@ -196,6 +202,13 @@ export function UpgradesView({ profilesets }: { profilesets: ProfilesetResult[] 
                       >
                         legendaria
                       </span>
+                    )}
+                  </td>
+                  <td style={{ color: 'var(--ink-2)', fontSize: 13 }}>
+                    {candidate.dropsFrom?.length ? (
+                      candidate.dropsFrom.map((where) => <div key={where}>{where}</div>)
+                    ) : (
+                      <span style={{ color: 'var(--ink-muted)' }}>—</span>
                     )}
                   </td>
                   <td className="num">

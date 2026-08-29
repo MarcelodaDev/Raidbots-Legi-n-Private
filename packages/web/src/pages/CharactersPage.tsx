@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import type { Character, ServerMeta } from '@rbl/shared';
+import type { Character, LootStatus, ServerMeta } from '@rbl/shared';
 import { api } from '../api.js';
+import { LootTableCard } from '../components/LootTableCard.js';
 
 const PLACEHOLDER = `# Pega aquí la salida del addon SimulationCraft, por ejemplo:
 warlock="Nyxa"
@@ -15,6 +16,9 @@ head=,id=152163,bonus_id=3562/1512,enchant_id=5429
 
 export function CharactersPage() {
   const meta = useOutletContext<ServerMeta | null>();
+  // El estado de la tabla de botín se refresca aquí sin recargar los metadatos
+  // enteros: el usuario acaba de pegarla y quiere ver el resultado ya.
+  const [loot, setLoot] = useState<LootStatus | undefined>(undefined);
   const navigate = useNavigate();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [input, setInput] = useState('');
@@ -120,6 +124,8 @@ export function CharactersPage() {
           </button>
         </div>
       </div>
+
+      <LootTableCard status={loot ?? meta?.loot} onUpdate={setLoot} />
 
       <div className="card">
         <h2>Guardados</h2>

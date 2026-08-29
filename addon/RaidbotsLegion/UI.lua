@@ -71,6 +71,20 @@ local function createFrame()
   return f
 end
 
+--- Enseña un texto cualquiera listo para copiar.
+local function showText(title, hint, text)
+  if not frame then
+    frame = createFrame()
+  end
+  RBL.lastProfile = text
+  frame.title:SetText(title)
+  frame.hint:SetText(hint)
+  frame.edit:SetText(text)
+  frame:Show()
+  frame.edit:SetFocus()
+  frame.edit:HighlightText()
+end
+
 --- Genera el perfil y lo muestra listo para copiar.
 function RBL.Show()
   if not frame then
@@ -84,19 +98,45 @@ function RBL.Show()
     return
   end
 
-  RBL.lastProfile = profile
-  frame.hint:SetText(
+  showText(
+    'Raidbots Legion · perfil para el simulador',
     equipped ..
       ' piezas equipadas · ' ..
       bagged ..
       ' en bolsas' ..
       (RBL.bankOpen and ' y banco' or ' (banco cerrado)') ..
-      '. Ctrl+C para copiar y pégalo en la app.'
+      '. Ctrl+C para copiar y pégalo en la app.',
+    profile
   )
-  frame.edit:SetText(profile)
-  frame:Show()
-  frame.edit:SetFocus()
-  frame.edit:HighlightText()
+end
+
+--- Escanea el botín de Legion y lo enseña para copiar.
+--
+-- Tarda: son unos cien jefes y hay que esperar a que llegue el botín de cada
+-- uno, así que se va informando por el chat en vez de dejar la pantalla quieta.
+function RBL.ShowLoot()
+  print('|cff33bbffRaidbots Legion|r escaneando el Diario de Mazmorras...')
+  RBL.ScanLoot(function(lines, bosses, items, err)
+    if err then
+      print('|cffff5555Raidbots Legion:|r ' .. err)
+      return
+    end
+    local header = RBL.LootHeader(bosses, items)
+    for _, line in ipairs(lines) do
+      header[#header + 1] = line
+    end
+    local text = table.concat(header, '\n')
+    print('|cff33bbffRaidbots Legion|r listo: ' .. items .. ' piezas de ' .. bosses .. ' jefes.')
+    showText(
+      'Raidbots Legion · tabla de botín',
+      bosses .. ' jefes, ' .. items .. ' piezas. Ctrl+C y pégalo en la app, en Tabla de botín.',
+      text
+    )
+  end, function(done, total)
+    if done % 20 == 0 then
+      print('|cff33bbffRaidbots Legion|r ' .. done .. '/' .. total .. ' jefes...')
+    end
+  end)
 end
 
 -- ---------------------------------------------------------------------------
@@ -113,8 +153,13 @@ SlashCmdList['RAIDBOTSLEGION'] = function(msg)
   local arg = string.lower(trim(msg or ''))
   if arg == 'help' or arg == 'ayuda' then
     print('|cff33bbffRaidbots Legion|r')
-    print('  /rbl        genera el perfil y lo abre para copiar')
+    print('  /rbl         genera el perfil y lo abre para copiar')
+    print('  /rbl botin   vuelca qué jefe suelta cada pieza (tarda un minuto)')
     print('  Abre el banco antes si quieres que incluya lo que guardas ahí.')
+    return
+  end
+  if arg == 'botin' or arg == 'loot' or arg == 'botín' then
+    RBL.ShowLoot()
     return
   end
   RBL.Show()

@@ -8,6 +8,7 @@ import { registerRoutes } from './routes.js';
 import { loadItemDb, itemDbStatus } from './data/itemdb.js';
 import { loadPatches, patchDbStatus } from './data/patches.js';
 import { enhancementsStatus, loadEnhancements } from './data/enhancements.js';
+import { loadLoot, lootStatus } from './data/loot.js';
 import { loadMedia, mediaStatus } from './data/media.js';
 import { getSimcStatus } from './simc/binary.js';
 
@@ -16,6 +17,7 @@ async function main(): Promise<void> {
   loadItemDb();
   loadPatches();
   loadEnhancements();
+  loadLoot();
   loadMedia();
 
   const app = Fastify({
@@ -73,6 +75,13 @@ async function main(): Promise<void> {
     patches.available
       ? `Fases de contenido: ${patches.phases}`
       : 'Fases no generadas. Ejecuta `npm run build:patchdb`.',
+  );
+
+  const loot = lootStatus();
+  app.log.info(
+    loot.available
+      ? `Tabla de botín: ${loot.items} piezas de ${loot.bosses} jefes`
+      : 'Sin tabla de botín. En el juego: /rbl botin, y pega el volcado en la app.',
   );
 }
 

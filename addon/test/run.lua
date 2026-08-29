@@ -21,6 +21,7 @@ end
 loadAddonFile('addon/RaidbotsLegion/Data.lua')
 loadAddonFile('addon/RaidbotsLegion/Items.lua')
 loadAddonFile('addon/RaidbotsLegion/Core.lua')
+loadAddonFile('addon/RaidbotsLegion/Loot.lua')
 
 -- --- comprobaciones ---------------------------------------------------------
 
@@ -192,6 +193,51 @@ RBL.bankOpen = true
 local withBank = RBL.BuildProfile()
 check('con el banco abierto entra su contenido', contains(withBank, '#trinket1=,id=154176'))
 check('y ya no avisa', not contains(withBank, 'banco no estaba abierto'))
+
+-- --- tabla de botín ---------------------------------------------------------
+--
+-- El Diario de Mazmorras vive en un addon que se carga bajo demanda y su botín
+-- llega de forma asíncrona. Las dos cosas fallan en silencio: sin cargarlo,
+-- todo sale vacío; sin reintentar, sale vacío la mitad. Por eso el stub simula
+-- las dos y aquí se comprueban.
+
+print()
+stub.resetJournal()
+stub.journalLoaded = false
+
+local lootLines, bosses, items, lootErr
+RBL.ScanLoot(function(l, b, i, e)
+  lootLines, bosses, items, lootErr = l, b, i, e
+end)
+
+check('carga el addon del Diario antes de leerlo', stub.journalLoaded)
+check('encuentra los jefes de Legion', (bosses or 0) == 5, 'jefes: ' .. tostring(bosses))
+check('no se queda sin botín pese a la carga asíncrona', (items or 0) > 0, 'piezas: ' .. tostring(items))
+
+local lootText = table.concat(lootLines or {}, '\n')
+check(
+  'cada pieza sale con su instancia y su jefe',
+  contains(lootText, '# drop:142124=Catedral de la Noche Eterna / Domatrax')
+)
+check(
+  'las bandas también entran, no solo las mazmorras',
+  contains(lootText, '# drop:137088=Bastión Nocturno / Gul\'dan')
+)
+-- El id solo aparece dentro del enlace, detrás de varios nils. Recorrer la
+-- respuesta con `ipairs` se pararía en el primero, igual que pasó con las
+-- reliquias del artefacto.
+check('el id se saca del enlace aunque venga detrás de nils', not contains(lootText, 'drop:nil'))
+-- La misma pieza cae de dos jefes distintos: las dos líneas deben salir.
+local _, veces = string.gsub(lootText, 'drop:134542=', '')
+check('una pieza que cae de dos jefes sale dos veces', veces == 2, 'apariciones: ' .. veces)
+
+-- Sin Diario disponible no se inventa una tabla vacía: se dice por qué.
+local savedTiers = EJ_GetNumTiers
+EJ_GetNumTiers = nil
+local noJournalErr
+RBL.ScanLoot(function(_, _, _, e) noJournalErr = e end)
+check('sin Diario disponible avisa en vez de devolver una tabla vacía', noJournalErr ~= nil)
+EJ_GetNumTiers = savedTiers
 
 print(string.format('\n%d comprobaciones, %d fallos', checks, failures))
 os.exit(failures == 0 and 0 or 1)
