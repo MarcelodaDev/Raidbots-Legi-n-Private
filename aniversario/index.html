@@ -36,6 +36,12 @@
   --line:        rgba(233,168,106,.18);
   --line-soft:   rgba(243,231,222,.09);
 
+  /* La enredadera: tallo y hoja en bronce-oliva para que parezcan planta
+     a la luz de una vela. El color fuerte se lo quedan las flores. */
+  --vine:        #6e6647;
+  --leaf:        #5c6742;
+  --bloom-core:  #f2d3a8;
+
   --f-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --f-body:    "Karla", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-mono:    "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -107,6 +113,50 @@ body{
   pointer-events: none;
   background: radial-gradient(125% 95% at 50% 45%, transparent 52%, rgba(8,4,6,.55) 100%);
 }
+
+/* --- Enredadera ---------------------------------------------
+   Va por detrás del contenido (z-index 1 contra el 2 de <main>),
+   así el tallo se pierde detrás de las fotos y reaparece en los
+   huecos, como si creciera por detrás de los marcos. */
+.vine{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+.vine__stem{
+  fill: none;
+  stroke: var(--vine);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: .85;
+}
+/* Segunda pasada más ancha y difusa: el halo de la luz cálida */
+.vine__glow{
+  fill: none;
+  stroke: var(--ember);
+  stroke-width: 7;
+  stroke-linecap: round;
+  opacity: .07;
+  filter: blur(3px);
+}
+
+/* Los pétalos y las hojas crecen desde su propio origen (0,0),
+   por eso no hace falta tocar transform-origin. */
+.bloom, .leaf{
+  opacity: 0;
+  transform: scale(.15);
+  transition: opacity .85s ease, transform 1.15s cubic-bezier(.18,1.25,.4,1);
+}
+.bloom{ transform: scale(.15) rotate(-30deg); }
+.is-open.bloom{ opacity: 1; transform: scale(1) rotate(0deg); }
+.is-open.leaf{ opacity: 1; transform: scale(1); }
+
+.bloom__petal{ opacity: .8; }
+.bloom__core{ fill: var(--bloom-core); opacity: .9; }
+.leaf__blade{ fill: var(--leaf); opacity: .72; }
 
 main{ position: relative; z-index: 2; }
 
@@ -388,6 +438,19 @@ h1, h2, h3{
   .drop{ margin-block-start: clamp(1.5rem, 6vw, 6rem); }
 }
 
+/* En móvil el margen normal es demasiado estrecho para que la enredadera
+   se vea: le abrimos un carril propio a la izquierda. La asimetría es
+   intencionada, la planta ocupa ese margen. */
+@media (max-width: 759px){
+  .title-card,
+  .interlude,
+  .gallery,
+  .closing{
+    width: auto;
+    margin-inline: 46px var(--gutter);
+  }
+}
+
 /* --- Cierre ------------------------------------------------- */
 .closing{
   width: var(--shell);
@@ -619,6 +682,8 @@ h1, h2, h3{
   .lightbox{ transition: none; }
   .sound.is-playing .sound__bars i{ animation: none; }
   .sound.is-waiting::after{ animation: none; opacity: .45; }
+  /* La enredadera se queda entera y florecida, sin crecer */
+  .bloom, .leaf{ opacity: 1; transform: none; transition: none; }
 }
 </style>
 </head>
@@ -626,6 +691,7 @@ h1, h2, h3{
 
 <div class="atmosphere" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
+<svg class="vine" id="vine" aria-hidden="true" focusable="false"></svg>
 
 <main>
 
@@ -809,6 +875,163 @@ h1, h2, h3{
   } else {
     shots.forEach(function (shot) { shot.classList.add("is-developed"); });
   }
+
+  /* --- Enredadera ------------------------------------------
+     El tallo se dibuja siempre un poco por delante de donde vas
+     leyendo, y cada brote se coloca sobre la propia curva con
+     getPointAtLength. Así la flor se abre justo en el instante en
+     que la punta pasa por encima, sin que haya que cuadrar nada
+     a mano: el disparador es la misma fracción que dibuja el tallo. */
+  var NS = "http://www.w3.org/2000/svg";
+  var vine = document.getElementById("vine");
+  var quiet = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var palette = window.getComputedStyle(document.documentElement);
+  var ROSE  = palette.getPropertyValue("--rose").trim()  || "#cf8093";
+  var EMBER = palette.getPropertyValue("--ember").trim() || "#e9a86a";
+
+  var stem = null, glow = null, stemLength = 0, sprouts = [];
+
+  /* Azar reproducible: la enredadera es distinta pero siempre la misma */
+  function seeded(i) {
+    var x = Math.sin(i * 127.1) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  function svg(name, attrs) {
+    var node = document.createElementNS(NS, name);
+    for (var key in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, key)) node.setAttribute(key, attrs[key]);
+    }
+    return node;
+  }
+
+  function makeBloom(i, scale) {
+    var petals = svg("g", { "class": "bloom" });
+    var r = (8 + seeded(i) * 5.5) * scale;
+    var tint = i % 4 === 1 ? ROSE : EMBER;
+    var twist = seeded(i + 9) * 22;
+    for (var k = 0; k < 5; k++) {
+      petals.appendChild(svg("ellipse", {
+        "class": "bloom__petal",
+        cx: 0, cy: -r * 0.6, rx: r * 0.33, ry: r * 0.6,
+        fill: tint,
+        transform: "rotate(" + (k * 72 + twist) + ")"
+      }));
+    }
+    petals.appendChild(svg("circle", { "class": "bloom__core", r: r * 0.23 }));
+    return petals;
+  }
+
+  function makeLeaf(i, dir, scale) {
+    /* El giro va en un grupo interior: si lo pusiéramos en .leaf,
+       el transform del CSS que la hace crecer lo borraría. */
+    var holder = svg("g", { "class": "leaf" });
+    var blade = "M 0 0 C 6 -7, 16 -6, 21 0 C 16 6, 6 7, 0 0";
+    var size = (0.75 + seeded(i + 3) * 0.45) * scale;
+
+    /* Dos hojas por nudo: el tallo se ve poblado sin gastar más flores */
+    var big = svg("g", {
+      transform: "rotate(" + (dir * (18 + seeded(i) * 26)) + ") scale(" + (dir * size) + "," + size + ")"
+    });
+    big.appendChild(svg("path", { "class": "leaf__blade", d: blade }));
+
+    var small = svg("g", {
+      transform: "rotate(" + (dir * (-34 - seeded(i + 5) * 22)) + ") scale(" + (dir * size * 0.62) + "," + (size * 0.62) + ")"
+    });
+    small.appendChild(svg("path", { "class": "leaf__blade", d: blade }));
+
+    holder.appendChild(big);
+    holder.appendChild(small);
+    return holder;
+  }
+
+  function growVine() {
+    var height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    var margin = document.getElementById("galeria").getBoundingClientRect().left;
+    /* La banda ocupa el margen libre; si no cabe, la enredadera se
+       mete un poco por detrás de las fotos, que es donde queremos. */
+    var band = Math.max(46, Math.min(104, margin + 22));
+    var cx = band * 0.5;
+    /* La onda no pasa del 20% ni del 80% de la banda: así, con los
+       brotes escalados, ninguna flor se sale por el borde izquierdo. */
+    var amp = band * 0.30;
+    var scale = Math.min(1, band / 94);
+
+    while (vine.firstChild) vine.removeChild(vine.firstChild);
+    sprouts = [];
+    vine.setAttribute("width", band);
+    vine.setAttribute("height", height);
+    vine.setAttribute("viewBox", "0 0 " + band + " " + height);
+
+    /* Onda: cada tramo cruza de un lado al otro */
+    var span = 300;
+    var d = "M " + cx + " 0";
+    var y = 0, side = 1;
+    while (y < height) {
+      var next = Math.min(y + span, height);
+      var bend = (next - y) * 0.55;
+      d += " C " + (cx + side * amp) + " " + (y + bend) +
+           ", " + (cx + side * amp) + " " + (next - bend) +
+           ", " + cx + " " + next;
+      y = next;
+      side = -side;
+    }
+
+    glow = svg("path", { d: d, "class": "vine__glow" });
+    stem = svg("path", { d: d, "class": "vine__stem" });
+    vine.appendChild(glow);
+    vine.appendChild(stem);
+    stemLength = stem.getTotalLength();
+
+    var count = Math.max(6, Math.round(height / 240));
+    for (var i = 1; i < count; i++) {
+      var at = (i / count) * stemLength;
+      var point = stem.getPointAtLength(at);
+      var sprout = (i % 2 === 1)
+        ? makeBloom(i, scale)
+        : makeLeaf(i, point.x < cx ? -1 : 1, scale);
+      var anchor = svg("g", { transform: "translate(" + point.x + "," + point.y + ")" });
+      anchor.appendChild(sprout);
+      vine.appendChild(anchor);
+      sprouts.push({ node: sprout, at: at / stemLength });
+    }
+
+    drawVine();
+  }
+
+  function drawVine() {
+    if (!stem) return;
+    var tall = document.documentElement.scrollHeight;
+    var reach = window.pageYOffset + window.innerHeight * 0.82;
+    var frac = quiet ? 1 : reach / Math.max(1, tall - window.innerHeight * 0.18);
+    frac = Math.max(0, Math.min(1, frac));
+
+    stem.style.strokeDasharray  = stemLength;
+    stem.style.strokeDashoffset = stemLength * (1 - frac);
+    glow.style.strokeDasharray  = stemLength;
+    glow.style.strokeDashoffset = stemLength * (1 - frac);
+
+    for (var i = 0; i < sprouts.length; i++) {
+      sprouts[i].node.classList.toggle("is-open", frac >= sprouts[i].at);
+    }
+  }
+
+  var pending = false;
+  window.addEventListener("scroll", function () {
+    if (pending) return;
+    pending = true;
+    window.requestAnimationFrame(function () { drawVine(); pending = false; });
+  }, { passive: true });
+
+  var redraw;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(redraw);
+    redraw = window.setTimeout(growVine, 200);
+  });
+
+  growVine();
+  /* Las tipografías cambian la altura de la página al llegar */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(growVine);
 
   /* --- Visor ----------------------------------------------- */
   var lightbox = document.getElementById("lightbox");

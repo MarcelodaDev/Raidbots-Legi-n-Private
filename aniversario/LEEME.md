@@ -56,6 +56,11 @@ repositorio y entrar a `…/aniversario/`.
 
 ## Detalles de la página
 
+- Una **enredadera** crece por el margen izquierdo a medida que bajas, siempre
+  un poco por delante de donde vas leyendo, y las flores se abren justo cuando
+  la punta del tallo las alcanza. Va por detrás de las fotos, así que se pierde
+  detrás de los marcos y reaparece en los huecos. Se dibuja sola según la
+  altura de la página: si añades o quitas fotos, se rehace al vuelo.
 - Las fotos **se revelan** al entrar en pantalla: aparecen apagadas y
   desaturadas y van ganando luz y color, como un positivado.
 - Al hacer clic se abren a pantalla completa. Funcionan las flechas del
