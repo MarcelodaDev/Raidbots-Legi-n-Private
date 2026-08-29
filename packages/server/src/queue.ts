@@ -3,7 +3,7 @@ import type { Job, SimPlan, SimRequest, SimResult } from '@rbl/shared';
 import { config } from './config.js';
 import { buildSim, describeTopGearSpace } from './sims/build.js';
 import { runSimc } from './simc/runner.js';
-import { extractWarnings, parseSimcJson } from './simc/parse.js';
+import { extractWarnings, parseSimcJson, raceWarning } from './simc/parse.js';
 import {
   getCharacter,
   newId,
@@ -176,7 +176,12 @@ class SimQueue extends EventEmitter {
         breakdown: parsed.breakdown,
         scaleFactors: parsed.scaleFactors,
         profilesets: parsed.profilesets,
-        warnings: [...built.warnings, ...extractWarnings(run.log)],
+        warnings: [
+          ...built.warnings,
+          ...extractWarnings(run.log),
+          // Un `...string` esparciría letra a letra, así que se filtra la lista.
+          raceWarning(character.race, parsed.race),
+        ].filter((line): line is string => Boolean(line)),
         iterations: parsed.iterations,
         elapsedMs: run.elapsedMs,
         finishedAt: new Date().toISOString(),

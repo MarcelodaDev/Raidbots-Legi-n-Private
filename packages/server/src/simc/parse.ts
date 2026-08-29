@@ -30,6 +30,7 @@ export interface ParsedSimc {
   iterations: number;
   baseline: DpsValue;
   breakdown: AbilityBreakdown[];
+  race: string;
   scaleFactors?: ScaleFactor[];
   profilesets?: ProfilesetResult[];
 }
@@ -144,6 +145,7 @@ export function parseSimcJson(
     simcVersion: String(json?.version ?? 'desconocida'),
     wowVersion: String(sim?.options?.dbc?.Live?.wow_version ?? '7.3.5'),
     playerName: String(player?.name ?? ''),
+    race: String(player?.race ?? ''),
     spec: String(player?.specialization ?? ''),
     class: String(player?.dbc?.class ?? player?.specialization ?? ''),
     iterations: num(sim?.options?.iterations ?? dps.count),
@@ -169,4 +171,29 @@ export function extractWarnings(log: string[]): string[] {
     }
   }
   return warnings.slice(0, 50);
+}
+
+/**
+ * Avisos que solo se ven comparando lo que se pidió con lo que se simuló.
+ *
+ * SimulationCraft acepta una raza que no conoce sin protestar y la deja en
+ * `none`, que significa «sin ningún racial». El DPS sale creíble pero por
+ * debajo del real: en un guerrero Furia son entre un 1% y un 2%. Esto pasa en
+ * servidores privados con razas propias, así que es un caso normal aquí, no una
+ * rareza. Por eso se compara la raza declarada con la que devuelve el motor.
+ */
+export function raceWarning(
+  declared: string | undefined,
+  reported: string | undefined,
+): string | undefined {
+  const wanted = declared?.trim().toLowerCase();
+  if (!wanted || wanted === 'none') return undefined;
+  if (reported && reported.toLowerCase() !== 'none') return undefined;
+
+  return (
+    `SimulationCraft no conoce la raza "${declared}", así que ha simulado sin ` +
+    'ningún bonus racial. El DPS que ves es algo más bajo que el real (en las ' +
+    'pruebas, entre un 1% y un 2%). Las comparaciones entre piezas siguen ' +
+    'siendo válidas porque a todas les falta lo mismo.'
+  );
 }

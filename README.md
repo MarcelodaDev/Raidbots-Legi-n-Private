@@ -469,6 +469,25 @@ imprime las claves que sí trae: con eso se añade el nombre que use esa fuente 
   Armas y Furia, druida Feral) no se pueden cargar porque usan un ítem que no
   está en la DBC de 7.3.5, así que esas specs no tienen referencia en esa fase.
 
+## Razas que SimulationCraft no conoce
+
+Los servidores privados añaden razas propias. SimulationCraft acepta la cadena
+sin protestar, la deja en `none` y simula **sin ningún bonus racial**: el DPS
+sale creíble pero por debajo del real.
+
+Medido con un guerrero Furia real, mismo equipo y 3.000 iteraciones:
+
+| Raza | DPS | Diferencia |
+|---|---|---|
+| `harronir` (desconocida → `none`) | 534.220 | — |
+| `orc` | 540.269 | +1,13% |
+| `human` | 540.974 | +1,26% |
+| `troll` | 544.582 | +1,94% |
+
+La app compara ahora la raza declarada con la que devuelve el motor y avisa
+cuando no coinciden (`raceWarning()` en `simc/parse.ts`). Las comparaciones
+entre piezas siguen siendo válidas: a todas les falta lo mismo.
+
 ## Servidores privados
 
 La app simula con los datos oficiales de 7.3.5. Si tu servidor tiene valores
