@@ -94,6 +94,14 @@ check(
   not contains(profile, 'gem_id=155850')
 )
 
+-- GetRelicInfo devuelve `nil, nil, nil, link`. Recorrer eso con `ipairs` no
+-- encuentra nada, porque se para en el primer nil: hay que usar select. Este
+-- fallo se coló en el propio arreglo de las reliquias y lo cazó esta prueba.
+check(
+  'artefacto: el enlace de la reliquia se encuentra aunque venga tras varios nil',
+  contains(profile, 'gem_id=141271/141272/141273')
+)
+
 -- Rangos del artefacto: solo los comprados (currentRank - bonusRanks)
 check('artefacto: rangos comprados', contains(profile, 'artifact=53:0:0:0:0:783:1:784:4:786:4'))
 check('artefacto: no cuela un rasgo solo del Crisol', not contains(profile, ':1739:'))

@@ -167,6 +167,14 @@ local function openArtifact()
     return false, nil
   end
 
+  -- `C_ArtifactUI` existe siempre, pero sus datos no se llenan hasta que está
+  -- cargado el addon de Blizzard que gestiona la ventana del artefacto. Sin
+  -- esto, en una sesión donde el jugador no haya abierto nunca su artefacto,
+  -- las llamadas devuelven vacío sin dar ningún error.
+  if LoadAddOn then
+    LoadAddOn('Blizzard_ArtifactUI')
+  end
+
   local wasOpen = artifactFrameOpen()
   if not wasOpen then
     SocketInventoryItem(INVSLOT_MAINHAND)
@@ -316,9 +324,23 @@ local function relicItemIds()
   local ids = {}
   local found = false
   for index = 1, (C_ArtifactUI.GetNumRelicSlots() or 0) do
-    local link = select(4, C_ArtifactUI.GetRelicInfo(index))
-    local parts = link and RBL.SplitItemLink(link)
-    local id = parts and parts[1] or 0
+    -- No se asume en qué posición viene el enlace: se busca entre todo lo que
+    -- devuelva. Ya nos costó caro dar por buena la forma de una respuesta de
+    -- esta misma API sin comprobarla.
+    -- `select` y no `ipairs`: la respuesta trae nils por delante del enlace
+    -- (`nil, nil, nil, link`) e `ipairs` se pararía en el primero.
+    local id = 0
+    local returns = { C_ArtifactUI.GetRelicInfo(index) }
+    for i = 1, select('#', C_ArtifactUI.GetRelicInfo(index)) do
+      local value = returns[i]
+      if type(value) == 'string' then
+        local parts = RBL.SplitItemLink(value)
+        if parts and parts[1] and parts[1] > 0 then
+          id = parts[1]
+          break
+        end
+      end
+    end
     ids[index] = id
     if id > 0 then
       found = true

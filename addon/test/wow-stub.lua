@@ -284,4 +284,9 @@ C_ArtifactUI = {
   end,
 }
 
+-- El cliente solo llena los datos del artefacto cuando este addon está cargado.
+function LoadAddOn(name)
+  return true, nil
+end
+
 return M
