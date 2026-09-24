@@ -4,8 +4,8 @@
     "name": "Vial de Sangre Animada",
     "slot": "trinket1",
     "ilevel": 890,
-    "stats": "137mastery",
-    "effectText": "Uso: Bebes del vial y ganas 9852 de Fuerza, que decae a lo largo de 18 s. (90 s de reutilización)",
+    "stats": "1137mastery",
+    "effectText": "Uso: Bebes del vial y ganas 9852 p. de fuerza, que decaen a lo largo de 18 s. (1 min 30 s de tiempo de reutilización)",
     "use": "547str_18stack_18dur_1tick_90cd_reverse",
     "addedAt": "2026-09-24T00:00:00.000Z"
   }
