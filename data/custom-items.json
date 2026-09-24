@@ -1,5 +1,37 @@
 [
   {
+    "itemId": 158311,
+    "name": "Placas de esgrima disimuladas",
+    "slot": "wrist",
+    "ilevel": 885,
+    "stats": "1061str_1592sta_326crit_552vers",
+    "addedAt": "2026-09-24T00:00:00.000Z"
+  },
+  {
+    "itemId": 159433,
+    "name": "Avambrazos fosforescentes",
+    "slot": "wrist",
+    "ilevel": 890,
+    "stats": "1112str_1668sta_505crit_390mastery",
+    "addedAt": "2026-09-24T00:00:00.000Z"
+  },
+  {
+    "itemId": 159436,
+    "name": "Apisonadoras de flora fluorescente",
+    "slot": "feet",
+    "ilevel": 860,
+    "stats": "1121str_1681sta_579haste_487vers",
+    "addedAt": "2026-09-24T00:00:00.000Z"
+  },
+  {
+    "itemId": 159463,
+    "name": "Aro de venas palpitantes",
+    "slot": "finger1",
+    "ilevel": 865,
+    "stats": "1321sta_1449haste_921mastery",
+    "addedAt": "2026-09-24T00:00:00.000Z"
+  },
+  {
     "itemId": 159625,
     "name": "Vial de Sangre Animada",
     "slot": "trinket1",
