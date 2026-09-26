@@ -37,8 +37,8 @@
     "slot": "trinket1",
     "ilevel": 890,
     "stats": "1137mastery",
-    "effectText": "Uso: Bebes del vial y ganas 9852 p. de fuerza, que decaen a lo largo de 18 s. (1 min 30 s de tiempo de reutilización)",
-    "use": "547str_18stack_18dur_1tick_90cd_reverse",
+    "effectText": "Uso: Bebes del vial y ganas 9852 p. de fuerza, que decaen a lo largo de 18 s. (1 min 30 s de reutilización). Observado en el juego: 3 acumulaciones de 3284, una menos cada 6 s.",
+    "use": "3284str_3stack_18dur_6tick_90cd_reverse",
     "addedAt": "2026-09-24T00:00:00.000Z"
   }
 ]
